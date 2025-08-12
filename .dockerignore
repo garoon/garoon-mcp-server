@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Development files
+.git/
+.gitignore
+.env*
+*.log
+
+# Test files
+coverage/
+**/*.test.ts
+**/__tests__/
+
+# Documentation
+README.md
+references/
+
+# Development tools
+.vscode/
+eslint.config.js
+mise.toml
+
+# Scripts
+bin/
+
+# Docker files
+Dockerfile
+.dockerignore

@@ -1,0 +1,19 @@
+.idea
+
+# MCP settings
+.mcp.json
+.vscode/mcp.json
+.cursor/mcp.json
+
+# Node
+node_modules/
+dist/
+npm-debug.log*
+
+## Env
+.env
+.env.local
+.envrc
+
+# Test coverage
+coverage/
