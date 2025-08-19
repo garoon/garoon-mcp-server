@@ -13,6 +13,9 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest watch",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "lint:eslint": "eslint . --max-warnings 0",
+    "lint:prettier": "prettier --check '**/*.{json,json5,md,yml,yaml}' --cache",
     "typecheck": "tsc --noEmit"
   },
   "author": "",
