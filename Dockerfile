@@ -1,4 +1,4 @@
-FROM node:22@sha256:bb6834c0669aa71cbc8d94606561a721adf489f6b93d7b8b825f0cf1b498c2c4 AS build
+FROM node:22@sha256:3266bc9e8bee1acc8a77386eefaf574987d2729b8c5ec35b0dbd6ddbc40b0ce2 AS build
 
 COPY . /app
 WORKDIR /app
@@ -10,7 +10,7 @@ RUN npm run license:extract
 
 RUN npm install --only=production
 
-FROM gcr.io/distroless/nodejs22-debian12:nonroot@sha256:ce215c7aca8708c4a748b351272d2722289f940d7626e86ad6da877008fd03d6
+FROM gcr.io/distroless/nodejs22-debian12:nonroot@sha256:3c90d20cfa08093504ee4795fae9e2571b605dd975b3992e1ef8ccf8b146388a
 LABEL org.opencontainers.image.source=https://github.com/garoon/garoon-mcp-server
 
 WORKDIR /app
