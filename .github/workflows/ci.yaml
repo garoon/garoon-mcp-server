@@ -25,6 +25,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
+          cache: "npm"
       - run: npm install --frozen-lockfile
       - run: npm run lint
 
@@ -38,6 +39,7 @@ jobs:
           cache: "npm"
       - run: npm install --frozen-lockfile
       - run: npm run typecheck
+
   license-check:
     runs-on: ubuntu-latest
     steps:
