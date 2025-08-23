@@ -13,6 +13,8 @@ const config = createConfig({
       "MPL-2.0",
       "CC0-1.0",
       "BlueOak-1.0.0",
+      "(BSD-3-Clause OR GPL-2.0)",
+      "(MIT OR CC0-1.0)",
       "Unlicense",
     ],
   },

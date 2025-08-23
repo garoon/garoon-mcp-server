@@ -40,6 +40,17 @@ jobs:
       - run: npm install --frozen-lockfile
       - run: npm run typecheck
 
+  check-dxt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: "npm"
+      - run: npm install --frozen-lockfile
+      - run: npm run check:dxt
+
   license-check:
     runs-on: ubuntu-latest
     steps:
