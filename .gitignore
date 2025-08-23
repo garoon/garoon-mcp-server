@@ -17,3 +17,8 @@ npm-debug.log*
 
 # Test coverage
 coverage/
+
+# Build
+NOTICE
+*.dxt
+build/

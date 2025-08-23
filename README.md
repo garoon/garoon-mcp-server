@@ -1,6 +1,7 @@
 # Garoon MCP Server
 
 ## Setup
+
 ```bash
 # Option-1 (Use Docker)
 bin/docker-build.sh
@@ -10,6 +11,7 @@ npm run build
 ```
 
 ## MCP Inspector Usage (Visual testing tool)
+
 Enable environment variables at startup by `.env.local`
 
 ```bash
@@ -24,8 +26,11 @@ npm run dev
 Reference: https://github.com/modelcontextprotocol/inspector
 
 # Setting Example
+
 ## Visual Studio Code
+
 Configure in `.vscode/mcp.json`:
+
 ```json
 {
   "servers": {
@@ -65,8 +70,10 @@ Configure in `.vscode/mcp.json`:
 ```
 
 ## Cursor / Claude Code
+
 Configure in `.cursor/mcp.json`
 Configure in `.mcp.json`
+
 ```json
 {
   "mcpServers": {

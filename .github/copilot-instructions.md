@@ -3,8 +3,10 @@
 This file provides guidance to Github Copilot when working with code in this repository.
 
 # Project Overview
+
 This is a Garoon MCP (Model Context Protocol) server that provides tools, resources, and prompts for interacting with the Garoon API. Garoon is a groupware application by Cybozu used for scheduling, collaboration, and organizational management.
 Garoon bundles various applications like the following.
+
 - Scheduler(スケジュール)
 - Workflow(ワークフロー)
 - E-mail(メール)
@@ -22,6 +24,7 @@ This MCP server mainly uses REST API. Garoon also has SOAP API, but it is legacy
 ## Development Commands
 
 ### Setup
+
 ```bash
 # Install dependencies
 npm install
@@ -31,6 +34,7 @@ npm run build
 ```
 
 ### Development
+
 ```bash
 # Run with MCP Inspector for debugging (Create .env.local)
 npm run dev
@@ -46,6 +50,7 @@ npm run typecheck
 ```
 
 ### Testing
+
 ```bash
 # Run all tests
 npm test
@@ -58,6 +63,7 @@ npm run test:watch
 ```
 
 ### Docker
+
 ```bash
 # Build Docker image
 bin/docker-build.sh
@@ -73,6 +79,7 @@ docker run --rm -i \
 ## Architecture
 
 ### MCP Server Structure
+
 The server follows the MCP (Model Context Protocol) pattern with three main components:
 
 1. **Tools** (`src/tools/`): Active operations that perform actions
@@ -85,32 +92,40 @@ The server follows the MCP (Model Context Protocol) pattern with three main comp
    - Registered via `registerPrompts()`
 
 ### Key Files
+
 - `src/index.ts`: Entry point that initializes the MCP server and registers all components
 - `src/client.ts`: HTTP client for Garoon API communication with authentication
 - `src/*/register.ts`: MCP feature-registration system with error handling wrapper
 - `src/schemas/`: Zod schemas for data validation (schedule events, users)
 
 ### Authentication
+
 The server uses Basic Authentication with the Garoon API:
+
 - Credentials are read from environment variables
 - Authentication header is automatically added to all requests via `X-Cybozu-Authorization`
 - Supports proxy configuration via `https_proxy`/`http_proxy` environment variables
 
 ### Error Handling
+
 - All tools are wrapped with error handlers that catch and format errors
 - HTTP errors are captured with status codes and response text
 - Structured error outputs are returned to the MCP client
 
 ### Testing Strategy
+
 - Uses Vitest as the test runner
 - Mock pattern: API client functions are mocked using `vi.mock()`
 - Test structure: Each tool/resource has a corresponding `.test.ts` file
 - Tests validate: tool configuration, schemas, and callback behavior
 
 ## Reference site
+
 The Garoon's help site is available at:
+
 - https://jp.cybozu.help/g/ja/
 
 The API documentation is available at:
+
 - https://cybozu.dev/ja/garoon/docs/
 - https://cybozu.dev/ja/garoon/docs/rest-api/
