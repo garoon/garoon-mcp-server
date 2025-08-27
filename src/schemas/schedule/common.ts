@@ -69,3 +69,21 @@ export const facilitySchema = () =>
 
 export const facilityUsingPurposeSchema = () =>
   z.string().describe("Facility usage purpose - required if 'Application for facility use' is enabled");
+
+export const visibilityTypeSchema = () =>
+  z
+    .enum(["PUBLIC", "PRIVATE"])
+    .describe("Publishing type { 'PUBLIC': 'Public', 'PRIVATE': 'Private' }");
+
+export const watcherSchema = () =>
+  z.object({
+    type: z.enum(["ORGANIZATION", "USER", "ROLE"]).describe("Watcher type - Organization, User, or Role"),
+    id: idSchema().optional().describe("Unique identifier for the watcher (Organization ID, Garoon user ID, or Role ID)"),
+    code: z.string().optional().describe("Code for the watcher (Organization code, Garoon user name/login name, or Role name)"),
+  }).refine(
+    (data) => data.id || data.code,
+    {
+      message: "Either id or code is required for watcher",
+      path: ["id", "code"]
+    }
+  ).describe("Watcher configuration - either id or code is required, if both are provided id takes precedence");
