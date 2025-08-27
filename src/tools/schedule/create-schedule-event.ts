@@ -10,24 +10,32 @@ import {
   notesSchema,
   startDateTimeSchema,
   endDateTimeSchema,
+  facilitySchema,
+  facilityUsingPurposeSchema,
 } from "../../schemas/schedule/common.js";
 import { createStructuredOutputSchema } from "../../schemas/helper.js";
 import { postRequest } from "../../client.js";
+
+const attendeeInputSchema = z
+  .union([userSchema().pick({ id: true }), userSchema().pick({ code: true })])
+  .describe("User identified by either id or code");
+
+const facilityInputSchema = z
+  .union([facilitySchema().pick({ id: true }), facilitySchema().pick({ code: true })])
+  .describe("Facility identified by either id or code");
 
 const inputSchema = {
   subject: subjectSchema().optional(),
   start: startDateTimeSchema(),
   end: endDateTimeSchema(),
-  attendees: z
-    .array(
-      z
-        .union([
-          userSchema().pick({ id: true }),
-          userSchema().pick({ code: true }),
-        ])
-        .describe("User identified by either id or code"),
-    )
-    .describe("List of attendees for the schedule event"),
+  eventType: eventTypeSchema().default("REGULAR"),
+  eventMenu: eventMenuSchema().optional(),
+  notes: notesSchema().optional(),
+  attendees: z.array(attendeeInputSchema).optional().describe("List of attendees for the schedule event"),
+  facilities: z.array(facilityInputSchema).optional().describe("List of facilities for the schedule event"),
+  facilityUsingPurpose: facilityUsingPurposeSchema()
+    .optional()
+    .describe("Facility usage purpose - required if 'Application for facility use' is enabled"),
 };
 
 const outputSchema = createStructuredOutputSchema({
@@ -39,12 +47,20 @@ const outputSchema = createStructuredOutputSchema({
   start: startDateTimeSchema(),
   end: endDateTimeSchema(),
   attendees: z.array(attendeeSchema()),
+  facilities: z.array(facilitySchema()),
+  facilityUsingPurpose: facilityUsingPurposeSchema(),
 });
 
-function hasId(
-  attendee: { id: string } | { code: string },
-): attendee is { id: string } {
+function hasId(attendee: { id: string } | { code: string }): attendee is {
+  id: string;
+} {
   return "id" in attendee;
+}
+
+function hasFacilityId(facility: { id?: string; code?: string }): facility is {
+  id: string;
+} {
+  return "id" in facility && facility.id !== undefined;
 }
 
 export const createScheduleEvent = createTool(
@@ -55,10 +71,10 @@ export const createScheduleEvent = createTool(
     inputSchema,
     outputSchema,
   },
-  async ({ subject, start, end, attendees }) => {
+  async ({ subject, start, end, attendees, eventType, eventMenu, notes, facilities, facilityUsingPurpose }) => {
     const endpoint = "/api/v1/schedule/events";
     const requestBody = {
-      eventType: "REGULAR",
+      eventType: eventType,
       subject: subject || "New Schedule",
       visibilityType: "PUBLIC",
       start: {
@@ -69,7 +85,7 @@ export const createScheduleEvent = createTool(
         dateTime: end.dateTime,
         timeZone: end.timeZone,
       },
-      attendees: attendees.map((attendee) =>
+      attendees: attendees?.map((attendee) =>
         hasId(attendee)
           ? {
               type: "USER",
@@ -80,13 +96,18 @@ export const createScheduleEvent = createTool(
               code: attendee.code,
             },
       ),
+      ...(eventMenu && { eventMenu }),
+      ...(notes && { notes }),
+      ...(facilities && {
+        facilities: facilities?.map((facility) =>
+          hasFacilityId(facility) ? { id: facility.id } : { code: facility.code },
+        ),
+      }),
+      ...(facilityUsingPurpose && { facilityUsingPurpose }),
     };
 
     type ResponseType = z.infer<typeof outputSchema.result>;
-    const result = await postRequest<ResponseType>(
-      endpoint,
-      JSON.stringify(requestBody),
-    );
+    const result = await postRequest<ResponseType>(endpoint, JSON.stringify(requestBody));
     const output = {
       isError: false,
       result: result,

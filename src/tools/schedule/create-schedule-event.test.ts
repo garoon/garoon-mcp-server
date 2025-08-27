@@ -28,9 +28,7 @@ describe("create-schedule-event tool", () => {
     });
 
     it("should have correct description", () => {
-      expect(tool.config.description).toBe(
-        "Create a new schedule event in Garoon",
-      );
+      expect(tool.config.description).toBe("Create a new schedule event in Garoon");
     });
 
     it("should have valid input schema", () => {
@@ -77,7 +75,12 @@ describe("create-schedule-event tool", () => {
             timeZone: "Asia/Tokyo",
           },
           attendees: [
-            { type: "USER", id: "1", code: "user1", name: "Usa Ichiro" },
+            {
+              type: "USER",
+              id: "1",
+              code: "user1",
+              name: "Usa Ichiro",
+            },
             {
               type: "USER",
               id: "2",
@@ -138,14 +141,21 @@ describe("create-schedule-event tool", () => {
       mockPostRequest.mockResolvedValue(mockApiResponse);
 
       const input = {
-        subject: "Test Event",
-        start: {
-          dateTime: "2024-07-27T11:00:00+09:00",
-          timeZone: "Asia/Tokyo",
+        event: {
+          subject: "Test Event",
+          eventType: "REGULAR" as const,
+          eventMenu: "Meeting",
+          notes: "Test notes",
         },
-        end: {
-          dateTime: "2024-07-27T12:00:00+09:00",
-          timeZone: "Asia/Tokyo",
+        schedule: {
+          start: {
+            dateTime: "2024-07-27T11:00:00+09:00",
+            timeZone: "Asia/Tokyo",
+          },
+          end: {
+            dateTime: "2024-07-27T12:00:00+09:00",
+            timeZone: "Asia/Tokyo",
+          },
         },
         attendees: [{ id: "1" }],
       };
@@ -155,14 +165,16 @@ describe("create-schedule-event tool", () => {
       expect(mockPostRequest).toHaveBeenCalledWith(
         "/api/v1/schedule/events",
         JSON.stringify({
-          eventType: "REGULAR",
-          subject: input.subject,
+          eventType: input.event.eventType,
+          subject: input.event.subject,
           visibilityType: "PUBLIC",
-          start: input.start,
-          end: input.end,
+          start: input.schedule.start,
+          end: input.schedule.end,
           attendees: input.attendees.map((attendee) => {
             return { type: "USER", id: attendee.id };
           }),
+          eventMenu: input.event.eventMenu,
+          notes: input.event.notes,
         }),
       );
 
