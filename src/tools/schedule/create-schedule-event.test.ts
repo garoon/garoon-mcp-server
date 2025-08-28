@@ -45,7 +45,16 @@ describe("create-schedule-event tool", () => {
           dateTime: "2024-07-27T12:00:00+09:00",
           timeZone: "Asia/Tokyo",
         },
-        attendees: [{ id: "1" }, { code: "user2" }, { id: "3", code: "user3" }],
+        attendees: [
+          { type: "USER", id: "1" },
+          { type: "USER", code: "user2" },
+          { type: "ORGANIZATION", id: "3", code: "org3" },
+        ],
+        watchers: [
+          { type: "USER", id: "10" },
+          { type: "ORGANIZATION", code: "sales_team" },
+          { type: "ROLE", code: "manager" },
+        ],
       };
 
       expect(() => schema.parse(validInput)).not.toThrow();
@@ -58,7 +67,15 @@ describe("create-schedule-event tool", () => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const schema = z.object(tool.config.outputSchema!);
 
-      const validOutput = {
+      const minimalValidOutput = {
+        isError: false,
+        result: {
+          id: "1",
+        },
+      };
+      expect(() => schema.parse(minimalValidOutput)).not.toThrow();
+
+      const fullValidOutput = {
         isError: false,
         result: {
           id: "1",
@@ -66,6 +83,7 @@ describe("create-schedule-event tool", () => {
           eventMenu: "Meeting",
           subject: "Test Event",
           notes: "This is a test event",
+          visibilityType: "PUBLIC",
           start: {
             dateTime: "2024-07-27T11:00:00+09:00",
             timeZone: "Asia/Tokyo",
@@ -81,32 +99,24 @@ describe("create-schedule-event tool", () => {
               code: "user1",
               name: "Usa Ichiro",
             },
+          ],
+          facilities: [],
+          watchers: [
             {
               type: "USER",
-              id: "2",
-              code: "user2",
-              name: "Ninomiya Shinji",
-              attendanceResponse: {
-                status: "PENDING",
-                comment: "I am going to attend the meeting.",
-              },
-            },
-            {
-              type: "ORGANIZATION",
-              id: "1",
-              code: "Sales",
-              name: "Sales Department",
+              id: "10",
+              code: "watcher1",
             },
           ],
         },
       };
-      expect(() => schema.parse(validOutput)).not.toThrow();
+      expect(() => schema.parse(fullValidOutput)).not.toThrow();
 
-      expect(() => schema.parse({ result: validOutput.result })).toThrow();
+      expect(() => schema.parse({ result: fullValidOutput.result })).toThrow();
       expect(() =>
         schema.parse({
-          isError: validOutput.isError,
-          result: { ...validOutput.result, id: 123 },
+          isError: fullValidOutput.isError,
+          result: { ...fullValidOutput.result, id: 123 },
         }),
       ).toThrow();
     });
@@ -141,23 +151,19 @@ describe("create-schedule-event tool", () => {
       mockPostRequest.mockResolvedValue(mockApiResponse);
 
       const input = {
-        event: {
-          subject: "Test Event",
-          eventType: "REGULAR" as const,
-          eventMenu: "Meeting",
-          notes: "Test notes",
+        subject: "Test Event",
+        eventType: "REGULAR" as const,
+        eventMenu: "Meeting",
+        notes: "Test notes",
+        start: {
+          dateTime: "2024-07-27T11:00:00+09:00",
+          timeZone: "Asia/Tokyo",
         },
-        schedule: {
-          start: {
-            dateTime: "2024-07-27T11:00:00+09:00",
-            timeZone: "Asia/Tokyo",
-          },
-          end: {
-            dateTime: "2024-07-27T12:00:00+09:00",
-            timeZone: "Asia/Tokyo",
-          },
+        end: {
+          dateTime: "2024-07-27T12:00:00+09:00",
+          timeZone: "Asia/Tokyo",
         },
-        attendees: [{ id: "1" }],
+        attendees: [{ type: "USER", id: "1" }],
       };
 
       const result = await tool.callback(input, {} as any);
@@ -165,16 +171,14 @@ describe("create-schedule-event tool", () => {
       expect(mockPostRequest).toHaveBeenCalledWith(
         "/api/v1/schedule/events",
         JSON.stringify({
-          eventType: input.event.eventType,
-          subject: input.event.subject,
+          eventType: input.eventType,
+          subject: input.subject,
           visibilityType: "PUBLIC",
-          start: input.schedule.start,
-          end: input.schedule.end,
-          attendees: input.attendees.map((attendee) => {
-            return { type: "USER", id: attendee.id };
-          }),
-          eventMenu: input.event.eventMenu,
-          notes: input.event.notes,
+          start: input.start,
+          end: input.end,
+          attendees: input.attendees.map((attendee) => ({ type: attendee.type, id: attendee.id })),
+          eventMenu: input.eventMenu,
+          notes: input.notes,
         }),
       );
 
@@ -186,6 +190,98 @@ describe("create-schedule-event tool", () => {
       const structuredContent = result.structuredContent as any;
       expect(structuredContent.isError).toBe(false);
       expect(structuredContent.result).toEqual(mockApiResponse);
+      expect(structuredContent.result.id).toBe("123");
+    });
+
+    it("should successfully create a schedule event with watchers", async () => {
+      const mockApiResponse = {
+        id: "456",
+        eventType: "REGULAR",
+        eventMenu: "Meeting",
+        subject: "Private Test Event",
+        notes: "Test notes with watchers",
+        visibilityType: "SET_PRIVATE_WATCHERS",
+        start: {
+          dateTime: "2024-07-27T14:00:00+09:00",
+          timeZone: "Asia/Tokyo",
+        },
+        end: {
+          dateTime: "2024-07-27T15:00:00+09:00",
+          timeZone: "Asia/Tokyo",
+        },
+        attendees: [
+          {
+            type: "USER",
+            id: "1",
+            code: "user1",
+            name: "Test User",
+          },
+        ],
+        watchers: [
+          {
+            type: "USER",
+            id: "10",
+            code: "watcher1",
+          },
+          {
+            type: "ORGANIZATION",
+            code: "sales_team",
+          },
+        ],
+      };
+
+      mockPostRequest.mockResolvedValue(mockApiResponse);
+
+      const input = {
+        subject: "Private Test Event",
+        eventType: "REGULAR" as const,
+        eventMenu: "Meeting",
+        notes: "Test notes with watchers",
+        visibilityType: "SET_PRIVATE_WATCHERS" as const,
+        start: {
+          dateTime: "2024-07-27T14:00:00+09:00",
+          timeZone: "Asia/Tokyo",
+        },
+        end: {
+          dateTime: "2024-07-27T15:00:00+09:00",
+          timeZone: "Asia/Tokyo",
+        },
+        attendees: [{ type: "USER", id: "1" }],
+        watchers: [
+          { type: "USER", id: "10" },
+          { type: "ORGANIZATION", code: "sales_team" },
+        ],
+      };
+
+      const result = await tool.callback(input, {} as any);
+
+      expect(mockPostRequest).toHaveBeenCalledWith(
+        "/api/v1/schedule/events",
+        JSON.stringify({
+          eventType: input.eventType,
+          subject: input.subject,
+          visibilityType: input.visibilityType,
+          start: input.start,
+          end: input.end,
+          attendees: input.attendees.map((attendee) => ({ type: attendee.type, id: attendee.id })),
+          eventMenu: input.eventMenu,
+          notes: input.notes,
+          watchers: [
+            { type: "USER", id: "10" },
+            { type: "ORGANIZATION", code: "sales_team" },
+          ],
+        }),
+      );
+
+      expect(result).toHaveProperty("structuredContent");
+      expect(result).toHaveProperty("content");
+      expect(result.content).toHaveLength(1);
+      expect(result.content[0].type).toBe("text");
+
+      const structuredContent = result.structuredContent as any;
+      expect(structuredContent.isError).toBe(false);
+      expect(structuredContent.result).toEqual(mockApiResponse);
+      expect(structuredContent.result.id).toBe("456");
     });
   });
 });

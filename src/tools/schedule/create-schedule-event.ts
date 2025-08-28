@@ -71,15 +71,15 @@ const inputSchema = {
 
 const outputSchema = createStructuredOutputSchema({
   id: idSchema().describe("Unique identifier for the created schedule event"),
-  eventType: eventTypeSchema(),
-  eventMenu: eventMenuSchema(),
-  subject: subjectSchema(),
-  notes: notesSchema(),
-  visibilityType: visibilityTypeSchema(),
-  start: startDateTimeSchema(),
-  end: endDateTimeSchema(),
-  attendees: z.array(attendeeSchema()),
-  facilities: z.array(facilitySchema()),
+  eventType: eventTypeSchema().optional(),
+  eventMenu: eventMenuSchema().optional(),
+  subject: subjectSchema().optional(),
+  notes: notesSchema().optional(),
+  visibilityType: visibilityTypeSchema().optional(),
+  start: startDateTimeSchema().optional(),
+  end: endDateTimeSchema().optional(),
+  attendees: z.array(attendeeSchema()).optional(),
+  facilities: z.array(facilitySchema()).optional(),
   facilityUsingPurpose: facilityUsingPurposeSchema().optional(),
   watchers: z.array(watcherSchema()).optional(),
 });
@@ -154,19 +154,17 @@ export const createScheduleEvent = createTool(
       }),
     };
 
-    type ResponseType = z.infer<typeof outputSchema.result>;
-    const result = await postRequest<ResponseType>(endpoint, JSON.stringify(requestBody));
+    const result = await postRequest(endpoint, JSON.stringify(requestBody));
     const output = {
       isError: false,
       result: result,
     };
-    const validatedOutput = z.object(outputSchema).parse(output);
     return {
-      structuredContent: validatedOutput,
+      structuredContent: output,
       content: [
         {
           type: "text",
-          text: JSON.stringify(validatedOutput, null, 2),
+          text: JSON.stringify(output, null, 2),
         },
       ],
     };
