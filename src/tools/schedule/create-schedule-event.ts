@@ -13,6 +13,8 @@ import {
   facilityUsingPurposeSchema,
   visibilityTypeSchema,
   watcherSchema,
+  isStartOnlySchema,
+  isAllDaySchema,
 } from "../../schemas/schedule/common.js";
 import { createStructuredOutputSchema } from "../../schemas/helper.js";
 import { postRequest } from "../../client.js";
@@ -35,7 +37,14 @@ const attendeeInputSchema = z
   );
 
 const facilityInputSchema = z
-  .union([facilitySchema().pick({ id: true }), facilitySchema().pick({ code: true })])
+  .object({
+    id: idSchema().optional(),
+    code: z.string().optional(),
+  })
+  .refine((data) => data.id || data.code, {
+    message: "Either id or code is required for facility",
+    path: ["id", "code"],
+  })
   .describe("Facility identified by either id or code");
 
 const watcherInputSchema = z
@@ -54,31 +63,35 @@ const watcherInputSchema = z
   .describe("Watcher identified by type and either id or code. If both are provided, id is used.");
 
 const inputSchema = {
-  subject: subjectSchema().optional(),
+  subject: subjectSchema().default("New Schedule"),
   start: startDateTimeSchema(),
-  end: endDateTimeSchema(),
+  end: endDateTimeSchema().optional(),
+  isStartOnly: isStartOnlySchema().default(false),
+  isAllDay: isAllDaySchema().default(false),
   eventType: eventTypeSchema().default("REGULAR"),
   eventMenu: eventMenuSchema().optional(),
   notes: notesSchema().optional(),
-  visibilityType: visibilityTypeSchema().default("PUBLIC").optional(),
+  visibilityType: visibilityTypeSchema().default("PUBLIC"),
   attendees: z.array(attendeeInputSchema).optional().describe("List of attendees for the schedule event"),
   facilities: z.array(facilityInputSchema).optional().describe("List of facilities for the schedule event"),
   facilityUsingPurpose: facilityUsingPurposeSchema()
     .optional()
     .describe("Facility usage purpose - required if 'Application for facility use' is enabled"),
-  watchers: z.array(watcherInputSchema).optional().describe("List of watchers for the schedule event - required when visibilityType is 'SET_PRIVATE_WATCHERS'"),
+  watchers: z.array(watcherInputSchema).optional().describe("List of watchers for the schedule event"),
 };
 
 const outputSchema = createStructuredOutputSchema({
   id: idSchema().describe("Unique identifier for the created schedule event"),
-  eventType: eventTypeSchema().optional(),
-  eventMenu: eventMenuSchema().optional(),
-  subject: subjectSchema().optional(),
-  notes: notesSchema().optional(),
+  eventType: eventTypeSchema(),
+  eventMenu: eventMenuSchema(),
+  subject: subjectSchema(),
+  notes: notesSchema(),
   visibilityType: visibilityTypeSchema().optional(),
-  start: startDateTimeSchema().optional(),
+  isStartOnly: isStartOnlySchema(),
+  isAllDay: isAllDaySchema(),
+  start: startDateTimeSchema(),
   end: endDateTimeSchema().optional(),
-  attendees: z.array(attendeeSchema()).optional(),
+  attendees: z.array(attendeeSchema()),
   facilities: z.array(facilitySchema()).optional(),
   facilityUsingPurpose: facilityUsingPurposeSchema().optional(),
   watchers: z.array(watcherSchema()).optional(),
@@ -106,20 +119,24 @@ export const createScheduleEvent = createTool(
     inputSchema,
     outputSchema,
   },
-  async ({ subject, start, end, attendees, eventType, eventMenu, notes, visibilityType, facilities, facilityUsingPurpose, watchers }) => {
+  async ({ subject, start, end, attendees, eventType, eventMenu, notes, visibilityType, facilities, facilityUsingPurpose, watchers, isStartOnly, isAllDay }) => {
     const endpoint = "/api/v1/schedule/events";
     const requestBody = {
       eventType: eventType,
-      subject: subject || "New Schedule",
-      visibilityType: visibilityType || "PUBLIC",
+      subject: subject,
+      visibilityType: visibilityType,
       start: {
         dateTime: start.dateTime,
         timeZone: start.timeZone,
       },
-      end: {
-        dateTime: end.dateTime,
-        timeZone: end.timeZone,
-      },
+      ...(end && {
+        end: {
+          dateTime: end.dateTime,
+          timeZone: end.timeZone,
+        },
+      }),
+      isStartOnly: isStartOnly,
+      isAllDay: isAllDay,
       attendees: attendees?.map((attendee) =>
         hasAttendeeId(attendee)
           ? {
@@ -134,13 +151,13 @@ export const createScheduleEvent = createTool(
       ...(eventMenu && { eventMenu }),
       ...(notes && { notes }),
       ...(facilities && {
-        facilities: facilities?.map((facility) =>
+        facilities: facilities.map((facility) =>
           hasFacilityId(facility) ? { id: facility.id } : { code: facility.code },
         ),
       }),
       ...(facilityUsingPurpose && { facilityUsingPurpose }),
       ...(watchers && {
-        watchers: watchers?.map((watcher) =>
+        watchers: watchers.map((watcher) =>
           hasWatcherId(watcher)
             ? {
                 type: watcher.type,
@@ -159,12 +176,14 @@ export const createScheduleEvent = createTool(
       isError: false,
       result: result,
     };
+    const validatedOutput = z.object(outputSchema).parse(output);
+
     return {
-      structuredContent: output,
+      structuredContent: validatedOutput,
       content: [
         {
           type: "text",
-          text: JSON.stringify(output, null, 2),
+          text: JSON.stringify(validatedOutput, null, 2),
         },
       ],
     };

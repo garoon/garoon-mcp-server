@@ -71,6 +71,30 @@ describe("create-schedule-event tool", () => {
         isError: false,
         result: {
           id: "1",
+          eventType: "REGULAR",
+          eventMenu: "Meeting",
+          subject: "Test Event",
+          notes: "Test notes",
+          visibilityType: "PUBLIC",
+          isStartOnly: false,
+          isAllDay: false,
+          start: {
+            dateTime: "2024-07-27T11:00:00+09:00",
+            timeZone: "Asia/Tokyo",
+          },
+          end: {
+            dateTime: "2024-07-27T12:00:00+09:00",
+            timeZone: "Asia/Tokyo",
+          },
+          attendees: [
+            {
+              type: "USER",
+              id: "1",
+              code: "user1",
+              name: "Usa Ichiro",
+            },
+          ],
+          facilities: [],
         },
       };
       expect(() => schema.parse(minimalValidOutput)).not.toThrow();
@@ -84,6 +108,8 @@ describe("create-schedule-event tool", () => {
           subject: "Test Event",
           notes: "This is a test event",
           visibilityType: "PUBLIC",
+          isStartOnly: false,
+          isAllDay: false,
           start: {
             dateTime: "2024-07-27T11:00:00+09:00",
             timeZone: "Asia/Tokyo",
@@ -106,6 +132,7 @@ describe("create-schedule-event tool", () => {
               type: "USER",
               id: "10",
               code: "watcher1",
+              name: "Watcher User",
             },
           ],
         },
@@ -130,6 +157,9 @@ describe("create-schedule-event tool", () => {
         eventMenu: "Meeting",
         subject: "Test Event",
         notes: "Test notes",
+        visibilityType: "PUBLIC",
+        isStartOnly: false,
+        isAllDay: false,
         start: {
           dateTime: "2024-07-27T11:00:00+09:00",
           timeZone: "Asia/Tokyo",
@@ -146,6 +176,7 @@ describe("create-schedule-event tool", () => {
             name: "Test User",
           },
         ],
+        facilities: [],
       };
 
       mockPostRequest.mockResolvedValue(mockApiResponse);
@@ -155,6 +186,9 @@ describe("create-schedule-event tool", () => {
         eventType: "REGULAR" as const,
         eventMenu: "Meeting",
         notes: "Test notes",
+        visibilityType: "PUBLIC" as const,
+        isStartOnly: false,
+        isAllDay: false,
         start: {
           dateTime: "2024-07-27T11:00:00+09:00",
           timeZone: "Asia/Tokyo",
@@ -163,7 +197,7 @@ describe("create-schedule-event tool", () => {
           dateTime: "2024-07-27T12:00:00+09:00",
           timeZone: "Asia/Tokyo",
         },
-        attendees: [{ type: "USER", id: "1" }],
+        attendees: [{ type: "USER" as const, id: "1" }],
       };
 
       const result = await tool.callback(input, {} as any);
@@ -173,9 +207,11 @@ describe("create-schedule-event tool", () => {
         JSON.stringify({
           eventType: input.eventType,
           subject: input.subject,
-          visibilityType: "PUBLIC",
+          visibilityType: input.visibilityType,
           start: input.start,
           end: input.end,
+          isStartOnly: input.isStartOnly,
+          isAllDay: input.isAllDay,
           attendees: input.attendees.map((attendee) => ({ type: attendee.type, id: attendee.id })),
           eventMenu: input.eventMenu,
           notes: input.notes,
@@ -200,7 +236,9 @@ describe("create-schedule-event tool", () => {
         eventMenu: "Meeting",
         subject: "Private Test Event",
         notes: "Test notes with watchers",
-        visibilityType: "SET_PRIVATE_WATCHERS",
+        visibilityType: "PRIVATE",
+        isStartOnly: false,
+        isAllDay: false,
         start: {
           dateTime: "2024-07-27T14:00:00+09:00",
           timeZone: "Asia/Tokyo",
@@ -217,15 +255,19 @@ describe("create-schedule-event tool", () => {
             name: "Test User",
           },
         ],
+        facilities: [],
         watchers: [
           {
             type: "USER",
             id: "10",
             code: "watcher1",
+            name: "Watcher User",
           },
           {
             type: "ORGANIZATION",
+            id: "20",
             code: "sales_team",
+            name: "Sales Team",
           },
         ],
       };
@@ -237,7 +279,9 @@ describe("create-schedule-event tool", () => {
         eventType: "REGULAR" as const,
         eventMenu: "Meeting",
         notes: "Test notes with watchers",
-        visibilityType: "SET_PRIVATE_WATCHERS" as const,
+        visibilityType: "PRIVATE" as const,
+        isStartOnly: false,
+        isAllDay: false,
         start: {
           dateTime: "2024-07-27T14:00:00+09:00",
           timeZone: "Asia/Tokyo",
@@ -246,10 +290,10 @@ describe("create-schedule-event tool", () => {
           dateTime: "2024-07-27T15:00:00+09:00",
           timeZone: "Asia/Tokyo",
         },
-        attendees: [{ type: "USER", id: "1" }],
+        attendees: [{ type: "USER" as const, id: "1" }],
         watchers: [
-          { type: "USER", id: "10" },
-          { type: "ORGANIZATION", code: "sales_team" },
+          { type: "USER" as const, id: "10" },
+          { type: "ORGANIZATION" as const, code: "sales_team" },
         ],
       };
 
@@ -263,6 +307,8 @@ describe("create-schedule-event tool", () => {
           visibilityType: input.visibilityType,
           start: input.start,
           end: input.end,
+          isStartOnly: input.isStartOnly,
+          isAllDay: input.isAllDay,
           attendees: input.attendees.map((attendee) => ({ type: attendee.type, id: attendee.id })),
           eventMenu: input.eventMenu,
           notes: input.notes,
