@@ -25,13 +25,10 @@ const attendeeInputSchema = z
     id: idSchema().optional(),
     code: z.string().optional(),
   })
-  .refine(
-    (data) => data.id || data.code,
-    {
-      message: "Either id or code is required for attendee",
-      path: ["id", "code"]
-    }
-  )
+  .refine((data) => data.id || data.code, {
+    message: "Either id or code is required for attendee",
+    path: ["id", "code"],
+  })
   .describe(
     "Attendee identified by type and either id or code. If both are provided, id is used.",
   );
@@ -53,14 +50,13 @@ const watcherInputSchema = z
     id: idSchema().optional(),
     code: z.string().optional(),
   })
-  .refine(
-    (data) => data.id || data.code,
-    {
-      message: "Either id or code is required for watcher",
-      path: ["id", "code"]
-    }
-  )
-  .describe("Watcher identified by type and either id or code. If both are provided, id is used.");
+  .refine((data) => data.id || data.code, {
+    message: "Either id or code is required for watcher",
+    path: ["id", "code"],
+  })
+  .describe(
+    "Watcher identified by type and either id or code. If both are provided, id is used.",
+  );
 
 const inputSchema = {
   subject: subjectSchema().default("New Schedule"),
@@ -72,12 +68,23 @@ const inputSchema = {
   eventMenu: eventMenuSchema().optional(),
   notes: notesSchema().optional(),
   visibilityType: visibilityTypeSchema().default("PUBLIC"),
-  attendees: z.array(attendeeInputSchema).optional().describe("List of attendees for the schedule event"),
-  facilities: z.array(facilityInputSchema).optional().describe("List of facilities for the schedule event"),
+  attendees: z
+    .array(attendeeInputSchema)
+    .optional()
+    .describe("List of attendees for the schedule event"),
+  facilities: z
+    .array(facilityInputSchema)
+    .optional()
+    .describe("List of facilities for the schedule event"),
   facilityUsingPurpose: facilityUsingPurposeSchema()
     .optional()
-    .describe("Facility usage purpose - required if 'Application for facility use' is enabled"),
-  watchers: z.array(watcherInputSchema).optional().describe("List of watchers for the schedule event"),
+    .describe(
+      "Facility usage purpose - required if 'Application for facility use' is enabled",
+    ),
+  watchers: z
+    .array(watcherInputSchema)
+    .optional()
+    .describe("List of watchers for the schedule event"),
 };
 
 const outputSchema = createStructuredOutputSchema({
@@ -97,7 +104,10 @@ const outputSchema = createStructuredOutputSchema({
   watchers: z.array(watcherSchema()).optional(),
 });
 
-function hasAttendeeId(attendee: { id?: string; code?: string }): attendee is { id: string } {
+function hasAttendeeId(attendee: {
+  id?: string;
+  code?: string;
+}): attendee is { id: string } {
   return "id" in attendee && attendee.id !== undefined;
 }
 
@@ -107,7 +117,10 @@ function hasFacilityId(facility: { id?: string; code?: string }): facility is {
   return "id" in facility && facility.id !== undefined;
 }
 
-function hasWatcherId(watcher: { id?: string; code?: string }): watcher is { id: string } {
+function hasWatcherId(watcher: {
+  id?: string;
+  code?: string;
+}): watcher is { id: string } {
   return "id" in watcher && watcher.id !== undefined;
 }
 
@@ -119,7 +132,21 @@ export const createScheduleEvent = createTool(
     inputSchema,
     outputSchema,
   },
-  async ({ subject, start, end, attendees, eventType, eventMenu, notes, visibilityType, facilities, facilityUsingPurpose, watchers, isStartOnly, isAllDay }) => {
+  async ({
+    subject,
+    start,
+    end,
+    attendees,
+    eventType,
+    eventMenu,
+    notes,
+    visibilityType,
+    facilities,
+    facilityUsingPurpose,
+    watchers,
+    isStartOnly,
+    isAllDay,
+  }) => {
     const endpoint = "/api/v1/schedule/events";
     const requestBody = {
       eventType: eventType,
@@ -152,7 +179,9 @@ export const createScheduleEvent = createTool(
       ...(notes && { notes }),
       ...(facilities && {
         facilities: facilities.map((facility) =>
-          hasFacilityId(facility) ? { id: facility.id } : { code: facility.code },
+          hasFacilityId(facility)
+            ? { id: facility.id }
+            : { code: facility.code },
         ),
       }),
       ...(facilityUsingPurpose && { facilityUsingPurpose }),
@@ -171,7 +200,12 @@ export const createScheduleEvent = createTool(
       }),
     };
 
-    const result = await postRequest(endpoint, JSON.stringify(requestBody));
+    type ResponseType = z.infer<typeof outputSchema.result>;
+    const result = await postRequest<ResponseType>(
+      endpoint,
+      JSON.stringify(requestBody),
+    );
+
     const output = {
       isError: false,
       result: result,

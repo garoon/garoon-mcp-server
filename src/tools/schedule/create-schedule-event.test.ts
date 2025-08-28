@@ -28,7 +28,9 @@ describe("create-schedule-event tool", () => {
     });
 
     it("should have correct description", () => {
-      expect(tool.config.description).toBe("Create a new schedule event in Garoon");
+      expect(tool.config.description).toBe(
+        "Create a new schedule event in Garoon",
+      );
     });
 
     it("should have valid input schema", () => {
@@ -212,7 +214,10 @@ describe("create-schedule-event tool", () => {
           end: input.end,
           isStartOnly: input.isStartOnly,
           isAllDay: input.isAllDay,
-          attendees: input.attendees.map((attendee) => ({ type: attendee.type, id: attendee.id })),
+          attendees: input.attendees.map((attendee) => ({
+            type: attendee.type,
+            id: attendee.id,
+          })),
           eventMenu: input.eventMenu,
           notes: input.notes,
         }),
@@ -309,7 +314,10 @@ describe("create-schedule-event tool", () => {
           end: input.end,
           isStartOnly: input.isStartOnly,
           isAllDay: input.isAllDay,
-          attendees: input.attendees.map((attendee) => ({ type: attendee.type, id: attendee.id })),
+          attendees: input.attendees.map((attendee) => ({
+            type: attendee.type,
+            id: attendee.id,
+          })),
           eventMenu: input.eventMenu,
           notes: input.notes,
           watchers: [

@@ -8,7 +8,6 @@ export default [
   {
     rules: {
       "n/no-missing-import": "off",
-      "prettier/prettier": "off",
     },
   },
 ];
