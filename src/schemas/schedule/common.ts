@@ -153,3 +153,36 @@ export const watcherSchema = () =>
     .describe(
       "Watcher configuration - either id or code is required, if both are provided id takes precedence",
     );
+
+export const timeRangesSchema = () =>
+  z.object({
+    start: z
+      .string()
+      .datetime({ offset: true })
+      .describe(
+        "Start time of the time range in RFC 3339 format with required timezone offset",
+      ),
+    end: z
+      .string()
+      .datetime({ offset: true })
+      .describe(
+        "End time of the time range in RFC 3339 format with required timezone offset",
+      ),
+  });
+
+export const timeIntervalSchema = () =>
+  z
+    .number()
+    .int()
+    .min(1)
+    .max(1439)
+    .describe(
+      "Time interval in minutes (1-1439 minutes, where 1439 = 23 hours 59 minutes)",
+    );
+
+export const facilitySearchConditionSchema = () =>
+  z
+    .enum(["AND", "OR"])
+    .describe(
+      "Facility search condition - determines how multiple facility conditions are combined: 'AND' = all conditions must match, 'OR' = any condition can match",
+    );
