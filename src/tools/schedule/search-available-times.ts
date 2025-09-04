@@ -79,18 +79,21 @@ const outputSchema = createStructuredOutputSchema({
   }),
 });
 
-function hasAttendeeId(attendee: {
+const hasAttendeeId = (attendee: {
   id?: string;
   code?: string;
-}): attendee is { id: string } {
+}): attendee is { id: string } => {
   return "id" in attendee && attendee.id !== undefined;
-}
+};
 
-function hasFacilityId(facility: { id?: string; code?: string }): facility is {
+const hasFacilityId = (facility: {
+  id?: string;
+  code?: string;
+}): facility is {
   id: string;
-} {
+} => {
   return "id" in facility && facility.id !== undefined;
-}
+};
 
 export const searchAvailableTimes = createTool(
   "search-available-times",
