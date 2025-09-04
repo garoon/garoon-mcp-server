@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createTool } from "../register.js";
 import {
   idSchema,
-  timeRangesSchema,
+  timeRangeSchema,
   timeIntervalSchema,
   facilitySearchConditionSchema,
 } from "../../schemas/schedule/common.js";
@@ -35,9 +35,9 @@ const facilityInputSchema = z
   .describe("Facility identified by either id or code");
 
 const inputSchema = {
-  timeRanges: timeRangesSchema().describe(
-    "Required time ranges for availability search",
-  ),
+  timeRanges: z
+    .array(timeRangeSchema())
+    .describe("Required time ranges for availability search"),
   timeInterval: timeIntervalSchema().describe(
     "Required time interval in minutes (1-1439 minutes)",
   ),
@@ -71,7 +71,7 @@ const outputSchema = createStructuredOutputSchema({
     .describe("List of available time slots"),
   totalSlots: z.number().describe("Total number of available time slots found"),
   searchCriteria: z.object({
-    timeRanges: z.array(timeRangesSchema()),
+    timeRanges: z.array(timeRangeSchema()),
     timeInterval: timeIntervalSchema(),
     attendees: z.array(attendeeInputSchema),
     facilities: z.array(facilityInputSchema).optional(),
@@ -113,12 +113,7 @@ export const searchAvailableTimes = createTool(
   }) => {
     const endpoint = "/api/v1/schedule/searchAvailableTimes";
     const requestBody = {
-      timeRanges: Array.isArray(timeRanges)
-        ? timeRanges.map((range: { start: string; end: string }) => ({
-            start: range.start,
-            end: range.end,
-          }))
-        : [],
+      timeRanges: timeRanges,
       timeInterval: timeInterval,
       attendees: attendees?.map((attendee) =>
         hasAttendeeId(attendee)
