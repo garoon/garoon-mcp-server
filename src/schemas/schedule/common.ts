@@ -118,6 +118,13 @@ export const facilitySchema = () =>
       .describe("Facility name (e.g., 'Conference Room 1', 'Meeting Room 2')"),
   });
 
+export const facilitySearchConditionSchema = () =>
+  z
+    .enum(["AND", "OR"])
+    .describe(
+      "Logical operator for combining multiple facility search conditions",
+    );
+
 export const facilityUsingPurposeSchema = () =>
   z
     .string()
@@ -153,3 +160,45 @@ export const watcherSchema = () =>
     .describe(
       "Watcher configuration - either id or code is required, if both are provided id takes precedence",
     );
+
+export const timeRangeSchema = () =>
+  z
+    .object({
+      start: z
+        .string()
+        .describe(
+          "Start datetime in RFC 3339 format (e.g., 2024-07-27T09:00:00+09:00)",
+        ),
+      end: z
+        .string()
+        .describe(
+          "End datetime in RFC 3339 format (e.g., 2024-07-27T18:00:00+09:00)",
+        ),
+    })
+    .describe("Time range for searching available times");
+
+export const timeIntervalSchema = () =>
+  z
+    .number()
+    .int()
+    .min(1)
+    .max(1439)
+    .describe(
+      "Time interval in minutes (e.g., 30 for 30-minute slots, max 1439 minutes = 23h59m)",
+    );
+
+export const availableTimeSlotSchema = () =>
+  z
+    .object({
+      start: z
+        .string()
+        .describe(
+          "Start datetime of available slot in RFC 3339 format (e.g., 2024-07-27T09:00:00+09:00)",
+        ),
+      end: z
+        .string()
+        .describe(
+          "End datetime of available slot in RFC 3339 format (e.g., 2024-07-27T09:30:00+09:00)",
+        ),
+    })
+    .describe("Available time slot");
