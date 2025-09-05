@@ -90,7 +90,7 @@ export const searchAvailableTimes = createTool(
   {
     title: "Search Available Times",
     description:
-      "Search for available time slots for specified attendees within given time ranges",
+      "Search for available time slots for specified attendee, facility (optional) within given time ranges",
     inputSchema,
     outputSchema,
   },
