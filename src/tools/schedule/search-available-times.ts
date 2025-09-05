@@ -5,7 +5,8 @@ import {
   facilitySchema,
   timeRangeSchema,
   timeIntervalSchema,
-  availableTimeSlotSchema,
+  startDateTimeSchema,
+  endDateTimeSchema,
   facilitySearchConditionSchema,
 } from "../../schemas/schedule/common.js";
 import { createStructuredOutputSchema } from "../../schemas/helper.js";
@@ -25,6 +26,17 @@ const attendeeInputSchema = z
     "Attendee identified by type and either id or code. If both are provided, id is used.",
   );
 
+const facilityInputSchema = z
+  .object({
+    id: idSchema().optional(),
+    code: z.string().optional(),
+  })
+  .refine((data) => data.id || data.code, {
+    message: "Either id or code is required for facility",
+    path: ["id", "code"],
+  })
+  .describe("Facility identified by either id or code");
+
 const inputSchema = {
   timeRanges: z
     .array(timeRangeSchema())
@@ -37,13 +49,26 @@ const inputSchema = {
     .array(attendeeInputSchema)
     .min(1)
     .describe("List of attendees to check availability for"),
-  facilities: z.array(facilitySchema()).optional(),
-  facilitySearchCondition: z.array(facilitySearchConditionSchema()).optional(),
+  facilities: z
+    .array(facilityInputSchema)
+    .optional()
+    .describe("List of facilities to check availability for"),
+  facilitySearchCondition: facilitySearchConditionSchema()
+    .optional()
+    .describe(
+      "Logical operator for combining multiple facility search conditions",
+    ),
 };
 
 const outputSchema = createStructuredOutputSchema({
   availableTimes: z
-    .array(availableTimeSlotSchema())
+    .array(
+      z.object({
+        start: startDateTimeSchema(),
+        end: endDateTimeSchema(),
+        facility: facilitySchema().optional(),
+      }),
+    )
     .describe("List of available time slots"),
 });
 
@@ -54,24 +79,10 @@ function hasAttendeeId(attendee: {
   return "id" in attendee && attendee.id !== undefined;
 }
 
-type ResponseType = z.infer<typeof outputSchema.result>;
-
-type ApiTimeSlot = {
-  start: { dateTime: string; timeZone: string };
-  end: { dateTime: string; timeZone: string };
-};
-
-type ApiResponse = {
-  availableTimes: ApiTimeSlot[];
-};
-
-function transformAvailableTimes(apiResponse: ApiResponse): ResponseType {
-  return {
-    availableTimes: apiResponse.availableTimes.map((slot: ApiTimeSlot) => ({
-      start: slot.start.dateTime,
-      end: slot.end.dateTime,
-    })),
-  };
+function hasFacilityId(facility: { id?: string; code?: string }): facility is {
+  id: string;
+} {
+  return "id" in facility && facility.id !== undefined;
 }
 
 export const searchAvailableTimes = createTool(
@@ -83,7 +94,13 @@ export const searchAvailableTimes = createTool(
     inputSchema,
     outputSchema,
   },
-  async ({ timeRanges, timeInterval, attendees }) => {
+  async ({
+    timeRanges,
+    timeInterval,
+    attendees,
+    facilities,
+    facilitySearchCondition,
+  }) => {
     const endpoint = "/api/v1/schedule/searchAvailableTimes";
     const requestBody = {
       timeRanges: timeRanges,
@@ -99,18 +116,25 @@ export const searchAvailableTimes = createTool(
               code: attendee.code,
             },
       ),
+      ...(facilities && {
+        facilities: facilities.map((facility) =>
+          hasFacilityId(facility)
+            ? { id: facility.id }
+            : { code: facility.code },
+        ),
+      }),
+      ...(facilitySearchCondition && { facilitySearchCondition }),
     };
 
-    const apiResult = await postRequest<ApiResponse>(
+    type ResponseType = z.infer<typeof outputSchema.result>;
+    const apiResult = await postRequest<ResponseType>(
       endpoint,
       JSON.stringify(requestBody),
     );
 
-    const transformedResult = transformAvailableTimes(apiResult);
-
     const output = {
       isError: false,
-      result: transformedResult,
+      result: apiResult,
     };
     const validatedOutput = z.object(outputSchema).parse(output);
 

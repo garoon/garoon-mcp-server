@@ -81,22 +81,74 @@ describe("search-available-times tool", () => {
         result: {
           availableTimes: [
             {
-              start: "2024-07-27T09:00:00+09:00",
-              end: "2024-07-27T09:30:00+09:00",
+              start: {
+                dateTime: "2024-07-27T09:00:00+09:00",
+                timeZone: "Asia/Tokyo",
+              },
+              end: {
+                dateTime: "2024-07-27T09:30:00+09:00",
+                timeZone: "Asia/Tokyo",
+              },
             },
             {
-              start: "2024-07-27T10:00:00+09:00",
-              end: "2024-07-27T10:30:00+09:00",
+              start: {
+                dateTime: "2024-07-27T10:00:00+09:00",
+                timeZone: "Asia/Tokyo",
+              },
+              end: {
+                dateTime: "2024-07-27T10:30:00+09:00",
+                timeZone: "Asia/Tokyo",
+              },
             },
             {
-              start: "2024-07-27T14:00:00+09:00",
-              end: "2024-07-27T14:30:00+09:00",
+              start: {
+                dateTime: "2024-07-27T14:00:00+09:00",
+                timeZone: "Asia/Tokyo",
+              },
+              end: {
+                dateTime: "2024-07-27T14:30:00+09:00",
+                timeZone: "Asia/Tokyo",
+              },
+            },
+          ],
+        },
+      };
+
+      const validOutputWithFacility = {
+        isError: false,
+        result: {
+          availableTimes: [
+            {
+              start: {
+                dateTime: "2024-07-27T09:00:00+09:00",
+                timeZone: "Asia/Tokyo",
+              },
+              end: {
+                dateTime: "2024-07-27T09:30:00+09:00",
+                timeZone: "Asia/Tokyo",
+              },
+              facility: {
+                id: "1",
+                code: "f1",
+                name: "f1",
+              },
+            },
+            {
+              start: {
+                dateTime: "2024-07-27T10:00:00+09:00",
+                timeZone: "Asia/Tokyo",
+              },
+              end: {
+                dateTime: "2024-07-27T10:30:00+09:00",
+                timeZone: "Asia/Tokyo",
+              },
             },
           ],
         },
       };
 
       expect(() => schema.parse(validOutput)).not.toThrow();
+      expect(() => schema.parse(validOutputWithFacility)).not.toThrow();
 
       // Test invalid outputs
       expect(() => schema.parse({ result: validOutput.result })).toThrow();
@@ -160,6 +212,8 @@ describe("search-available-times tool", () => {
           { type: "USER" as const, id: "1" },
           { type: "USER" as const, code: "user2" },
         ],
+        facilities: [{ id: "1" }, { id: "2" }],
+        facilitySearchCondition: "OR" as const,
       };
 
       const result = await tool.callback(input, {} as any);
@@ -173,6 +227,8 @@ describe("search-available-times tool", () => {
             { type: "USER", id: "1" },
             { type: "USER", code: "user2" },
           ],
+          facilities: [{ id: "1" }, { id: "2" }],
+          facilitySearchCondition: "OR",
         }),
       );
 
@@ -185,8 +241,14 @@ describe("search-available-times tool", () => {
       expect(structuredContent.isError).toBe(false);
       expect(structuredContent.result.availableTimes).toHaveLength(3);
       expect(structuredContent.result.availableTimes[0]).toEqual({
-        start: "2024-07-27T09:00:00+09:00",
-        end: "2024-07-27T09:30:00+09:00",
+        start: {
+          dateTime: "2024-07-27T09:00:00+09:00",
+          timeZone: "Asia/Tokyo",
+        },
+        end: {
+          dateTime: "2024-07-27T09:30:00+09:00",
+          timeZone: "Asia/Tokyo",
+        },
       });
     });
 
@@ -255,6 +317,8 @@ describe("search-available-times tool", () => {
           { type: "ORGANIZATION" as const, id: "2" },
           { type: "USER" as const, code: "user3" },
         ],
+        facilities: [{ id: "1" }, { id: "2" }],
+        facilitySearchCondition: "AND" as const,
       };
 
       const result = await tool.callback(input, {} as any);
@@ -269,6 +333,8 @@ describe("search-available-times tool", () => {
             { type: "ORGANIZATION", id: "2" },
             { type: "USER", code: "user3" },
           ],
+          facilities: [{ id: "1" }, { id: "2" }],
+          facilitySearchCondition: "AND",
         }),
       );
 
@@ -276,8 +342,14 @@ describe("search-available-times tool", () => {
       expect(structuredContent.isError).toBe(false);
       expect(structuredContent.result.availableTimes).toHaveLength(2);
       expect(structuredContent.result.availableTimes[0]).toEqual({
-        start: "2024-07-27T09:00:00+09:00",
-        end: "2024-07-27T09:30:00+09:00",
+        start: {
+          dateTime: "2024-07-27T09:00:00+09:00",
+          timeZone: "Asia/Tokyo",
+        },
+        end: {
+          dateTime: "2024-07-27T09:30:00+09:00",
+          timeZone: "Asia/Tokyo",
+        },
       });
     });
 
@@ -312,6 +384,210 @@ describe("search-available-times tool", () => {
       const structuredContent = result.structuredContent as any;
       expect(structuredContent.isError).toBe(false);
       expect(structuredContent.result.availableTimes).toHaveLength(0);
+    });
+
+    it("should handle OR condition with facility information", async () => {
+      const mockApiResponse = {
+        availableTimes: [
+          {
+            start: {
+              dateTime: "2024-07-27T12:30:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+            end: {
+              dateTime: "2024-07-27T14:00:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+            facility: {
+              id: "1",
+              code: "f1",
+              name: "f1",
+            },
+          },
+          {
+            start: {
+              dateTime: "2024-07-27T16:00:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+            end: {
+              dateTime: "2024-07-27T17:30:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+            facility: {
+              id: "1",
+              code: "f1",
+              name: "f1",
+            },
+          },
+          {
+            start: {
+              dateTime: "2024-07-27T12:00:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+            end: {
+              dateTime: "2024-07-27T13:30:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+            facility: {
+              id: "2",
+              code: "f2",
+              name: "f2",
+            },
+          },
+          {
+            start: {
+              dateTime: "2024-07-27T16:00:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+            end: {
+              dateTime: "2024-07-27T17:30:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+            facility: {
+              id: "2",
+              code: "f2",
+              name: "f2",
+            },
+          },
+        ],
+      };
+
+      mockPostRequest.mockResolvedValue(mockApiResponse);
+
+      const input = {
+        timeRanges: [
+          {
+            start: "2024-07-27T12:00:00+09:00",
+            end: "2024-07-27T18:00:00+09:00",
+          },
+        ],
+        timeInterval: 90,
+        attendees: [{ type: "USER" as const, code: "Administrator" }],
+        facilities: [{ id: "1" }, { id: "2" }],
+        facilitySearchCondition: "OR" as const,
+      };
+
+      const result = await tool.callback(input, {} as any);
+
+      expect(mockPostRequest).toHaveBeenCalledWith(
+        "/api/v1/schedule/searchAvailableTimes",
+        JSON.stringify({
+          timeRanges: input.timeRanges,
+          timeInterval: input.timeInterval,
+          attendees: [{ type: "USER", code: "Administrator" }],
+          facilities: [{ id: "1" }, { id: "2" }],
+          facilitySearchCondition: "OR",
+        }),
+      );
+
+      const structuredContent = result.structuredContent as any;
+      expect(structuredContent.isError).toBe(false);
+      expect(structuredContent.result.availableTimes).toHaveLength(4);
+
+      // Check that OR condition returns facility information
+      expect(structuredContent.result.availableTimes[0].facility).toEqual({
+        id: "1",
+        code: "f1",
+        name: "f1",
+      });
+      expect(structuredContent.result.availableTimes[2].facility).toEqual({
+        id: "2",
+        code: "f2",
+        name: "f2",
+      });
+    });
+
+    it("should handle AND condition without facility information", async () => {
+      const mockApiResponse = {
+        availableTimes: [
+          {
+            start: {
+              dateTime: "2024-07-27T12:00:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+            end: {
+              dateTime: "2024-07-27T13:30:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+          },
+          {
+            start: {
+              dateTime: "2024-07-27T13:30:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+            end: {
+              dateTime: "2024-07-27T15:00:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+          },
+          {
+            start: {
+              dateTime: "2024-07-27T15:00:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+            end: {
+              dateTime: "2024-07-27T16:30:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+          },
+          {
+            start: {
+              dateTime: "2024-07-27T16:30:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+            end: {
+              dateTime: "2024-07-27T18:00:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+          },
+        ],
+      };
+
+      mockPostRequest.mockResolvedValue(mockApiResponse);
+
+      const input = {
+        timeRanges: [
+          {
+            start: "2024-07-27T12:00:00+09:00",
+            end: "2024-07-27T18:00:00+09:00",
+          },
+        ],
+        timeInterval: 90,
+        attendees: [{ type: "USER" as const, code: "Administrator" }],
+        facilities: [{ id: "1" }, { id: "2" }],
+        facilitySearchCondition: "AND" as const,
+      };
+
+      const result = await tool.callback(input, {} as any);
+
+      expect(mockPostRequest).toHaveBeenCalledWith(
+        "/api/v1/schedule/searchAvailableTimes",
+        JSON.stringify({
+          timeRanges: input.timeRanges,
+          timeInterval: input.timeInterval,
+          attendees: [{ type: "USER", code: "Administrator" }],
+          facilities: [{ id: "1" }, { id: "2" }],
+          facilitySearchCondition: "AND",
+        }),
+      );
+
+      const structuredContent = result.structuredContent as any;
+      expect(structuredContent.isError).toBe(false);
+      expect(structuredContent.result.availableTimes).toHaveLength(4);
+
+      // Check that AND condition does not return facility information
+      expect(
+        structuredContent.result.availableTimes[0].facility,
+      ).toBeUndefined();
+      expect(
+        structuredContent.result.availableTimes[1].facility,
+      ).toBeUndefined();
+      expect(
+        structuredContent.result.availableTimes[2].facility,
+      ).toBeUndefined();
+      expect(
+        structuredContent.result.availableTimes[3].facility,
+      ).toBeUndefined();
     });
   });
 });
