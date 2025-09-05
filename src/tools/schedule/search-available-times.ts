@@ -47,7 +47,7 @@ const inputSchema = {
   ),
   attendees: z
     .array(attendeeInputSchema)
-    .min(1)
+    .optional()
     .describe("List of attendees to check availability for"),
   facilities: z
     .array(facilityInputSchema)
@@ -72,25 +72,25 @@ const outputSchema = createStructuredOutputSchema({
     .describe("List of available time slots"),
 });
 
-function hasAttendeeId(attendee: {
+const hasAttendeeId = (attendee: {
   id?: string;
   code?: string;
-}): attendee is { id: string } {
+}): attendee is { id: string } => {
   return "id" in attendee && attendee.id !== undefined;
-}
+};
 
-function hasFacilityId(facility: { id?: string; code?: string }): facility is {
+const hasFacilityId = (facility: { id?: string; code?: string }): facility is {
   id: string;
-} {
+} => {
   return "id" in facility && facility.id !== undefined;
-}
+};
 
 export const searchAvailableTimes = createTool(
   "search-available-times",
   {
     title: "Search Available Times",
     description:
-      "Search for available time slots for specified attendee, facility (optional) within given time ranges",
+      "Search for available time slots for specified attendee or facility within given time ranges",
     inputSchema,
     outputSchema,
   },
@@ -105,7 +105,7 @@ export const searchAvailableTimes = createTool(
     const requestBody = {
       timeRanges: timeRanges,
       timeInterval: timeInterval,
-      attendees: attendees.map((attendee) =>
+      attendees: attendees?.map((attendee) =>
         hasAttendeeId(attendee)
           ? {
               type: attendee.type,

@@ -29,7 +29,7 @@ describe("search-available-times tool", () => {
 
     it("should have correct description", () => {
       expect(tool.config.description).toBe(
-        "Search for available time slots for specified attendee, facility (optional) within given time ranges",
+        "Search for available time slots for specified attendee or facility within given time ranges",
       );
     });
 
@@ -69,7 +69,7 @@ describe("search-available-times tool", () => {
           timeRanges: validInput.timeRanges,
           timeInterval: validInput.timeInterval,
         }),
-      ).toThrow();
+      ).not.toThrow();
     });
 
     it("should have valid output schema", () => {
