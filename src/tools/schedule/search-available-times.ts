@@ -54,9 +54,7 @@ const inputSchema = {
   facilities: z
     .array(facilityInputSchema)
     .optional()
-    .describe(
-      "Optional list of facilities to check availability for (at least one attendee or facility is required)",
-    ),
+    .describe("List of facilities to check availability for"),
   facilitySearchCondition: facilitySearchConditionSchema()
     .optional()
     .describe(
@@ -71,7 +69,7 @@ const availableTimeSlotSchema = z.object({
 });
 
 const outputSchema = createStructuredOutputSchema({
-  availableSlots: z
+  availableTimes: z
     .array(availableTimeSlotSchema)
     .describe("List of available time slots"),
 });
