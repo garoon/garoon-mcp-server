@@ -5,6 +5,7 @@ import {
   timeRangeSchema,
   timeIntervalSchema,
   facilitySearchConditionSchema,
+  facilitySchema,
 } from "../../schemas/schedule/common.js";
 import { createStructuredOutputSchema } from "../../schemas/helper.js";
 import { postRequest } from "../../client.js";
@@ -37,6 +38,7 @@ const facilityInputSchema = z
 const inputSchema = {
   timeRanges: z
     .array(timeRangeSchema())
+    .min(1)
     .describe("Required time ranges for availability search"),
   timeInterval: timeIntervalSchema().describe(
     "Required time interval in minutes (1-1439 minutes)",
@@ -63,6 +65,7 @@ const inputSchema = {
 const availableTimeSlotSchema = z.object({
   start: z.string().describe("Start time of available slot in RFC 3339 format"),
   end: z.string().describe("End time of available slot in RFC 3339 format"),
+  facility: facilitySchema().optional(),
 });
 
 const outputSchema = createStructuredOutputSchema({
