@@ -180,9 +180,6 @@ export const timeRangeSchema = () =>
 export const timeIntervalSchema = () =>
   z
     .number()
-    .int()
-    .min(1)
-    .max(1439)
     .describe(
-      "Time interval in minutes (e.g., 30 for 30-minute slots, max 1439 minutes = 23h59m)",
+      "Time interval in minutes (e.g., 30 for 30-minutes slot, min 1, max 1439 minutes = 23h59m)",
     );
