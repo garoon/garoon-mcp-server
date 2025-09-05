@@ -5,6 +5,8 @@ import {
   timeRangeSchema,
   timeIntervalSchema,
   facilitySearchConditionSchema,
+  startDateTimeSchema,
+  endDateTimeSchema,
   facilitySchema,
 } from "../../schemas/schedule/common.js";
 import { createStructuredOutputSchema } from "../../schemas/helper.js";
@@ -63,8 +65,8 @@ const inputSchema = {
 };
 
 const availableTimeSlotSchema = z.object({
-  start: z.string().describe("Start time of available slot in RFC 3339 format"),
-  end: z.string().describe("End time of available slot in RFC 3339 format"),
+  start: startDateTimeSchema(),
+  end: endDateTimeSchema(),
   facility: facilitySchema().optional(),
 });
 
@@ -72,14 +74,6 @@ const outputSchema = createStructuredOutputSchema({
   availableSlots: z
     .array(availableTimeSlotSchema)
     .describe("List of available time slots"),
-  totalSlots: z.number().describe("Total number of available time slots found"),
-  searchCriteria: z.object({
-    timeRanges: z.array(timeRangeSchema()),
-    timeInterval: timeIntervalSchema(),
-    attendees: z.array(attendeeInputSchema),
-    facilities: z.array(facilityInputSchema).optional(),
-    facilitySearchCondition: facilitySearchConditionSchema().optional(),
-  }),
 });
 
 const hasAttendeeId = (attendee: {
