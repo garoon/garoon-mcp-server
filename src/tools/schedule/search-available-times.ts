@@ -79,7 +79,10 @@ const hasAttendeeId = (attendee: {
   return "id" in attendee && attendee.id !== undefined;
 };
 
-const hasFacilityId = (facility: { id?: string; code?: string }): facility is {
+const hasFacilityId = (facility: {
+  id?: string;
+  code?: string;
+}): facility is {
   id: string;
 } => {
   return "id" in facility && facility.id !== undefined;
