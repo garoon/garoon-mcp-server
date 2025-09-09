@@ -16,11 +16,11 @@ export function createErrorOutput(error: unknown): CallToolResult {
   }
 
   const output = {
-    isError: true,
     error: errorMessage,
   };
 
   return {
+    isError: true,
     structuredContent: output,
     content: [
       {

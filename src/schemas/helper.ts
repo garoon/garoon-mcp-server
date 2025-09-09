@@ -5,7 +5,6 @@ export function createStructuredOutputSchema<OutputArgs extends z.ZodRawShape>(
   outputSchema: OutputArgs,
 ) {
   return {
-    isError: z.boolean().describe("Indicates if error occurred"),
     result: z
       .object(outputSchema)
       .optional()

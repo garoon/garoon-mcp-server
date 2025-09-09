@@ -207,7 +207,6 @@ export const createScheduleEvent = createTool(
     );
 
     const output = {
-      isError: false,
       result: result,
     };
     const validatedOutput = z.object(outputSchema).parse(output);

@@ -42,7 +42,6 @@ export const getCurrentTimeTool = createTool(
       .replace(/\[.*$/, "");
 
     const output = {
-      isError: false,
       result: {
         timezone: selectedTimezone,
         datetime: datetimeString,

@@ -30,8 +30,8 @@ describe("createTool", () => {
     const result = await tool.callback({}, mockExtra);
 
     expect(result).toEqual({
+      isError: true,
       structuredContent: {
-        isError: true,
         error: "Test error",
       },
       content: [
@@ -39,7 +39,6 @@ describe("createTool", () => {
           type: "text",
           text: JSON.stringify(
             {
-              isError: true,
               error: "Test error",
             },
             null,
@@ -71,8 +70,8 @@ describe("createTool", () => {
     const result = await tool.callback({}, mockExtra);
 
     expect(result).toEqual({
+      isError: true,
       structuredContent: {
-        isError: true,
         error: "Async test error",
       },
       content: [
@@ -80,7 +79,6 @@ describe("createTool", () => {
           type: "text",
           text: JSON.stringify(
             {
-              isError: true,
               error: "Async test error",
             },
             null,
@@ -150,8 +148,8 @@ describe("createTool", () => {
     const result = await tool.callback({}, mockExtra);
 
     expect(result).toEqual({
+      isError: true,
       structuredContent: {
-        isError: true,
         error: "Unknown error occurred",
       },
       content: [
@@ -159,7 +157,6 @@ describe("createTool", () => {
           type: "text",
           text: JSON.stringify(
             {
-              isError: true,
               error: "Unknown error occurred",
             },
             null,

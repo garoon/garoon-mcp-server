@@ -72,7 +72,6 @@ export const searchScheduleEvents = createTool(
     const result = await getRequest<ResponseType>(endpoint);
 
     const output = {
-      isError: false,
       result: result,
     };
 

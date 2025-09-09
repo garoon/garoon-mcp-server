@@ -54,7 +54,6 @@ describe("search-schedule-events tool", () => {
       const schema = z.object(tool.config.outputSchema!);
 
       const validOutput = {
-        isError: false,
         result: {
           events: [
             {
@@ -76,10 +75,10 @@ describe("search-schedule-events tool", () => {
       };
       expect(() => schema.parse(validOutput)).not.toThrow();
 
-      expect(() => schema.parse({ result: validOutput.result })).toThrow();
+      expect(() => schema.parse({ error: "Some error" })).not.toThrow();
+
       expect(() =>
         schema.parse({
-          isError: validOutput.isError,
           result: { ...validOutput.result, events: "invalid" },
         }),
       ).toThrow();
@@ -137,7 +136,6 @@ describe("search-schedule-events tool", () => {
       expect(result.content[0].type).toBe("text");
 
       const structuredContent = result.structuredContent as any;
-      expect(structuredContent.isError).toBe(false);
       expect(structuredContent.result).toEqual(mockApiResponse);
     });
   });
