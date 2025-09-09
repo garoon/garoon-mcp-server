@@ -51,7 +51,6 @@ describe("garoon-users tool", () => {
       };
 
       const expectedResult = {
-        isError: false,
         result: {
           users: [
             {
@@ -107,7 +106,6 @@ describe("garoon-users tool", () => {
       };
 
       const expectedResult = {
-        isError: false,
         result: {
           users: [],
         },

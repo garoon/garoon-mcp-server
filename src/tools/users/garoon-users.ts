@@ -34,7 +34,6 @@ export const garoonUsersTool = createTool(
     );
 
     const output = {
-      isError: false,
       result: data,
     };
     const validatedOutput = z.object(outputSchema).parse(output);

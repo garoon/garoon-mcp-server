@@ -70,7 +70,6 @@ describe("create-schedule-event tool", () => {
       const schema = z.object(tool.config.outputSchema!);
 
       const minimalValidOutput = {
-        isError: false,
         result: {
           id: "1",
           eventType: "REGULAR",
@@ -102,7 +101,6 @@ describe("create-schedule-event tool", () => {
       expect(() => schema.parse(minimalValidOutput)).not.toThrow();
 
       const fullValidOutput = {
-        isError: false,
         result: {
           id: "1",
           eventType: "REGULAR",
@@ -141,10 +139,9 @@ describe("create-schedule-event tool", () => {
       };
       expect(() => schema.parse(fullValidOutput)).not.toThrow();
 
-      expect(() => schema.parse({ result: fullValidOutput.result })).toThrow();
+      expect(() => schema.parse({ error: "Some error" })).not.toThrow();
       expect(() =>
         schema.parse({
-          isError: fullValidOutput.isError,
           result: { ...fullValidOutput.result, id: 123 },
         }),
       ).toThrow();
@@ -229,7 +226,6 @@ describe("create-schedule-event tool", () => {
       expect(result.content[0].type).toBe("text");
 
       const structuredContent = result.structuredContent as any;
-      expect(structuredContent.isError).toBe(false);
       expect(structuredContent.result).toEqual(mockApiResponse);
       expect(structuredContent.result.id).toBe("123");
     });
@@ -333,7 +329,6 @@ describe("create-schedule-event tool", () => {
       expect(result.content[0].type).toBe("text");
 
       const structuredContent = result.structuredContent as any;
-      expect(structuredContent.isError).toBe(false);
       expect(structuredContent.result).toEqual(mockApiResponse);
       expect(structuredContent.result.id).toBe("456");
     });

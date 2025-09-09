@@ -60,7 +60,6 @@ describe("get-current-time tool", () => {
       expect(result.content[0].type).toBe("text");
 
       const parsedResult = JSON.parse(result.content[0].text as string);
-      expect(parsedResult.isError).toBe(false);
       expect(parsedResult.result.timezone).toBe("Asia/Tokyo");
       expect(parsedResult.result.datetime).toBe("2024-07-27T11:00:00+09:00");
     });
@@ -79,9 +78,9 @@ describe("get-current-time tool", () => {
         {} as any,
       );
 
+      expect(result.isError).toBe(true);
       expect(result.content).toHaveLength(1);
       const parsedResult = JSON.parse(result.content[0].text as string);
-      expect(parsedResult.isError).toBe(true);
       expect(parsedResult.error).toBe("Unsupported timezone: Invalid/Timezone");
     });
 
@@ -98,7 +97,6 @@ describe("get-current-time tool", () => {
 
       expect(result.structuredContent).toBeDefined();
       if (result.structuredContent) {
-        expect(result.structuredContent.isError).toBe(false);
         expect((result.structuredContent.result as any).timezone).toBe(
           "Asia/Tokyo",
         );

@@ -77,7 +77,6 @@ describe("search-available-times tool", () => {
       const schema = z.object(tool.config.outputSchema!);
 
       const validOutput = {
-        isError: false,
         result: {
           availableTimes: [
             {
@@ -115,7 +114,6 @@ describe("search-available-times tool", () => {
       };
 
       const validOutputWithFacility = {
-        isError: false,
         result: {
           availableTimes: [
             {
@@ -150,11 +148,9 @@ describe("search-available-times tool", () => {
       expect(() => schema.parse(validOutput)).not.toThrow();
       expect(() => schema.parse(validOutputWithFacility)).not.toThrow();
 
-      // Test invalid outputs
-      expect(() => schema.parse({ result: validOutput.result })).toThrow();
+      expect(() => schema.parse({ error: "Some error" })).not.toThrow();
       expect(() =>
         schema.parse({
-          isError: validOutput.isError,
           result: { ...validOutput.result, availableTimes: "invalid" },
         }),
       ).toThrow();
@@ -238,7 +234,6 @@ describe("search-available-times tool", () => {
       expect(result.content[0].type).toBe("text");
 
       const structuredContent = result.structuredContent as any;
-      expect(structuredContent.isError).toBe(false);
       expect(structuredContent.result.availableTimes).toHaveLength(3);
       expect(structuredContent.result.availableTimes[0]).toEqual({
         start: {
@@ -339,7 +334,6 @@ describe("search-available-times tool", () => {
       );
 
       const structuredContent = result.structuredContent as any;
-      expect(structuredContent.isError).toBe(false);
       expect(structuredContent.result.availableTimes).toHaveLength(2);
       expect(structuredContent.result.availableTimes[0]).toEqual({
         start: {
@@ -382,7 +376,6 @@ describe("search-available-times tool", () => {
       const result = await tool.callback(input, {} as any);
 
       const structuredContent = result.structuredContent as any;
-      expect(structuredContent.isError).toBe(false);
       expect(structuredContent.result.availableTimes).toHaveLength(0);
     });
 
@@ -481,7 +474,6 @@ describe("search-available-times tool", () => {
       );
 
       const structuredContent = result.structuredContent as any;
-      expect(structuredContent.isError).toBe(false);
       expect(structuredContent.result.availableTimes).toHaveLength(4);
 
       // Check that OR condition returns facility information
@@ -572,7 +564,6 @@ describe("search-available-times tool", () => {
       );
 
       const structuredContent = result.structuredContent as any;
-      expect(structuredContent.isError).toBe(false);
       expect(structuredContent.result.availableTimes).toHaveLength(4);
 
       // Check that AND condition does not return facility information

@@ -136,7 +136,6 @@ export const searchAvailableTimes = createTool(
     );
 
     const output = {
-      isError: false,
       result: apiResult,
     };
     const validatedOutput = z.object(outputSchema).parse(output);
