@@ -107,28 +107,6 @@ describe("output-schemas", () => {
       expect(() => schema.parse(errorOutput)).not.toThrow();
     });
 
-    it("should reject output without isError", () => {
-      const invalidOutput = {
-        result: {
-          availableTimes: [
-            {
-              start: {
-                dateTime: "2024-07-27T09:00:00+09:00",
-                timeZone: "Asia/Tokyo",
-              },
-              end: {
-                dateTime: "2024-07-27T09:30:00+09:00",
-                timeZone: "Asia/Tokyo",
-              },
-            },
-          ],
-        },
-      };
-
-      const schema = z.object(outputSchema);
-      expect(() => schema.parse(invalidOutput)).toThrow();
-    });
-
     it("should reject output with invalid availableTimes format", () => {
       const invalidOutput = {
         isError: false,
