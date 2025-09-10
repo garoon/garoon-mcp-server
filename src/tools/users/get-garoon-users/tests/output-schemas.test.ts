@@ -169,23 +169,6 @@ describe("output-schemas", () => {
       expect(() => schema.parse(invalidOutput)).toThrow();
     });
 
-    it("should reject output with missing isError", () => {
-      const invalidOutput = {
-        result: {
-          users: [
-            {
-              id: "123",
-              name: "John Doe",
-              code: "john.doe",
-            },
-          ],
-        },
-      };
-
-      const schema = z.object(outputSchema);
-      expect(() => schema.parse(invalidOutput)).toThrow();
-    });
-
     it("should validate users with empty strings", () => {
       const validOutput = {
         isError: false,

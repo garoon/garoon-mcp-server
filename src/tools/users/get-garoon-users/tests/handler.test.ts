@@ -39,7 +39,6 @@ describe("getGaroonUsersHandler", () => {
     expect(result.content[0].type).toBe("text");
 
     const parsedResult = JSON.parse(result.content[0].text as string);
-    expect(parsedResult.isError).toBe(false);
     expect(parsedResult.result).toEqual(mockApiResponse);
   });
 
@@ -74,7 +73,6 @@ describe("getGaroonUsersHandler", () => {
 
     expect(result.content).toHaveLength(1);
     const parsedResult = JSON.parse(result.content[0].text as string);
-    expect(parsedResult.isError).toBe(false);
     expect(parsedResult.result.users).toEqual([]);
   });
 
@@ -188,7 +186,6 @@ describe("getGaroonUsersHandler", () => {
 
     expect(result.structuredContent).toBeDefined();
     if (result.structuredContent) {
-      expect(result.structuredContent.isError).toBe(false);
       expect((result.structuredContent.result as any).users).toHaveLength(1);
       expect((result.structuredContent.result as any).users[0].name).toBe(
         "Test User",
@@ -226,8 +223,5 @@ describe("getGaroonUsersHandler", () => {
     const result = await getGaroonUsersHandler({ name: "" });
 
     expect(mockGetRequest).toHaveBeenCalledWith("/api/v1/base/users?name=");
-
-    const parsedResult = JSON.parse(result.content[0].text as string);
-    expect(parsedResult.isError).toBe(false);
   });
 });

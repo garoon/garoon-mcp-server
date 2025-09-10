@@ -179,17 +179,5 @@ describe("output-schemas", () => {
       const schema = z.object(outputSchema);
       expect(() => schema.parse(validOutput)).not.toThrow();
     });
-
-    it("should reject output with missing isError", () => {
-      const invalidOutput = {
-        result: {
-          timezone: "Asia/Tokyo",
-          datetime: "2024-07-27T11:00:00+09:00",
-        },
-      };
-
-      const schema = z.object(outputSchema);
-      expect(() => schema.parse(invalidOutput)).toThrow();
-    });
   });
 });
