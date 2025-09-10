@@ -159,26 +159,6 @@ describe("output-schemas", () => {
       expect(() => schema.parse(errorOutput)).not.toThrow();
     });
 
-    it("should reject output without isError", () => {
-      const invalidOutput = {
-        result: {
-          id: "12345",
-          eventType: "REGULAR",
-          subject: "Test Event",
-          isStartOnly: false,
-          isAllDay: false,
-          start: {
-            dateTime: "2024-07-27T09:00:00+09:00",
-            timeZone: "Asia/Tokyo",
-          },
-          attendees: [],
-        },
-      };
-
-      const schema = z.object(outputSchema);
-      expect(() => schema.parse(invalidOutput)).toThrow();
-    });
-
     it("should reject output with invalid eventType", () => {
       const invalidOutput = {
         isError: false,

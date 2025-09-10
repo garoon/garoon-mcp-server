@@ -90,9 +90,9 @@ const inputSchema = {
 const outputSchema = createStructuredOutputSchema({
   id: idSchema().describe("Unique identifier for the created schedule event"),
   eventType: eventTypeSchema(),
-  eventMenu: eventMenuSchema(),
+  eventMenu: eventMenuSchema().optional(),
   subject: subjectSchema(),
-  notes: notesSchema(),
+  notes: notesSchema().optional(),
   visibilityType: visibilityTypeSchema().optional(),
   isStartOnly: isStartOnlySchema(),
   isAllDay: isAllDaySchema(),

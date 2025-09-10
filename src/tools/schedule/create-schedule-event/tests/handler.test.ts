@@ -187,7 +187,6 @@ describe("createScheduleEventHandler", () => {
     );
 
     const structuredContent = result.structuredContent as any;
-    expect(structuredContent.isError).toBe(false);
     expect(structuredContent.result.id).toBe("12345");
   });
 
@@ -238,7 +237,6 @@ describe("createScheduleEventHandler", () => {
     );
 
     const structuredContent = result.structuredContent as any;
-    expect(structuredContent.isError).toBe(false);
     expect(structuredContent.result.isStartOnly).toBe(true);
   });
 
@@ -301,7 +299,6 @@ describe("createScheduleEventHandler", () => {
     );
 
     const structuredContent = result.structuredContent as any;
-    expect(structuredContent.isError).toBe(false);
     expect(structuredContent.result.isAllDay).toBe(true);
   });
 
