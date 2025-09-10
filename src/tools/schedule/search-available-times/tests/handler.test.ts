@@ -261,7 +261,6 @@ describe("searchAvailableTimesHandler", () => {
     const structuredContent = result.structuredContent as any;
     expect(structuredContent.result.availableTimes).toHaveLength(2);
 
-    // Check that OR condition returns facility information
     expect(structuredContent.result.availableTimes[0].facility).toEqual({
       id: "1",
       code: "f1",
@@ -326,7 +325,6 @@ describe("searchAvailableTimesHandler", () => {
     const structuredContent = result.structuredContent as any;
     expect(structuredContent.result.availableTimes).toHaveLength(2);
 
-    // Check that AND condition does not return facility information
     expect(structuredContent.result.availableTimes[0].facility).toBeUndefined();
     expect(structuredContent.result.availableTimes[1].facility).toBeUndefined();
   });

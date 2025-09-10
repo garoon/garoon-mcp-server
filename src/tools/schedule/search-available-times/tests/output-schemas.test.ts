@@ -123,7 +123,6 @@ describe("search-available-times output schema", () => {
   it("should accept empty object (both result and error are optional)", () => {
     const emptyOutput = {};
 
-    // Both result and error are optional, so empty object is valid
     expect(() => schema.parse(emptyOutput)).not.toThrow();
   });
 

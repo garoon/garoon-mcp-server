@@ -61,6 +61,6 @@ describe("get-garoon-users input schema", () => {
       name: "",
     };
 
-    expect(() => schema.parse(invalidInput)).not.toThrow(); // Empty string is valid for search
+    expect(() => schema.parse(invalidInput)).not.toThrow();
   });
 });

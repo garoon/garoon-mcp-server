@@ -45,6 +45,6 @@ describe("get-schedule-events input schema", () => {
       rangeEnd: "2024-01-07T23:59:59+09:00",
     };
 
-    expect(() => schema.parse(invalidInput)).not.toThrow(); // String is valid, format validation is done elsewhere
+    expect(() => schema.parse(invalidInput)).not.toThrow();
   });
 });

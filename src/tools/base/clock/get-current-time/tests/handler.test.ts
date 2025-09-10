@@ -20,7 +20,6 @@ describe("getCurrentTimeHandler", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // Mock instant with a fixed datetime
     const mockZonedDateTime = {
       toString: vi
         .fn()
