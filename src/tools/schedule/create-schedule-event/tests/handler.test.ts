@@ -49,15 +49,10 @@ describe("createScheduleEventHandler", () => {
     expect(mockPostRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/events",
       JSON.stringify({
-        eventType: "REGULAR",
-        subject: "New Schedule",
-        visibilityType: "PUBLIC",
         start: {
           dateTime: "2024-07-27T11:00:00+09:00",
           timeZone: "Asia/Tokyo",
         },
-        isStartOnly: false,
-        isAllDay: false,
       }),
     );
 
@@ -222,7 +217,6 @@ describe("createScheduleEventHandler", () => {
       JSON.stringify({
         eventType: "ALL_DAY",
         subject: "All Day Event",
-        visibilityType: "PUBLIC",
         start: {
           dateTime: "2024-07-27T00:00:00+09:00",
           timeZone: "Asia/Tokyo",
@@ -231,7 +225,6 @@ describe("createScheduleEventHandler", () => {
           dateTime: "2024-07-27T23:59:59+09:00",
           timeZone: "Asia/Tokyo",
         },
-        isStartOnly: false,
         isAllDay: true,
       }),
     );
@@ -270,15 +263,12 @@ describe("createScheduleEventHandler", () => {
     expect(mockPostRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/events",
       JSON.stringify({
-        eventType: "REGULAR",
         subject: "Start Only Event",
-        visibilityType: "PUBLIC",
         start: {
           dateTime: "2024-07-27T11:00:00+09:00",
           timeZone: "Asia/Tokyo",
         },
         isStartOnly: true,
-        isAllDay: false,
       }),
     );
 
