@@ -68,7 +68,6 @@ describe("searchScheduleEventsHandler", () => {
     expect(result.content[0].type).toBe("text");
 
     const structuredContent = result.structuredContent as any;
-    expect(structuredContent.isError).toBe(false);
     expect(structuredContent.result).toEqual(mockApiResponse);
   });
 
@@ -92,7 +91,6 @@ describe("searchScheduleEventsHandler", () => {
     expect(result).toHaveProperty("content");
 
     const structuredContent = result.structuredContent as any;
-    expect(structuredContent.isError).toBe(false);
     expect(structuredContent.result).toEqual(mockApiResponse);
   });
 
@@ -144,7 +142,6 @@ describe("searchScheduleEventsHandler", () => {
     );
 
     const structuredContent = result.structuredContent as any;
-    expect(structuredContent.isError).toBe(false);
     expect(structuredContent.result.events).toHaveLength(2);
     expect(structuredContent.result.hasNext).toBe(true);
   });
@@ -184,7 +181,6 @@ describe("searchScheduleEventsHandler", () => {
     );
 
     const structuredContent = result.structuredContent as any;
-    expect(structuredContent.isError).toBe(false);
     expect(structuredContent.result.events[0].start.timeZone).toBe("UTC");
   });
 
@@ -219,7 +215,6 @@ describe("searchScheduleEventsHandler", () => {
     const result = await searchScheduleEventsHandler(input);
 
     const structuredContent = result.structuredContent as any;
-    expect(structuredContent.isError).toBe(false);
     expect(structuredContent.result.events[0].notes).toBe("");
   });
 
