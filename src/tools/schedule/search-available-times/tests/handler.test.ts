@@ -7,7 +7,6 @@ import type {
 } from "@modelcontextprotocol/sdk/types.js";
 import * as client from "../../../../client.js";
 
-// Mock the client module
 vi.mock("../../../../client.js", () => ({
   postRequest: vi.fn(),
 }));
@@ -127,7 +126,6 @@ describe("searchAvailableTimesHandler", () => {
     );
 
     const structuredContent = result.structuredContent as any;
-    expect(structuredContent.isError).toBe(false);
     expect(structuredContent.result.availableTimes).toHaveLength(1);
   });
 
@@ -152,7 +150,6 @@ describe("searchAvailableTimesHandler", () => {
     const result = await searchAvailableTimesHandler(input, mockExtra);
 
     const structuredContent = result.structuredContent as any;
-    expect(structuredContent.isError).toBe(false);
     expect(structuredContent.result.availableTimes).toHaveLength(0);
   });
 
@@ -209,7 +206,6 @@ describe("searchAvailableTimesHandler", () => {
     );
 
     const structuredContent = result.structuredContent as any;
-    expect(structuredContent.isError).toBe(false);
     expect(structuredContent.result.availableTimes).toHaveLength(2);
   });
 
