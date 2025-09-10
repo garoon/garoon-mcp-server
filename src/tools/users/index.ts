@@ -1,4 +1,4 @@
 import { Tool } from "../register.js";
-import { garoonUsersTool } from "./garoon-users.js";
+import { getGaroonUsersTool } from "../base/users/get-garoon-users/index.js";
 
-export const usersTools: Array<Tool<any, any>> = [garoonUsersTool];
+export const usersTools: Array<Tool<any, any>> = [getGaroonUsersTool];
