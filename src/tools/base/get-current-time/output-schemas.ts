@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createStructuredOutputSchema } from "../../../../schemas/helper.js";
+import { createStructuredOutputSchema } from "../../../schemas/helper.js";
 
 export const outputSchema = createStructuredOutputSchema({
   timezone: z.string().describe("The timezone used for the datetime"),

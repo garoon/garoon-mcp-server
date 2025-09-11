@@ -1,4 +1,4 @@
-import { createTool } from "../../../register.js";
+import { createTool } from "../../register.js";
 import { inputSchema } from "./input-schemas.js";
 import { outputSchema } from "./output-schemas.js";
 import { getGaroonUsersHandler } from "./handler.js";

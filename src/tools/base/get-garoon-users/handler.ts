@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { getRequest } from "../../../../client.js";
+import { getRequest } from "../../../client.js";
 import { outputSchema } from "./output-schemas.js";
 import type { RequestHandlerExtra } from "@modelcontextprotocol/sdk/shared/protocol.js";
 import {

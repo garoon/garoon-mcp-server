@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { Temporal } from "@js-temporal/polyfill";
-import { GAROON_SUPPORTED_TIMEZONES } from "../../../../constants.js";
+import { GAROON_SUPPORTED_TIMEZONES } from "../../../constants.js";
 import { outputSchema } from "./output-schemas.js";
 import type { RequestHandlerExtra } from "@modelcontextprotocol/sdk/shared/protocol.js";
 import {

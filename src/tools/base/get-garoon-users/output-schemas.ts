@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { userSchema } from "../../../../schemas/base/user.js";
-import { createStructuredOutputSchema } from "../../../../schemas/helper.js";
+import { userSchema } from "../../../schemas/base/user.js";
+import { createStructuredOutputSchema } from "../../../schemas/helper.js";
 
 export const outputSchema = createStructuredOutputSchema({
   users: z
