@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { idSchema } from "../../../schemas/base/id.js";
+import { idSchema } from "../../../schemas/base/index.js";
 
 export const inputSchema = {
   userId: idSchema().describe(

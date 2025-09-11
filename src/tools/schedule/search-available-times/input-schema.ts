@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { idSchema } from "../../../schemas/base/id.js";
+import { idSchema } from "../../../schemas/base/index.js";
 import { facilitySearchConditionSchema } from "../shared-schemas/index.js";
 import { timeIntervalSchema, timeRangeSchema } from "src/schemas/base/index.js";
 

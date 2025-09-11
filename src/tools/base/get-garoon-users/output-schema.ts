@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { userSchema } from "../../../schemas/base/user.js";
+import { userSchema } from "../../../schemas/base/index.js";
 import { createStructuredOutputSchema } from "../../../schemas/helper.js";
 
 export const outputSchema = createStructuredOutputSchema({
