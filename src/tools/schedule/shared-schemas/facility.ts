@@ -18,3 +18,15 @@ export const facilitySearchConditionSchema = () =>
     .describe(
       "Logical operator for combining multiple facility search conditions",
     );
+
+export const facilityInputSchema = () =>
+  z
+    .object({
+      id: idSchema().optional(),
+      code: z.string().optional(),
+    })
+    .refine((data) => data.id || data.code, {
+      message: "Either id or code is required for facility",
+      path: ["id", "code"],
+    })
+    .describe("Facility identified by either id or code");

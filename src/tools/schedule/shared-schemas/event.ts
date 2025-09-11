@@ -117,3 +117,33 @@ export const facilityUsingPurposeSchema = () =>
     .describe(
       "Facility usage purpose - required if 'Application for facility use' is enabled",
     );
+
+export const attendeeInputSchema = () =>
+  z
+    .object({
+      type: z.enum(["ORGANIZATION", "USER"]).describe("Participant type"),
+      id: idSchema().optional(),
+      code: z.string().optional(),
+    })
+    .refine((data) => data.id || data.code, {
+      message: "Either id or code is required for attendee",
+      path: ["id", "code"],
+    })
+    .describe(
+      "Attendee identified by type and either id or code. If both are provided, id is used.",
+    );
+
+export const watcherInputSchema = () =>
+  z
+    .object({
+      type: z.enum(["ORGANIZATION", "USER", "ROLE"]).describe("Watcher type"),
+      id: idSchema().optional(),
+      code: z.string().optional(),
+    })
+    .refine((data) => data.id || data.code, {
+      message: "Either id or code is required for watcher",
+      path: ["id", "code"],
+    })
+    .describe(
+      "Watcher identified by type and either id or code. If both are provided, id is used.",
+    );
