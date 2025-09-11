@@ -1,6 +1,6 @@
 import { createTool } from "../../register.js";
-import { inputSchema } from "./input-schemas.js";
-import { outputSchema } from "./output-schemas.js";
+import { inputSchema } from "./input-schema.js";
+import { outputSchema } from "./output-schema.js";
 import { searchScheduleEventsHandler } from "./handler.js";
 
 export const searchScheduleEvents = createTool(

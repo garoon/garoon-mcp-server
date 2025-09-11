@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
-import { outputSchema } from "../output-schemas.js";
+import { outputSchema } from "../output-schema.js";
 
 describe("search-available-times output schema", () => {
   const schema = z.object(outputSchema);

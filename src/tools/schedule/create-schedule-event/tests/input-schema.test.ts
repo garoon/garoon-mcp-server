@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
-import { inputSchema } from "../input-schemas.js";
+import { inputSchema } from "../input-schema.js";
 
 describe("create-schedule-event input schema", () => {
   const schema = z.object(inputSchema);

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { postRequest } from "../../../client.js";
-import { outputSchema } from "./output-schemas.js";
+import { outputSchema } from "./output-schema.js";
 import type { RequestHandlerExtra } from "@modelcontextprotocol/sdk/shared/protocol.js";
 import {
   ServerNotification,

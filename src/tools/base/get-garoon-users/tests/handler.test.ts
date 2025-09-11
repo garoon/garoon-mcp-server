@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { getGaroonUsersHandler } from "../handler.js";
-import * as client from "../../../../../client.js";
+import * as client from "../../../../client.js";
 
-vi.mock("../../../../../client.js", async () => {
-  const actual = await vi.importActual("../../../../../client.js");
+vi.mock("../../../../client.js", async () => {
+  const actual = await vi.importActual("../../../../client.js");
   return {
     ...actual,
     getRequest: vi.fn(),
