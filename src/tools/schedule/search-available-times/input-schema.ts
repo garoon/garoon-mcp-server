@@ -1,10 +1,7 @@
 import { z } from "zod";
 import { idSchema } from "../../../schemas/base/id.js";
-import {
-  timeIntervalSchema,
-  timeRangeSchema,
-} from "../../../schemas/base/time-range.js";
 import { facilitySearchConditionSchema } from "../shared-schemas/index.js";
+import { timeIntervalSchema, timeRangeSchema } from "src/schemas/base/index.js";
 
 const attendeeInputSchema = z
   .object({
