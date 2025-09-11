@@ -1,5 +1,5 @@
-import { idSchema } from "src/schemas/base/id.js";
-import { userSchema } from "src/schemas/base/user.js";
+import { idSchema } from "../../../schemas/base/id.js";
+import { userSchema } from "../../../schemas/base/user.js";
 import { z } from "zod";
 
 export const eventTypeSchema = () =>
