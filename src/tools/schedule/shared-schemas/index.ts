@@ -1,4 +1,3 @@
-// Event schemas
 export {
   eventTypeSchema,
   eventMenuSchema,
@@ -15,5 +14,3 @@ export {
 } from "./event.js";
 
 export { facilitySchema, facilitySearchConditionSchema } from "./facility.js";
-
-export { timeIntervalSchema } from "./time.js";

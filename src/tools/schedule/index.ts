@@ -1,9 +1,13 @@
-import { Tool } from "../register.js";
 import { createScheduleEvent } from "./create-schedule-event/index.js";
 import { searchScheduleEvents } from "./get-schedule-events/index.js";
 import { searchAvailableTimes } from "./search-available-times/index.js";
 
-export const scheduleTools: Array<Tool<any, any>> = [
+type ScheduleTool =
+  | typeof createScheduleEvent
+  | typeof searchScheduleEvents
+  | typeof searchAvailableTimes;
+
+export const scheduleTools: ScheduleTool[] = [
   createScheduleEvent,
   searchScheduleEvents,
   searchAvailableTimes,

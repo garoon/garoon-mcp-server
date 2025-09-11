@@ -6,6 +6,3 @@ export const baseTools: Array<Tool<any, any>> = [
   ...baseClockTools,
   ...baseUsersTools,
 ];
-
-export { baseClockTools } from "./clock/index.js";
-export { baseUsersTools } from "./users/index.js";
