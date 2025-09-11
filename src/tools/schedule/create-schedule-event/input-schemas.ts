@@ -1,8 +1,8 @@
 import { z } from "zod";
+import { idSchema } from "../../../schemas/base/id.js";
 import {
   eventTypeSchema,
   eventMenuSchema,
-  idSchema,
   subjectSchema,
   notesSchema,
   startDateTimeSchema,
@@ -11,7 +11,7 @@ import {
   visibilityTypeSchema,
   isStartOnlySchema,
   isAllDaySchema,
-} from "../../../schemas/schedule/common.js";
+} from "../shared-schemas/index.js";
 
 const attendeeInputSchema = z
   .object({

@@ -1,10 +1,11 @@
-import z from "zod";
+import { z } from "zod";
+import { idSchema } from "./id.js";
 
 export const userSchema = () =>
   z.object({
-    id: z
-      .string()
-      .describe("User unique identifier as a numeric string (e.g., 12345)"),
+    id: idSchema().describe(
+      "User unique identifier as a numeric string (e.g., 12345)",
+    ),
     code: z
       .string()
       .describe(

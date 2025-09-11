@@ -1,0 +1,20 @@
+import { z } from "zod";
+import { idSchema } from "../../../schemas/base/id.js";
+
+export const facilitySchema = () =>
+  z.object({
+    id: idSchema().describe(
+      "Facility unique identifier as a numeric string (e.g., 12345)",
+    ),
+    code: z.string().describe("Facility code (e.g., '101', '202')"),
+    name: z
+      .string()
+      .describe("Facility name (e.g., 'Conference Room 1', 'Meeting Room 2')"),
+  });
+
+export const facilitySearchConditionSchema = () =>
+  z
+    .enum(["AND", "OR"])
+    .describe(
+      "Logical operator for combining multiple facility search conditions",
+    );

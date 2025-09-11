@@ -1,11 +1,11 @@
 import { z } from "zod";
+import { idSchema } from "../../../schemas/base/id.js";
 import {
-  idSchema,
   subjectSchema,
   notesSchema,
   startDateTimeSchema,
   endDateTimeSchema,
-} from "../../../schemas/schedule/common.js";
+} from "../shared-schemas/index.js";
 import { createStructuredOutputSchema } from "../../../schemas/helper.js";
 
 export const outputSchema = createStructuredOutputSchema({

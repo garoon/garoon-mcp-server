@@ -1,9 +1,9 @@
 import { z } from "zod";
+import { idSchema } from "../../../schemas/base/id.js";
 import {
   attendeeSchema,
   eventTypeSchema,
   eventMenuSchema,
-  idSchema,
   subjectSchema,
   notesSchema,
   startDateTimeSchema,
@@ -14,7 +14,7 @@ import {
   watcherSchema,
   isStartOnlySchema,
   isAllDaySchema,
-} from "../../../schemas/schedule/common.js";
+} from "../shared-schemas/index.js";
 import { createStructuredOutputSchema } from "../../../schemas/helper.js";
 
 export const outputSchema = createStructuredOutputSchema({

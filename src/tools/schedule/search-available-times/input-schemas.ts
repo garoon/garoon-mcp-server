@@ -1,10 +1,10 @@
 import { z } from "zod";
+import { idSchema } from "../../../schemas/base/id.js";
+import { timeRangeSchema } from "../../../schemas/base/timerange.js";
 import {
-  idSchema,
-  timeRangeSchema,
   timeIntervalSchema,
   facilitySearchConditionSchema,
-} from "../../../schemas/schedule/common.js";
+} from "../shared-schemas/index.js";
 
 const attendeeInputSchema = z
   .object({
