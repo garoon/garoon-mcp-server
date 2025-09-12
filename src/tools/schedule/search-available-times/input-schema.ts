@@ -4,7 +4,10 @@ import {
   attendeeInputSchema,
   facilityInputSchema,
 } from "../shared-schemas/index.js";
-import { timeIntervalSchema, timeRangeSchema } from "src/schemas/base/index.js";
+import {
+  timeIntervalSchema,
+  timeRangeSchema,
+} from "../../../schemas/base/index.js";
 
 export const inputSchema = {
   timeRanges: z
