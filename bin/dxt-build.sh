@@ -4,7 +4,7 @@ set -eux
 cd "$(dirname "$0")/.."
 
 npm run clean
-npm run build
+BUILD_TYPE=dxt npm run build
 npm run license:extract
 
 mkdir -p build/tmp
