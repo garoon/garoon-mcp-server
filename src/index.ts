@@ -10,13 +10,13 @@ import { tools } from "./tools/index.js";
 import { prompts } from "./prompts/index.js";
 
 const PFX_PATH = process.env.GAROON_PFX_FILE_PATH;
-const PFX_PASSPHRASE = process.env.GAROON_PFX_FILE_PASSWORD;
+const PFX_FILE_PASSWORD = process.env.GAROON_PFX_FILE_PASSWORD;
 
 if (process.env.https_proxy || process.env.http_proxy) {
   const requestTls: { pfx?: Buffer; passphrase?: string } = {};
-  if (PFX_PATH && PFX_PASSPHRASE) {
+  if (PFX_PATH && PFX_FILE_PASSWORD) {
     requestTls.pfx = readFileSync(PFX_PATH);
-    requestTls.passphrase = PFX_PASSPHRASE;
+    requestTls.passphrase = readFileSync(PFX_FILE_PASSWORD, "utf8").trim();
   }
   setGlobalDispatcher(
     new EnvHttpProxyAgent({
