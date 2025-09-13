@@ -27,7 +27,7 @@ export async function postRequest<T>(
     headers: {
       "Content-Type": "application/json",
       "X-Cybozu-Authorization": API_CREDENTIAL,
-      "User-Agent": USER_AGENT
+      "User-Agent": USER_AGENT,
     },
     body,
   });
