@@ -7,6 +7,7 @@ import { registerPrompts } from "./prompts/register.js";
 import { resources } from "./resources/index.js";
 import { tools } from "./tools/index.js";
 import { prompts } from "./prompts/index.js";
+import { VERSION } from "./build-constants.js";
 
 if (process.env.https_proxy || process.env.http_proxy) {
   setGlobalDispatcher(new EnvHttpProxyAgent());
@@ -14,7 +15,7 @@ if (process.env.https_proxy || process.env.http_proxy) {
 
 const server = new McpServer({
   name: "Garoon MCP Server",
-  version: "0.0.1",
+  version: VERSION,
 });
 
 registerResources(server, resources);

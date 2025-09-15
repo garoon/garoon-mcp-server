@@ -22,4 +22,7 @@ npm --prefix build/tmp install --only=production --frozen-lockfile
 
 npx --prefix build/tmp dxt pack build/tmp build/garoon-mcp-server.dxt
 
+# Revert build type to npm
+BUILD_TYPE=npm npm run build
+
 echo "DXT package created successfully at build/garoon-mcp-server.dxt"
