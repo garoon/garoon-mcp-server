@@ -20,7 +20,10 @@
       "env": {
         "GAROON_BASE_URL": "${user_config.garoon_base_url}",
         "GAROON_USERNAME": "${user_config.garoon_username}",
-        "GAROON_PASSWORD": "${user_config.garoon_password}"
+        "GAROON_PASSWORD": "${user_config.garoon_password}",
+        "https_proxy": "${user_config.https_proxy}",
+        "GAROON_PFX_FILE_PATH": "${user_config.garoon_pfx_file_path}",
+        "GAROON_PFX_FILE_PASSWORD": "${user_config.garoon_pfx_file_password}"
       }
     }
   },
@@ -51,6 +54,30 @@
       "description": "Your garoon password for authentication",
       "required": true,
       "sensitive": true
+    },
+    "https_proxy": {
+      "type": "string",
+      "title": "HTTPS Proxy",
+      "description": "HTTPS proxy URL (e.g., http://proxy.example.com:8080)",
+      "required": false,
+      "sensitive": false,
+      "default": ""
+    },
+    "garoon_pfx_file_path": {
+      "type": "string",
+      "title": "PFX File Path",
+      "description": "Path to PFX client certificate file for authentication",
+      "required": false,
+      "sensitive": false,
+      "default": ""
+    },
+    "garoon_pfx_file_password": {
+      "type": "string",
+      "title": "PFX File Password",
+      "description": "Password for PFX client certificate file",
+      "required": false,
+      "sensitive": true,
+      "default": ""
     }
   },
   "keywords": ["Garoon"],
