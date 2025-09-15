@@ -73,6 +73,10 @@ docker run --rm -i \
   -e GAROON_BASE_URL \
   -e GAROON_USERNAME \
   -e GAROON_PASSWORD \
+  -e https_proxy \  # Optional
+  -e http_proxy \   # Optional
+  -e GAROON_PFX_FILE_PATH \  # Optional
+  -e GAROON_PFX_FILE_PASSWORD \  # Optional
   garoon-mcp-server:latest
 ```
 
