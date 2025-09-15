@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "sh bin/inspector-run.sh",
-    "build": "BUILD_TYPE=npm tsc",
+    "build": "tsc",
     "build:dxt": "./bin/dxt-build.sh",
     "check:dxt": "dxt validate .",
     "clean": "rm -rf dist ./build && rm -rf dist",
