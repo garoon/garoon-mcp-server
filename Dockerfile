@@ -19,6 +19,7 @@ COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package.json ./package.json
 COPY --from=build /app/LICENSE ./LICENSE
 COPY --from=build /app/NOTICE ./NOTICE
+COPY --from=build /app/scripts/inspect-container.mjs ./scripts/inspect-container.mjs
 
 # ref. https://github.com/GoogleContainerTools/distroless/tree/main/nodejs#usage
 # > The entrypoint of this image is set to "node", so this image expects users to supply a path to a .js file in the CMD.

@@ -20,6 +20,6 @@ cp -r dist build/tmp/
 
 npm --prefix build/tmp install --only=production --frozen-lockfile
 
-npx --prefix build/tmp dxt pack build/tmp build/garoon-mcp-server.dxt
+cd build/tmp && ../../node_modules/.bin/dxt pack . ../garoon-mcp-server.dxt
 
 echo "DXT package created successfully at build/garoon-mcp-server.dxt"

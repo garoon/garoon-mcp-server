@@ -20,9 +20,13 @@
     "lint": "npm run lint:eslint && npm run lint:prettier",
     "lint:eslint": "eslint . --max-warnings 0",
     "lint:prettier": "prettier --check '**/*.{json,json5,md,yml,yaml}' --cache",
-    "license:analyze": "license-manager analyze -c license-manager.config.cjs",
-    "license:extract": "license-manager extract -c license-manager.config.cjs",
-    "typecheck": "tsc --noEmit"
+    "license:analyze": "npx license-manager analyze -c license-manager.config.cjs",
+    "license:extract": "./node_modules/.bin/license-manager extract -c license-manager.config.cjs",
+    "typecheck": "tsc --noEmit",
+    "test:npm": "npm run build && node scripts/test-execution-type.js npm",
+    "test:docker": "./scripts/test-docker-execution-type.sh",
+    "test:dxt": "./scripts/test-dxt-execution-type.sh",
+    "test:all-execution-types": "npm run test:npm && npm run test:docker && npm run test:dxt"
   },
   "author": "",
   "license": "ISC",
