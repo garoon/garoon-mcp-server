@@ -22,4 +22,3 @@ coverage/
 NOTICE
 *.dxt
 build/
-src/build-constants.ts
