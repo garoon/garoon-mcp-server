@@ -30,7 +30,6 @@ export const EXECUTION_TYPE = "${EXECUTION_TYPE}";
   console.log(`   VERSION: ${VERSION}`);
   console.log(`   EXECUTION_TYPE: ${EXECUTION_TYPE}`);
   console.log(`   Output: ${outputPath}`);
-
 } catch (error) {
   console.error("❌ Failed to generate build constants:", error.message);
   throw error;
