@@ -26,6 +26,7 @@ GAROON_PFX_FILE_PASSWORD=pfx_password
 EOS
 npm run dev
 ```
+
 If your site doesn't require a client certificate, leave `GAROON_PFX_FILE_PATH` and `GAROON_PFX_FILE_PASSWORD` empty.
 
 Reference: https://github.com/modelcontextprotocol/inspector
@@ -96,7 +97,6 @@ If your site doesn't require a client certificate, leave `GAROON_PFX_FILE_PATH` 
 Configure in `.cursor/mcp.json`
 Configure in `.mcp.json`
 If your site doesn't require a client certificate, leave `GAROON_PFX_FILE_PATH` and `GAROON_PFX_FILE_PASSWORD` empty.
-
 
 ```json
 {
