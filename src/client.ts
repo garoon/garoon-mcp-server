@@ -1,11 +1,11 @@
-import { getUserAgent } from "./build-constants.js";
+import { VERSION, EXECUTION_TYPE } from "./build-constants.js";
 
 const GAROON_BASE_URL = process.env.GAROON_BASE_URL || "";
 const API_CREDENTIAL = Buffer.from(
   `${process.env.GAROON_USERNAME}:${process.env.GAROON_PASSWORD}`,
 ).toString("base64");
 
-const USER_AGENT = getUserAgent();
+const USER_AGENT = `garoon-mcp-server/${VERSION} (${EXECUTION_TYPE})`;
 
 export class HttpErrorResponse extends Error {
   constructor(
