@@ -1,7 +1,11 @@
+import { VERSION, EXECUTION_TYPE } from "./build-constants.js";
+
 const GAROON_BASE_URL = process.env.GAROON_BASE_URL || "";
 const API_CREDENTIAL = Buffer.from(
   `${process.env.GAROON_USERNAME}:${process.env.GAROON_PASSWORD}`,
 ).toString("base64");
+
+const USER_AGENT = `garoon-mcp-server/${VERSION} (${EXECUTION_TYPE})`;
 
 export class HttpErrorResponse extends Error {
   constructor(
@@ -23,6 +27,7 @@ export async function postRequest<T>(
     headers: {
       "Content-Type": "application/json",
       "X-Cybozu-Authorization": API_CREDENTIAL,
+      "User-Agent": USER_AGENT,
     },
     body,
   });
@@ -39,6 +44,7 @@ export async function getRequest<T>(endpoint: string): Promise<T> {
     method: "GET",
     headers: {
       "X-Cybozu-Authorization": API_CREDENTIAL,
+      "User-Agent": USER_AGENT,
     },
   });
   if (response.ok) {

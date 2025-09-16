@@ -1,6 +1,6 @@
 {
   "name": "garoon-mcp-server",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "type": "module",
   "main": "dist/index.js",
   "engines": {
@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "sh bin/inspector-run.sh",
+    "prebuild": "node scripts/generate-build-constants.js",
     "build": "tsc",
     "build:dxt": "./bin/dxt-build.sh",
     "check:dxt": "dxt validate .",

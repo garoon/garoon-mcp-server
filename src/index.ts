@@ -8,6 +8,7 @@ import { registerPrompts } from "./prompts/register.js";
 import { resources } from "./resources/index.js";
 import { tools } from "./tools/index.js";
 import { prompts } from "./prompts/index.js";
+import { VERSION } from "./build-constants.js";
 
 const PFX_PATH = process.env.GAROON_PFX_FILE_PATH;
 const PFX_PASSPHRASE = process.env.GAROON_PFX_FILE_PASSWORD;
@@ -27,7 +28,7 @@ if (process.env.https_proxy || process.env.http_proxy) {
 
 const server = new McpServer({
   name: "Garoon MCP Server",
-  version: "0.0.1",
+  version: VERSION,
 });
 
 registerResources(server, resources);

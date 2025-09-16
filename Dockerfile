@@ -4,7 +4,7 @@ COPY . /app
 WORKDIR /app
 
 RUN npm install --frozen-lockfile
-RUN npm run build
+RUN BUILD_TYPE=docker npm run build
 # generate NOTICE file
 RUN npm run license:extract
 
