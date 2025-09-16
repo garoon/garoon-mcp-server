@@ -10,6 +10,7 @@ export const facilitySchema = () =>
     name: z
       .string()
       .describe("Facility name (e.g., 'Conference Room 1', 'Meeting Room 2')"),
+    notes: z.string().describe("Notes about the facility"),
   });
 
 export const facilitySearchConditionSchema = () =>
