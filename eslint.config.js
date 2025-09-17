@@ -3,7 +3,7 @@ import presetsNodeTypescriptPrettier from "@cybozu/eslint-config/flat/presets/no
 export default [
   ...presetsNodeTypescriptPrettier,
   {
-    ignores: ["dist"],
+    ignores: ["dist", "build"],
   },
   {
     rules: {
