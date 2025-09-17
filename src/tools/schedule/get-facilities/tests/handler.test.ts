@@ -310,7 +310,7 @@ describe("getFacilitiesHandler", () => {
     );
 
     expect(mockGetRequest).toHaveBeenCalledWith(
-      "/api/v1/schedule/facilities?name=Room&limit=0&offset=0",
+      "/api/v1/schedule/facilities?name=Room",
     );
   });
 

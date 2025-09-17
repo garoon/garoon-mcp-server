@@ -17,14 +17,11 @@ export const getFacilitiesHandler = async (
 ) => {
   const { name, limit, offset } = input;
 
-  const params = new URLSearchParams();
-  params.append("name", name);
-  if (limit !== undefined) {
-    params.append("limit", limit.toString());
-  }
-  if (offset !== undefined) {
-    params.append("offset", offset.toString());
-  }
+  const params = new URLSearchParams({
+    name: name,
+    ...(limit && { limit: limit.toString() }),
+    ...(offset && { offset: offset.toString() }),
+  });
 
   type ResponseType = z.infer<typeof outputSchema.result>;
   const data = await getRequest<ResponseType>(

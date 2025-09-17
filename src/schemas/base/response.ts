@@ -4,5 +4,5 @@ export const hasNextSchema = () =>
   z
     .boolean()
     .describe(
-      "Indicates if there are more elements available (based on limit parameter)",
+      "Indicates if the number elements is larger than limit, hasNext is true. Otherwise return false",
     );
