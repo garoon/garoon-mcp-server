@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { limitSchema, offsetSchema } from '../../../schemas/base/pagination.js';
 
 export const inputSchema = {
   name: z
@@ -6,21 +7,10 @@ export const inputSchema = {
     .describe(
       "Organization name to search for (e.g., 'Sales Department', 'Engineering', 'HR')",
     ),
-  limit: z
-    .number()
-    .int()
-    .min(1)
-    .max(1000)
-    .optional()
-    .describe(
-      "Maximum number of organizations to return (1-1000, default: 100 - server default)",
+    limit: limitSchema().describe(
+        "Maximum number of organizations to return (1-1000, default: 100 - server default)",
     ),
-  offset: z
-    .number()
-    .int()
-    .min(0)
-    .optional()
-    .describe(
+    offset: offsetSchema().describe(    
       "Starting position for results (0 or greater, default: 0 - server default)",
     ),
 };
