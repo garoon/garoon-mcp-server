@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { idSchema } from "../../../schemas/base/index.js";
+import { hasNextSchema, idSchema } from "../../../schemas/base/index.js";
 import {
   subjectSchema,
   notesSchema,
@@ -22,9 +22,7 @@ export const outputSchema = createStructuredOutputSchema({
     .describe(
       "List of schedule event objects within the specified period range",
     ),
-  hasNext: z
-    .boolean()
-    .describe(
-      "Boolean indicating if there are more results (True indicates more results exist)",
-    ),
+  hasNext: hasNextSchema().describe(
+    "Boolean indicating if there are more results (True indicates more results exist)",
+  ),
 });
