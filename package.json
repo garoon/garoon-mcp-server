@@ -43,6 +43,7 @@
     "lint": "npm run lint:eslint && npm run lint:prettier",
     "lint:eslint": "eslint . --max-warnings 0",
     "lint:prettier": "prettier --check '**/*.{json,json5,md,yml,yaml}' --cache",
+    "fix:prettier": "prettier --write '**/*.{json,json5,md,yml,yaml}'",
     "license:analyze": "license-manager analyze -c license-manager.config.cjs",
     "license:extract": "license-manager extract -c license-manager.config.cjs",
     "typecheck": "tsc --noEmit"

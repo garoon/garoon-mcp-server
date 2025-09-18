@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version to publish (e.g., v0.1.0)"
+        required: true
+        type: string
+
+jobs:
+  check-draft:
+    name: Check Release Draft
+    runs-on: ubuntu-latest
+    outputs:
+      draft_exists: ${{ steps.check.outputs.draft_exists }}
+    steps:
+      - name: Check if draft release exists
+        id: check
+        run: |
+          # Check if the specified version exists and is a draft
+          if ! gh release view "${{ github.event.inputs.version }}" --json isDraft --jq '.isDraft' 2>/dev/null | grep -q true; then
+            echo "Error: Draft release ${{ github.event.inputs.version }} not found or not a draft"
+            echo "Available draft releases:"
+            gh release list --limit 100 | grep "Draft" || echo "No draft releases found"
+            exit 1
+          fi
+          echo "Found draft release: ${{ github.event.inputs.version }}"
+          echo "draft_exists=true" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-release:
+    name: Publish Release
+    needs: check-draft
+    if: needs.check-draft.outputs.draft_exists == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - name: Publish release with Release Drafter
+        uses: release-drafter/release-drafter@b1476f6e6eb133afa41ed8589daba6dc69b4d3f5 # v6.1.0
+        with:
+          version: ${{ github.event.inputs.version }}
+          publish: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
