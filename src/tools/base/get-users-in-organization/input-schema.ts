@@ -10,6 +10,6 @@ export const inputSchema = {
   ),
   limit: limitSchema().describe("Maximum number of users to return (optional)"),
   offset: offsetSchema().describe(
-    "Number of users to skip for pagination (optional)",
+    "Number of users to skip from the beginning (optional)",
   ),
 };

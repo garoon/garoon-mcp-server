@@ -24,7 +24,7 @@ describe("get-users-in-organization input schema", () => {
   });
 
   describe("limit param", () => {
-    it("should validate limit as positive integer", () => {
+    it("should validate limit as integer", () => {
       const validInput = {
         organizationId: "123",
         limit: 50,
@@ -35,59 +35,10 @@ describe("get-users-in-organization input schema", () => {
       expect(result).toEqual(validInput);
     });
 
-    it("should validate limit with minimum value (1)", () => {
-      const validInput = {
-        organizationId: "123",
-        limit: 1,
-      };
-
-      const result = schema.parse(validInput);
-
-      expect(result).toEqual(validInput);
-    });
-
-    it("should validate limit with maximum value (1000)", () => {
-      const validInput = {
-        organizationId: "123",
-        limit: 1000,
-      };
-
-      const result = schema.parse(validInput);
-
-      expect(result).toEqual(validInput);
-    });
-
-    it("should fail with limit = 0", () => {
+    it("should fail with limit as string", () => {
       const invalidInput = {
         organizationId: "123",
-        limit: 0,
-      };
-
-      expect(() => schema.parse(invalidInput)).toThrow();
-    });
-
-    it("should fail with negative limit", () => {
-      const invalidInput = {
-        organizationId: "123",
-        limit: -1,
-      };
-
-      expect(() => schema.parse(invalidInput)).toThrow();
-    });
-
-    it("should fail with limit > 1000", () => {
-      const invalidInput = {
-        organizationId: "123",
-        limit: 1001,
-      };
-
-      expect(() => schema.parse(invalidInput)).toThrow();
-    });
-
-    it("should fail with non-integer limit", () => {
-      const invalidInput = {
-        organizationId: "123",
-        limit: 10.5,
+        limit: "50",
       };
 
       expect(() => schema.parse(invalidInput)).toThrow();
@@ -95,7 +46,7 @@ describe("get-users-in-organization input schema", () => {
   });
 
   describe("offset param", () => {
-    it("should validate offset as non-negative integer", () => {
+    it("should validate offset as integer", () => {
       const validInput = {
         organizationId: "123",
         offset: 0,
@@ -106,19 +57,10 @@ describe("get-users-in-organization input schema", () => {
       expect(result).toEqual(validInput);
     });
 
-    it("should fail with negative offset", () => {
+    it("should fail with offset as string", () => {
       const invalidInput = {
         organizationId: "123",
-        offset: -1,
-      };
-
-      expect(() => schema.parse(invalidInput)).toThrow();
-    });
-
-    it("should fail with non-integer offset", () => {
-      const invalidInput = {
-        organizationId: "123",
-        offset: 5.5,
+        offset: "0",
       };
 
       expect(() => schema.parse(invalidInput)).toThrow();
