@@ -1,0 +1,54 @@
+name-template: "v$RESOLVED_VERSION"
+tag-template: "v$RESOLVED_VERSION"
+categories:
+  - title: "Breaking Changes"
+    labels:
+      - "breaking change"
+  - title: "Features"
+    labels:
+      - "feature"
+  - title: "Bug Fixes"
+    labels:
+      - "bug"
+  - title: "Maintenance"
+    labels:
+      - "security"
+      - "maintenance"
+  - title: "Documentation"
+    labels:
+      - "documentation"
+  - title: "Dependencies"
+    labels:
+      - "dependencies"
+change-template: "- $TITLE (#$NUMBER)"
+change-title-escapes: '\<*_&'
+version-resolver:
+  major:
+    labels:
+      - "major"
+      - "breaking change"
+  minor:
+    labels:
+      - "minor"
+      - "feature"
+  patch:
+    labels:
+      - "patch"
+      - "bug"
+      - "security"
+      - "maintenance"
+      - "dependencies"
+  default: patch
+exclude-labels:
+  - "skip changelog"
+  - "cicd"
+  - "documentation"
+  - "wontfix"
+  - "question"
+  - "help wanted"
+  - "invalid"
+  - "duplicate"
+template: |
+  ## Changes
+
+  $CHANGES

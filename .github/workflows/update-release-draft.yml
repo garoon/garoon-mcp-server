@@ -1,0 +1,67 @@
+name: Update Release Draft
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release-draft:
+    name: Release Draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+    outputs:
+      tag_name: ${{ steps.release-drafter.outputs.tag_name }}
+    steps:
+      # Get next version
+      - uses: release-drafter/release-drafter@b1476f6e6eb133afa41ed8589daba6dc69b4d3f5 # v6.1.0
+        id: release-drafter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-dxt:
+    name: Build DXT
+    needs:
+      - release-draft
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .node-version
+          cache: "npm"
+      - run: npm install --frozen-lockfile
+      - name: Build DXT
+        run: npm run build:dxt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: garoon-mcp-server.dxt
+          path: build/garoon-mcp-server.dxt
+
+  upload-binaries:
+    name: Upload Binaries
+    needs:
+      - build-dxt
+      - release-draft
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Download artifacts
+        uses: actions/download-artifact@v5
+        with:
+          path: ./artifacts
+      - name: Upload binaries to Release Draft
+        run: |
+          gh release upload ${{ needs.release-draft.outputs.tag_name }} ./artifacts/garoon-mcp-server.dxt --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
