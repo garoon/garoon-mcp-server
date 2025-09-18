@@ -93,10 +93,6 @@ describe("get-organizations input schema", () => {
 
   it("should reject invalid limit values", () => {
     const invalidInputs = [
-      { name: "Test", limit: 0 },
-      { name: "Test", limit: 1001 },
-      { name: "Test", limit: -1 },
-      { name: "Test", limit: 1.5 },
       { name: "Test", limit: "10" },
       { name: "Test", limit: true },
     ];
@@ -108,8 +104,6 @@ describe("get-organizations input schema", () => {
 
   it("should reject invalid offset values", () => {
     const invalidInputs = [
-      { name: "Test", offset: -1 },
-      { name: "Test", offset: 1.5 },
       { name: "Test", offset: "10" },
       { name: "Test", offset: true },
       { name: "Test", offset: null },

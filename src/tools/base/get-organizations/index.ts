@@ -8,7 +8,7 @@ export const getOrganizationsTool = createTool(
   {
     title: "Get Garoon Organization Data",
     description:
-      "Get organization's name, ID, and code data by searching for organization names. This is useful for creating schedule events with specific organizations as attendees.",
+      "Get Garoon organization's name, ID, and code data by searching for organization names - supports pagination with optional limit and offset parameters.",
     inputSchema,
     outputSchema,
   },
