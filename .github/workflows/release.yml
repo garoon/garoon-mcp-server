@@ -12,9 +12,12 @@ jobs:
   check-draft:
     name: Check Release Draft
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     outputs:
       draft_exists: ${{ steps.check.outputs.draft_exists }}
     steps:
+      - uses: actions/checkout@v5
       - name: Check if draft release exists
         id: check
         run: |
@@ -37,6 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: read
     steps:
       - uses: actions/checkout@v5
       - name: Publish release with Release Drafter
