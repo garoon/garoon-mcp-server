@@ -1,0 +1,76 @@
+name: Build and Publish Docker Image
+
+on:
+  workflow_call:
+    inputs:
+      tags:
+        description: 'Comma-separated list of tags for the Docker image (e.g., "1.0.0,latest")'
+        required: true
+        type: string
+      push:
+        description: "Whether to push the Docker image to registry"
+        required: false
+        type: boolean
+        default: true
+
+defaults:
+  run:
+    shell: bash -eo pipefail {0}
+
+jobs:
+  create-tags:
+    name: Create Tagged Docker Image Names
+    runs-on: ubuntu-latest
+    outputs:
+      tags: ${{ steps.create-tags.outputs.docker_tags }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Create tagged image names
+        id: create-tags
+        env:
+          IMAGE_NAME: ghcr.io/garoon/mcp-server
+          TAGS: "${{ inputs.tags }}"
+        run: |
+          FULL_TAGS=$(echo "$TAGS" | \
+            tr ',' '\n' | \
+            sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | \
+            grep -v '^$' | \
+            sed "s|^|$IMAGE_NAME:|" | \
+            tr '\n' ',' | \
+            sed 's/,$//')
+          echo "docker_tags=$FULL_TAGS" >> "$GITHUB_OUTPUT"
+
+  build-and-publish-container:
+    name: Build and Publish Container Image
+    needs: create-tags
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 # v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3
+
+      - name: Build and push container image
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6
+        with:
+          context: .
+          file: ./Dockerfile
+          provenance: false
+          platforms: "linux/amd64,linux/arm64"
+          push: ${{ inputs.push }}
+          tags: ${{ needs.create-tags.outputs.tags }}
+        env:
+          DOCKER_BUILD_SUMMARY: false

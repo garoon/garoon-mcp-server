@@ -1,0 +1,16 @@
+name: Publish Dev Image
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-publish-container:
+    name: Build and Publish Dev Container Image
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/reusable-publish-image.yml
+    with:
+      tags: dev
+      push: true

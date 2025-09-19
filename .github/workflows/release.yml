@@ -17,7 +17,9 @@ jobs:
     outputs:
       draft_exists: ${{ steps.check.outputs.draft_exists }}
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
       - name: Check if draft release exists
         id: check
         run: |
@@ -33,16 +35,52 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  prepare-release:
+    name: Prepare Release
+    needs: check-draft
+    runs-on: ubuntu-latest
+    outputs:
+      tag_without_prefix: ${{ steps.prepare_docker_tag.outputs.tag }}
+    steps:
+      - name: Prepare Docker tag
+        id: prepare_docker_tag
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          # Remove the "v" prefix if it exists in semantic versioning format
+          if [[ "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-.*)?$ ]]; then
+            DOCKER_TAG="${VERSION#v}"
+          else
+            DOCKER_TAG="$VERSION"
+          fi
+          echo "tag=$DOCKER_TAG" >> "$GITHUB_OUTPUT"
+
+  publish-docker-image:
+    name: Publish Docker Image
+    needs:
+      - check-draft
+      - prepare-release
+    if: needs.check-draft.outputs.draft_exists == 'true'
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/reusable-publish-image.yml
+    with:
+      tags: "${{ needs.prepare-release.outputs.tag_without_prefix }},latest"
+      push: true
+
   publish-release:
     name: Publish Release
-    needs: check-draft
+    needs:
+      - check-draft
     if: needs.check-draft.outputs.draft_exists == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: read
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
       - name: Publish release with Release Drafter
         uses: release-drafter/release-drafter@b1476f6e6eb133afa41ed8589daba6dc69b4d3f5 # v6.1.0
         with:
