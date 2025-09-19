@@ -42,7 +42,7 @@ jobs:
     outputs:
       tag_without_prefix: ${{ steps.prepare_docker_tag.outputs.tag }}
     steps:
-      - name: Prepare Docker Tag
+      - name: Prepare Docker tag
         id: prepare_docker_tag
         run: |
           VERSION="${{ github.event.inputs.version }}"

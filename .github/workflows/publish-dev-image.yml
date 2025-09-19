@@ -6,6 +6,7 @@ on:
 
 jobs:
   build-and-publish-container:
+    name: Build and Publish Dev Container Image
     permissions:
       contents: read
       packages: write
