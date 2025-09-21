@@ -21,7 +21,7 @@ const config = createConfig({
   extract: {
     output: "./NOTICE",
   },
-  packageManager: "npm",
+  packageManager: "pnpm",
 });
 
 module.exports = config;

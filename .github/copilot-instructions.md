@@ -27,39 +27,39 @@ This MCP server mainly uses REST API. Garoon also has SOAP API, but it is legacy
 
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Build the TypeScript project
-npm run build
+pnpm run build
 ```
 
 ### Development
 
 ```bash
 # Run with MCP Inspector for debugging (Create .env.local)
-npm run dev
+pnpm run dev
 
 # Build TypeScript
-npm run build
+pnpm run build
 
 # Start the MCP server
-npm start
+pnpm start
 
 # Type checking
-npm run typecheck
+pnpm run typecheck
 ```
 
 ### Testing
 
 ```bash
 # Run all tests
-npm test
+pnpm run test
 
 # Run tests with coverage
-npm run test:coverage
+pnpm run test:coverage
 
 # Watch mode for test development
-npm run test:watch
+pnpm run test:watch
 ```
 
 ### Docker

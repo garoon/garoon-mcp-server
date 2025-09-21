@@ -6,8 +6,8 @@
 # Option-1 (Use Docker)
 bin/docker-build.sh
 # Option-2 (Use Node.js)
-npm install
-npm run build
+pnpm install
+pnpm run build
 ```
 
 ## MCP Inspector Usage (Visual testing tool)
@@ -24,7 +24,7 @@ https_proxy=http://localhost:7890
 GAROON_PFX_FILE_PATH=absolute/path/to/pfx_file
 GAROON_PFX_FILE_PASSWORD=pfx_password
 EOS
-npm run dev
+pnpm run dev
 ```
 
 If your site doesn't require a client certificate, leave `GAROON_PFX_FILE_PATH` and `GAROON_PFX_FILE_PASSWORD` empty.
