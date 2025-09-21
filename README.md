@@ -4,7 +4,7 @@
 
 ```bash
 # Option-1 (Use Docker)
-scripts/docker-build.sh
+./scripts/build-docker.sh
 # Option-2 (Use Node.js)
 pnpm install
 pnpm run build
