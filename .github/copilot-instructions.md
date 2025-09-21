@@ -43,7 +43,7 @@ pnpm run dev
 pnpm run build
 
 # Start the MCP server
-pnpm start
+pnpm run start
 
 # Type checking
 pnpm run typecheck
