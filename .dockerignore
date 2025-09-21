@@ -25,7 +25,7 @@ eslint.config.js
 mise.toml
 
 # Scripts
-bin/
+scripts/
 
 # Docker files
 Dockerfile

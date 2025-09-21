@@ -30,10 +30,10 @@
     "dist/"
   ],
   "scripts": {
-    "dev": "sh bin/inspector-run.sh",
+    "dev": "./scripts/inspector-run.sh",
     "prebuild": "node scripts/generate-build-constants.js",
     "build": "tsc",
-    "build:dxt": "./bin/dxt-build.sh",
+    "build:dxt": "./scripts/dxt-build.sh",
     "check:dxt": "dxt validate .",
     "clean": "pnpm \"/^clean:.*/\"",
     "clean:dist": "rm -rf dist",

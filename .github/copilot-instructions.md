@@ -66,7 +66,7 @@ pnpm run test:watch
 
 ```bash
 # Build Docker image
-bin/docker-build.sh
+scripts/docker-build.sh
 
 # Run with Docker (configure in .vscode/mcp.json)
 docker run --rm -i \
