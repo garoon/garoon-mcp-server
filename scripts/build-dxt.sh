@@ -3,14 +3,14 @@
 set -eux
 cd "$(dirname "$0")/.."
 
-npm run clean
-BUILD_TYPE=dxt npm run build
-npm run license:extract
+pnpm run clean
+BUILD_TYPE=dxt pnpm run build
+pnpm run license:extract
 
 mkdir -p build/tmp
 
 cp package.json \
-  package-lock.json \
+  pnpm-lock.yaml \
   manifest.json \
   LICENSE \
   NOTICE \
@@ -18,8 +18,8 @@ cp package.json \
   build/tmp/
 cp -r dist build/tmp/
 
-npm --prefix build/tmp install --only=production --frozen-lockfile
+pnpm --prefix build/tmp install --only=production --frozen-lockfile
 
-npx --prefix build/tmp dxt pack build/tmp build/garoon-mcp-server.dxt
+pnpm exec dxt pack build/tmp build/garoon-mcp-server.dxt
 
 echo "DXT package created successfully at build/garoon-mcp-server.dxt"

@@ -30,20 +30,24 @@
     "dist/"
   ],
   "scripts": {
-    "dev": "sh bin/inspector-run.sh",
+    "dev": "./scripts/run-inspector.sh",
     "prebuild": "node scripts/generate-build-constants.js",
     "build": "tsc",
-    "build:dxt": "./bin/dxt-build.sh",
+    "build:dxt": "./scripts/build-dxt.sh",
     "check:dxt": "dxt validate .",
-    "clean": "rm -rf dist ./build && rm -rf dist",
+    "clean": "pnpm \"/^clean:.*/\"",
+    "clean:dist": "rm -rf dist",
+    "clean:dxt": "rm -rf build",
     "start": "node dist/index.js",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest watch",
-    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "lint": "pnpm run \"/^lint:.*/\"",
     "lint:eslint": "eslint . --max-warnings 0",
     "lint:prettier": "prettier --check '**/*.{json,json5,md,yml,yaml}' --cache",
-    "fix:prettier": "prettier --write '**/*.{json,json5,md,yml,yaml}'",
+    "fix": "pnpm run \"/^fix:.*/\"",
+    "fix:eslint": "pnpm lint:eslint --fix",
+    "fix:prettier": "pnpm lint:prettier --write",
     "license:analyze": "license-manager analyze -c license-manager.config.cjs",
     "license:extract": "license-manager extract -c license-manager.config.cjs",
     "typecheck": "tsc --noEmit"
@@ -66,6 +70,7 @@
     "typescript": "^5.8.3",
     "vitest": "^3.2.4"
   },
+  "packageManager": "pnpm@10.17.0+sha512.fce8a3dd29a4ed2ec566fb53efbb04d8c44a0f05bc6f24a73046910fb9c3ce7afa35a0980500668fa3573345bd644644fa98338fa168235c80f4aa17aa17fbef",
   "engines": {
     "node": ">=22.0.0"
   },

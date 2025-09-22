@@ -3,12 +3,14 @@ FROM node:22@sha256:3266bc9e8bee1acc8a77386eefaf574987d2729b8c5ec35b0dbd6ddbc40b
 COPY . /app
 WORKDIR /app
 
-RUN npm install --frozen-lockfile
-RUN BUILD_TYPE=docker npm run build
-# generate NOTICE file
-RUN npm run license:extract
+RUN corepack enable
 
-RUN npm install --only=production
+RUN pnpm install --frozen-lockfile
+RUN BUILD_TYPE=docker pnpm run build
+# generate NOTICE file
+RUN pnpm run license:extract
+
+RUN pnpm install --only=production
 
 FROM gcr.io/distroless/nodejs22-debian12:nonroot@sha256:3c90d20cfa08093504ee4795fae9e2571b605dd975b3992e1ef8ccf8b146388a
 LABEL org.opencontainers.image.source=https://github.com/garoon/garoon-mcp-server

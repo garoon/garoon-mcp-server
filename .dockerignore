@@ -25,7 +25,8 @@ eslint.config.js
 mise.toml
 
 # Scripts
-bin/
+scripts/*
+!scripts/generate-build-constants.js
 
 # Docker files
 Dockerfile
