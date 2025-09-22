@@ -10,7 +10,7 @@ RUN BUILD_TYPE=docker pnpm run build
 # generate NOTICE file
 RUN pnpm run license:extract
 
-RUN pnpm install --only=production
+RUN pnpm install --prod
 
 FROM gcr.io/distroless/nodejs22-debian12:nonroot@sha256:3c90d20cfa08093504ee4795fae9e2571b605dd975b3992e1ef8ccf8b146388a
 LABEL org.opencontainers.image.source=https://github.com/garoon/garoon-mcp-server
