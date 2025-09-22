@@ -18,7 +18,7 @@ cp package.json \
   build/tmp/
 cp -r dist build/tmp/
 
-pnpm --prefix build/tmp install --only=production --frozen-lockfile
+pnpm --prefix build/tmp install --prod --frozen-lockfile --config.shamefully-hoist=true
 
 pnpm exec dxt pack build/tmp build/garoon-mcp-server.dxt
 
