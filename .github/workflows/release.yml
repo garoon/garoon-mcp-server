@@ -93,6 +93,43 @@ jobs:
       tags: "${{ needs.prepare-release.outputs.no_prefix_version }},latest"
       push: true
 
+  publish-npm-package:
+    name: Publish to npmjs
+    needs:
+      - check-draft
+      - validate-versions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
+
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .node-version
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Configure npm user
+        run: npm config set "//registry.npmjs.org/:_authToken=${NPM_TOKEN}"
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Build package
+        run: pnpm run build
+
+      - name: Publish package
+        run: |
+          pnpm publish --dry-run
+        env:
+          NPM_CONFIG_PROVENANCE: false # ToDo: Set true in public release
+
   publish-release:
     name: Publish Release
     needs:
