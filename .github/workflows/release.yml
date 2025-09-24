@@ -40,38 +40,64 @@ jobs:
     needs: check-draft
     runs-on: ubuntu-latest
     outputs:
-      tag_without_prefix: ${{ steps.prepare_docker_tag.outputs.tag }}
+      no_prefix_version: ${{ steps.create_no_prefix_version_string.outputs.no_prefix_version }}
     steps:
-      - name: Prepare Docker tag
-        id: prepare_docker_tag
+      - name: Create no prefix version string
+        id: create_no_prefix_version_string
         run: |
           VERSION="${{ github.event.inputs.version }}"
           # Remove the "v" prefix if it exists in semantic versioning format
           if [[ "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-.*)?$ ]]; then
-            DOCKER_TAG="${VERSION#v}"
+            NO_PREFIX_VERSION="${VERSION#v}"
           else
-            DOCKER_TAG="$VERSION"
+            NO_PREFIX_VERSION="$VERSION"
           fi
-          echo "tag=$DOCKER_TAG" >> "$GITHUB_OUTPUT"
+          echo "no_prefix_version=$NO_PREFIX_VERSION" >> "$GITHUB_OUTPUT"
+
+  validate-versions:
+    name: Validate Version Consistency
+    needs: prepare-release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Check version consistency
+        run: |
+          EXPECTED_VERSION="${{ needs.prepare-release.outputs.no_prefix_version }}"
+          PACKAGE_VERSION=$(jq -r '.version' package.json)
+          MANIFEST_VERSION=$(jq -r '.version' manifest.json)
+          echo "Expected version: $EXPECTED_VERSION"
+          echo "package.json version: $PACKAGE_VERSION"
+          echo "manifest.json version: $MANIFEST_VERSION"
+
+          if [ "$PACKAGE_VERSION" != "$EXPECTED_VERSION" ] || [ "$MANIFEST_VERSION" != "$EXPECTED_VERSION" ]; then
+            echo "ERROR: Version mismatch detected. Please update the versions to $EXPECTED_VERSION"
+            exit 1
+          fi
+
+          echo "All versions are consistent!"
 
   publish-docker-image:
     name: Publish Docker Image
     needs:
       - check-draft
       - prepare-release
+      - validate-versions
     if: needs.check-draft.outputs.draft_exists == 'true'
     permissions:
       contents: read
       packages: write
     uses: ./.github/workflows/reusable-publish-image.yml
     with:
-      tags: "${{ needs.prepare-release.outputs.tag_without_prefix }},latest"
+      tags: "${{ needs.prepare-release.outputs.no_prefix_version }},latest"
       push: true
 
   publish-release:
     name: Publish Release
     needs:
       - check-draft
+      - validate-versions
     if: needs.check-draft.outputs.draft_exists == 'true'
     runs-on: ubuntu-latest
     permissions:
