@@ -42,6 +42,7 @@ describe("getGaroonUsersHandler", () => {
             code: "user01",
           },
         ],
+        hasNext: false,
       },
     };
 
@@ -89,6 +90,7 @@ describe("getGaroonUsersHandler", () => {
     const expectedResult = {
       result: {
         users: [],
+        hasNext: false,
       },
     };
 
@@ -159,5 +161,142 @@ describe("getGaroonUsersHandler", () => {
     expect(parsedResult.result.users).toHaveLength(2);
     expect(parsedResult.result.users[0].name).toBe("José María");
     expect(parsedResult.result.users[1].name).toBe("李小明");
+  });
+
+  it("should handle limit parameter", async () => {
+    const mockApiResponse = {
+      users: [
+        {
+          id: "123",
+          name: "John Doe",
+          code: "john.doe",
+        },
+      ],
+      hasNext: true,
+    };
+
+    mockGetRequest.mockResolvedValue(mockApiResponse);
+
+    const result = await getGaroonUsersHandler(
+      { name: "John", limit: 1 },
+      {} as any,
+    );
+
+    expect(mockGetRequest).toHaveBeenCalledWith(
+      "/api/v1/base/users?name=John&limit=1",
+    );
+
+    const parsedResult = JSON.parse(result.content[0].text as string);
+    expect(parsedResult.result.hasNext).toBe(true);
+  });
+
+  it("should handle offset parameter", async () => {
+    const mockApiResponse = {
+      users: [
+        {
+          id: "456",
+          name: "Jane Smith",
+          code: "jane smith",
+        },
+      ],
+      hasNext: false,
+    };
+
+    mockGetRequest.mockResolvedValue(mockApiResponse);
+
+    const result = await getGaroonUsersHandler(
+      { name: "Jane", offset: 10 },
+      {} as any,
+    );
+
+    expect(mockGetRequest).toHaveBeenCalledWith(
+      "/api/v1/base/users?name=Jane&offset=10",
+    );
+
+    const parsedResult = JSON.parse(result.content[0].text as string);
+    expect(parsedResult.result.users[0].name).toBe("Jane Smith");
+  });
+
+  it("should handle both limit and offset parameters", async () => {
+    const mockApiResponse = {
+      users: [
+        {
+          id: "789",
+          name: "Bob Wilson",
+          code: "bob.wilson",
+        },
+      ],
+      hasNext: true,
+    };
+
+    mockGetRequest.mockResolvedValue(mockApiResponse);
+
+    const result = await getGaroonUsersHandler(
+      { name: "Bob", limit: 5, offset: 20 },
+      {} as any,
+    );
+
+    expect(mockGetRequest).toHaveBeenCalledWith(
+      "/api/v1/base/users?name=Bob&limit=5&offset=20",
+    );
+
+    const parsedResult = JSON.parse(result.content[0].text as string);
+    expect(parsedResult.result.users[0].name).toBe("Bob Wilson");
+    expect(parsedResult.result.hasNext).toBe(true);
+  });
+
+  it("should handle pagination without name", async () => {
+    const mockApiResponse = {
+      users: [
+        {
+          id: "111",
+          name: "First User",
+          code: "first.user",
+        },
+        {
+          id: "222",
+          name: "Second User",
+          code: "second.user",
+        },
+      ],
+      hasNext: true,
+    };
+
+    mockGetRequest.mockResolvedValue(mockApiResponse);
+
+    const result = await getGaroonUsersHandler(
+      { limit: 2, offset: 0 },
+      {} as any,
+    );
+
+    expect(mockGetRequest).toHaveBeenCalledWith(
+      "/api/v1/base/users?limit=2&offset=0",
+    );
+
+    const parsedResult = JSON.parse(result.content[0].text as string);
+    expect(parsedResult.result.users).toHaveLength(2);
+    expect(parsedResult.result.hasNext).toBe(true);
+  });
+
+  it("should handle when offset equals 0", async () => {
+    const mockApiResponse = {
+      users: [
+        {
+          id: "333",
+          name: "Zero Offset User",
+          code: "zero.offset.user",
+        },
+      ],
+      hasNext: false,
+    };
+
+    mockGetRequest.mockResolvedValue(mockApiResponse);
+
+    const result = await getGaroonUsersHandler({ offset: 0 }, {} as any);
+
+    expect(mockGetRequest).toHaveBeenCalledWith("/api/v1/base/users?offset=0");
+
+    const parsedResult = JSON.parse(result.content[0].text as string);
+    expect(parsedResult.result.users[0].name).toBe("Zero Offset User");
   });
 });

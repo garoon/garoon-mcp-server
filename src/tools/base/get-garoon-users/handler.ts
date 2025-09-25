@@ -9,16 +9,35 @@ import {
 
 export const getGaroonUsersHandler = async (
   input: {
-    name: string;
+    name?: string;
+    limit?: number;
+    offset?: number;
   },
   _extra: RequestHandlerExtra<ServerRequest, ServerNotification>,
 ) => {
-  const { name } = input;
+  const { name, limit, offset } = input;
+
+  const queryParams = new URLSearchParams();
+
+  if (name) {
+    queryParams.append("name", name);
+  }
+
+  if (limit !== undefined) {
+    queryParams.append("limit", limit.toString());
+  }
+
+  if (offset !== undefined) {
+    queryParams.append("offset", offset.toString());
+  }
+
+  const queryString = queryParams.toString();
+  const endpoint = queryString
+    ? `/api/v1/base/users?${queryString}`
+    : `/api/v1/base/users`;
 
   type ResponseType = z.infer<typeof outputSchema.result>;
-  const data = await getRequest<ResponseType>(
-    `/api/v1/base/users?name=${encodeURIComponent(name)}`,
-  );
+  const data = await getRequest<ResponseType>(endpoint);
 
   const output = {
     result: data,
