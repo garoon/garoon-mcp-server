@@ -55,6 +55,12 @@ describe("get-garoon-users output schema", () => {
     expect(() => schema.parse(validOutput)).not.toThrow();
   });
 
+  it("should accept empty object (both result and error are optional)", () => {
+    const emptyOutput = {};
+
+    expect(() => schema.parse(emptyOutput)).not.toThrow();
+  });
+
   it("should reject invalid users structure", () => {
     const invalidOutputs = [
       {
@@ -68,7 +74,7 @@ describe("get-garoon-users output schema", () => {
             {
               id: "123",
               name: "John Doe",
-              code: 123,
+              code: 123, // Invalid type
             },
           ],
         },
@@ -78,6 +84,7 @@ describe("get-garoon-users output schema", () => {
           users: [
             {
               id: "123",
+              // Missing required fields
             },
           ],
         },
