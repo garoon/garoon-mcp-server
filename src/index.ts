@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { EnvHttpProxyAgent, setGlobalDispatcher } from "undici";
+import { Agent, EnvHttpProxyAgent, setGlobalDispatcher } from "undici";
 import { readFileSync } from "fs";
 import { registerResources } from "./resources/register.js";
 import { registerTools } from "./tools/register.js";
@@ -13,15 +13,21 @@ import { VERSION } from "./build-constants.js";
 const PFX_PATH = process.env.GAROON_PFX_FILE_PATH;
 const PFX_PASSPHRASE = process.env.GAROON_PFX_FILE_PASSWORD;
 
+const tlsOptions: { pfx?: Buffer; passphrase?: string } = {};
+if (PFX_PATH && PFX_PASSPHRASE) {
+  tlsOptions.pfx = readFileSync(PFX_PATH);
+  tlsOptions.passphrase = PFX_PASSPHRASE;
+}
 if (process.env.https_proxy || process.env.http_proxy) {
-  const requestTls: { pfx?: Buffer; passphrase?: string } = {};
-  if (PFX_PATH && PFX_PASSPHRASE) {
-    requestTls.pfx = readFileSync(PFX_PATH);
-    requestTls.passphrase = PFX_PASSPHRASE;
-  }
   setGlobalDispatcher(
     new EnvHttpProxyAgent({
-      requestTls,
+      requestTls: tlsOptions,
+    }),
+  );
+} else if (PFX_PATH && PFX_PASSPHRASE) {
+  setGlobalDispatcher(
+    new Agent({
+      connect: tlsOptions,
     }),
   );
 }
