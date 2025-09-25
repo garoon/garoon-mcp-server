@@ -19,8 +19,9 @@ export const getGaroonUsersHandler = async (
 
   const queryParams = new URLSearchParams();
 
-  if (name) {
-    queryParams.append("name", name);
+  const searchName = name || process.env.GAROON_USERNAME;
+  if (searchName) {
+    queryParams.append("name", searchName);
   }
 
   if (limit !== undefined) {
