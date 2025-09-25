@@ -245,7 +245,7 @@ describe("getGaroonUsersHandler", () => {
     expect(parsedResult.result.hasNext).toBe(true);
   });
 
-  it("should handle pagination without name (when GAROON_USERNAME not set)", async () => {
+  it("should handle pagination without name", async () => {
     const mockApiResponse = {
       users: [
         {
@@ -278,7 +278,7 @@ describe("getGaroonUsersHandler", () => {
     expect(parsedResult.result.hasNext).toBe(true);
   });
 
-  it("should handle when offset equals 0 (when GAROON_USERNAME not set)", async () => {
+  it("should handle when offset equals 0", async () => {
     const mockApiResponse = {
       users: [
         {
@@ -300,62 +300,60 @@ describe("getGaroonUsersHandler", () => {
     expect(parsedResult.result.users[0].name).toBe("Zero Offset User");
   });
 
-  describe("searchName logic behavior", () => {
-    it("should use name from input when provided (searchName = name)", async () => {
-      process.env.GAROON_USERNAME = "envuser";
+  it("should use name from input when provided (searchName = name)", async () => {
+    process.env.GAROON_USERNAME = "envuser";
 
-      const mockApiResponse = {
-        users: [
-          {
-            id: "123",
-            name: "Input User",
-            code: "input.user",
-          },
-        ],
-        hasNext: false,
-      };
+    const mockApiResponse = {
+      users: [
+        {
+          id: "123",
+          name: "Input User",
+          code: "input.user",
+        },
+      ],
+      hasNext: false,
+    };
 
-      mockGetRequest.mockResolvedValue(mockApiResponse);
+    mockGetRequest.mockResolvedValue(mockApiResponse);
 
-      const result = await getGaroonUsersHandler(
-        { name: "input.user" },
-        {} as any,
-      );
+    const result = await getGaroonUsersHandler(
+      { name: "input.user" },
+      {} as any,
+    );
 
-      expect(mockGetRequest).toHaveBeenCalledWith(
-        "/api/v1/base/users?name=input.user",
-      );
+    expect(mockGetRequest).toHaveBeenCalledWith(
+      "/api/v1/base/users?name=input.user",
+    );
 
-      const parsedResult = JSON.parse(result.content[0].text as string);
-      expect(parsedResult.result.users[0].name).toBe("Input User");
-    });
+    const parsedResult = JSON.parse(result.content[0].text as string);
+    expect(parsedResult.result.users[0].name).toBe("Input User");
+  });
 
-    it("should fallback to GAROON_USERNAME when name not provided (searchName = process.env.GAROON_USERNAME)", async () => {
-      process.env.GAROON_USERNAME = "env.fallback.user";
+  it("should fallback to GAROON_USERNAME when name not provided (searchName = process.env.GAROON_USERNAME)", async () => {
+    process.env.GAROON_USERNAME = "env.fallback.user";
 
-      const mockApiResponse = {
-        users: [
-          {
-            id: "456",
-            name: "Environment Fallback User",
-            code: "env.fallback.user",
-          },
-        ],
-        hasNext: false,
-      };
+    const mockApiResponse = {
+      users: [
+        {
+          id: "456",
+          name: "Environment Fallback User",
+          code: "env.fallback.user",
+        },
+      ],
+      hasNext: false,
+    };
 
-      mockGetRequest.mockResolvedValue(mockApiResponse);
+    mockGetRequest.mockResolvedValue(mockApiResponse);
 
-      const result = await getGaroonUsersHandler({}, {} as any);
+    const result = await getGaroonUsersHandler({}, {} as any);
 
-      expect(mockGetRequest).toHaveBeenCalledWith(
-        "/api/v1/base/users?name=env.fallback.user",
-      );
+    expect(mockGetRequest).toHaveBeenCalledWith(
+      "/api/v1/base/users?name=env.fallback.user",
+    );
 
-      const parsedResult = JSON.parse(result.content[0].text as string);
-      expect(parsedResult.result.users[0].name).toBe(
+    const parsedResult = JSON.parse(result.content[0].text as string);
+    expect(parsedResult.result.users[0].name).toBe(
         "Environment Fallback User",
-      );
-    });
+    );
   });
 });
