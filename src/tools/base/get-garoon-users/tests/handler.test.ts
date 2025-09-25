@@ -352,8 +352,6 @@ describe("getGaroonUsersHandler", () => {
     );
 
     const parsedResult = JSON.parse(result.content[0].text as string);
-    expect(parsedResult.result.users[0].name).toBe(
-        "Environment Fallback User",
-    );
+    expect(parsedResult.result.users[0].name).toBe("Environment Fallback User");
   });
 });
