@@ -37,10 +37,10 @@ describe("get-garoon-users input schema", () => {
     expect(() => schema.parse(validInput)).not.toThrow();
   });
 
-  it("should reject missing name field", () => {
-    const invalidInput = {};
+  it("should allow missing name field (optional)", () => {
+    const validInput = {};
 
-    expect(() => schema.parse(invalidInput)).toThrow();
+    expect(() => schema.parse(validInput)).not.toThrow();
   });
 
   it("should reject invalid name type", () => {
@@ -62,5 +62,68 @@ describe("get-garoon-users input schema", () => {
     };
 
     expect(() => schema.parse(invalidInput)).not.toThrow();
+  });
+
+  it("should validate input with limit parameter", () => {
+    const validInput = {
+      name: "John",
+      limit: 10,
+    };
+
+    expect(() => schema.parse(validInput)).not.toThrow();
+  });
+
+  it("should validate input with offset parameter", () => {
+    const validInput = {
+      name: "John",
+      offset: 20,
+    };
+
+    expect(() => schema.parse(validInput)).not.toThrow();
+  });
+
+  it("should validate input with both limit and offset", () => {
+    const validInput = {
+      name: "John",
+      limit: 10,
+      offset: 20,
+    };
+
+    expect(() => schema.parse(validInput)).not.toThrow();
+  });
+
+  it("should validate input with pagination but no name", () => {
+    const validInput = {
+      limit: 5,
+      offset: 0,
+    };
+
+    expect(() => schema.parse(validInput)).not.toThrow();
+  });
+
+  it("should reject invalid limit type", () => {
+    const invalidInputs = [
+      { limit: "10" },
+      { limit: true },
+      { limit: {} },
+      { limit: [] },
+    ];
+
+    invalidInputs.forEach((input) => {
+      expect(() => schema.parse(input)).toThrow();
+    });
+  });
+
+  it("should reject invalid offset type", () => {
+    const invalidInputs = [
+      { offset: "20" },
+      { offset: true },
+      { offset: {} },
+      { offset: [] },
+    ];
+
+    invalidInputs.forEach((input) => {
+      expect(() => schema.parse(input)).toThrow();
+    });
   });
 });
