@@ -28,6 +28,7 @@ pnpm run dev
 ```
 
 If your site doesn't require a client certificate, leave `GAROON_PFX_FILE_PATH` and `GAROON_PFX_FILE_PASSWORD` empty.
+If you don't use proxy, leave `http_proxy` or `https_proxy` empty.
 
 Reference: https://github.com/modelcontextprotocol/inspector
 
@@ -37,6 +38,7 @@ Reference: https://github.com/modelcontextprotocol/inspector
 
 Configure in `.vscode/mcp.json`:
 If your site doesn't require a client certificate, leave `GAROON_PFX_FILE_PATH` and `GAROON_PFX_FILE_PASSWORD` empty.
+If you don't use proxy, leave `http_proxy` or `https_proxy` empty.
 
 ```json
 {
@@ -97,6 +99,7 @@ If your site doesn't require a client certificate, leave `GAROON_PFX_FILE_PATH` 
 Configure in `.cursor/mcp.json`
 Configure in `.mcp.json`
 If your site doesn't require a client certificate, leave `GAROON_PFX_FILE_PATH` and `GAROON_PFX_FILE_PASSWORD` empty.
+If you don't use proxy, leave `http_proxy` or `https_proxy` empty.
 
 ```json
 {
