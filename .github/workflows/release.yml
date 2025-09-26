@@ -126,7 +126,7 @@ jobs:
 
       - name: Publish package
         run: |
-          pnpm publish --dry-run
+          pnpm publish
         env:
           NPM_CONFIG_PROVENANCE: false # ToDo: Set true in public release
 
