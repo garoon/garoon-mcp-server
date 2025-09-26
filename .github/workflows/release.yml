@@ -98,6 +98,7 @@ jobs:
     needs:
       - check-draft
       - validate-versions
+    if: needs.check-draft.outputs.draft_exists == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -126,9 +127,9 @@ jobs:
 
       - name: Publish package
         run: |
-          pnpm publish
+          pnpm publish --dry-run
         env:
-          NPM_CONFIG_PROVENANCE: false # ToDo: Set true in public release
+          NPM_CONFIG_PROVENANCE: true
 
   publish-release:
     name: Publish Release
