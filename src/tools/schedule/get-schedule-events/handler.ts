@@ -7,7 +7,8 @@ import {
   ServerRequest,
 } from "@modelcontextprotocol/sdk/types.js";
 
-const API_FIELDS = "id,subject,start,end,notes";
+const API_FIELDS =
+  "id,subject,start,end,notes,eventType,eventMenu,visibilityType,isStartOnly,isAllDay,attendees,facilities,facilityUsingPurpose,watchers";
 
 type HandlerInput = {
   target: string;

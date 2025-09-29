@@ -53,7 +53,8 @@ describe("searchScheduleEventsHandler", () => {
     const result = await searchScheduleEventsHandler(input, {} as any);
 
     const expectedParams = new URLSearchParams({
-      fields: "id,subject,start,end,notes",
+      fields:
+        "id,subject,start,end,notes,eventType,eventMenu,visibilityType,isStartOnly,isAllDay,attendees,facilities,facilityUsingPurpose,watchers",
       rangeStart: input.rangeStart,
       rangeEnd: input.rangeEnd,
       target: input.target,
