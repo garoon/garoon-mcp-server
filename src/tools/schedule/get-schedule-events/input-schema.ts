@@ -6,38 +6,14 @@ import {
 } from "../../../schemas/base/index.js";
 
 export const inputSchema = {
-  userId: idSchema()
-    .optional()
+  target: idSchema().describe(
+    "Target ID as a numeric string (e.g., 12345) - user ID, organization ID, or facility ID",
+  ),
+  targetType: z
+    .enum(["user", "organization", "facility"])
+    .default("user")
     .describe(
-      "User ID as a numeric string (e.g., 12345). Either userId or userName must be provided.",
-    ),
-  userName: z
-    .string()
-    .optional()
-    .describe(
-      "User name or code (e.g., 'Administrator', 't-tanaka'). Either userId or userName must be provided.",
-    ),
-  organizationId: idSchema()
-    .optional()
-    .describe(
-      "Organization ID as a numeric string (e.g., 12345). Either organizationId or organizationName must be provided.",
-    ),
-  organizationName: z
-    .string()
-    .optional()
-    .describe(
-      "Organization name (e.g., 'Sales Department', 'Engineering'). Either organizationId or organizationName must be provided.",
-    ),
-  facilityId: idSchema()
-    .optional()
-    .describe(
-      "Facility ID as a numeric string (e.g., 12345). Either facilityId or facilityName must be provided.",
-    ),
-  facilityName: z
-    .string()
-    .optional()
-    .describe(
-      "Facility name (e.g., 'Conference Room A', 'Meeting Room 1'). Either facilityId or facilityName must be provided.",
+      "Type of target: 'user', 'organization', or 'facility' (default: 'user')",
     ),
   rangeStart: z
     .string()

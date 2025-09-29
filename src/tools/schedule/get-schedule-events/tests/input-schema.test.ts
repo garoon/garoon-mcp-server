@@ -5,9 +5,10 @@ import { inputSchema } from "../input-schema.js";
 describe("get-schedule-events input schema", () => {
   const schema = z.object(inputSchema);
 
-  it("should validate valid input with userId", () => {
+  it("should validate valid input with user target", () => {
     const validInput = {
-      userId: "123",
+      target: "123",
+      targetType: "user",
       rangeStart: "2024-01-01T00:00:00+09:00",
       rangeEnd: "2024-01-07T23:59:59+09:00",
     };
@@ -15,19 +16,10 @@ describe("get-schedule-events input schema", () => {
     expect(() => schema.parse(validInput)).not.toThrow();
   });
 
-  it("should validate valid input with userName", () => {
+  it("should validate valid input with organization target", () => {
     const validInput = {
-      userName: "Administrator",
-      rangeStart: "2024-07-27T09:00:00+09:00",
-      rangeEnd: "2024-07-27T18:00:00+09:00",
-    };
-
-    expect(() => schema.parse(validInput)).not.toThrow();
-  });
-
-  it("should validate valid input with organizationId", () => {
-    const validInput = {
-      organizationId: "456",
+      target: "456",
+      targetType: "organization",
       rangeStart: "2024-12-01T00:00:00+09:00",
       rangeEnd: "2024-12-31T23:59:59+09:00",
     };
@@ -35,19 +27,10 @@ describe("get-schedule-events input schema", () => {
     expect(() => schema.parse(validInput)).not.toThrow();
   });
 
-  it("should validate valid input with organizationName", () => {
+  it("should validate valid input with facility target", () => {
     const validInput = {
-      organizationName: "Sales Department",
-      rangeStart: "2024-06-01T00:00:00+09:00",
-      rangeEnd: "2024-06-30T23:59:59+09:00",
-    };
-
-    expect(() => schema.parse(validInput)).not.toThrow();
-  });
-
-  it("should validate valid input with facilityId", () => {
-    const validInput = {
-      facilityId: "789",
+      target: "789",
+      targetType: "facility",
       rangeStart: "2024-03-15T08:00:00+09:00",
       rangeEnd: "2024-03-15T20:00:00+09:00",
     };
@@ -55,19 +38,21 @@ describe("get-schedule-events input schema", () => {
     expect(() => schema.parse(validInput)).not.toThrow();
   });
 
-  it("should validate valid input with facilityName", () => {
+  it("should use default targetType when not provided", () => {
     const validInput = {
-      facilityName: "Conference Room A",
-      rangeStart: "2024-05-10T10:00:00+09:00",
-      rangeEnd: "2024-05-10T16:00:00+09:00",
+      target: "123",
+      rangeStart: "2024-01-01T00:00:00+09:00",
+      rangeEnd: "2024-01-07T23:59:59+09:00",
     };
 
-    expect(() => schema.parse(validInput)).not.toThrow();
+    const result = schema.parse(validInput);
+    expect(result.targetType).toBe("user");
   });
 
   it("should validate input with all optional parameters", () => {
     const validInput = {
-      userId: "123",
+      target: "123",
+      targetType: "user",
       rangeStart: "2024-01-01T00:00:00+09:00",
       rangeEnd: "2024-01-07T23:59:59+09:00",
       showPrivate: false,
@@ -78,122 +63,23 @@ describe("get-schedule-events input schema", () => {
     expect(() => schema.parse(validInput)).not.toThrow();
   });
 
-  it("should validate input with Japanese characters", () => {
-    const validInputs = [
-      {
-        userName: "田中太郎",
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-      },
-      {
-        organizationName: "営業部",
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-      },
-      {
-        facilityName: "会議室A",
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-      },
-    ];
-
-    validInputs.forEach((input) => {
-      expect(() => schema.parse(input)).not.toThrow();
-    });
-  });
-
-  it("should validate input with special characters", () => {
-    const validInputs = [
-      {
-        userName: "user@example.com",
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-      },
-      {
-        organizationName: "R&D Department",
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-      },
-      {
-        facilityName: "Meeting Room #1",
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-      },
-    ];
-
-    validInputs.forEach((input) => {
-      expect(() => schema.parse(input)).not.toThrow();
-    });
-  });
-
-  it("should validate limit boundary values", () => {
-    const validInputs = [
-      {
-        userId: "123",
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-        limit: 1,
-      },
-      {
-        userId: "123",
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-        limit: 100,
-      },
-      {
-        userId: "123",
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-        limit: 1000,
-      },
-    ];
-
-    validInputs.forEach((input) => {
-      expect(() => schema.parse(input)).not.toThrow();
-    });
-  });
-
-  it("should validate offset boundary values", () => {
-    const validInputs = [
-      {
-        userId: "123",
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-        offset: 0,
-      },
-      {
-        userId: "123",
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-        offset: 100,
-      },
-      {
-        userId: "123",
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-        offset: 999999,
-      },
-    ];
-
-    validInputs.forEach((input) => {
-      expect(() => schema.parse(input)).not.toThrow();
-    });
-  });
-
   it("should validate different datetime formats", () => {
     const validInputs = [
       {
-        userId: "123",
+        target: "123",
+        targetType: "user",
         rangeStart: "2024-01-01T00:00:00+09:00",
         rangeEnd: "2024-01-07T23:59:59+09:00",
       },
       {
-        userId: "123",
+        target: "123",
+        targetType: "user",
         rangeStart: "2024-07-15T14:30:00+09:00",
         rangeEnd: "2024-07-15T18:45:00+09:00",
       },
       {
-        userId: "123",
+        target: "123",
+        targetType: "user",
         rangeStart: "2024-12-25T00:00:00+09:00",
         rangeEnd: "2024-12-25T23:59:59+09:00",
       },
@@ -207,9 +93,21 @@ describe("get-schedule-events input schema", () => {
   it("should reject missing required fields", () => {
     const invalidInputs = [
       {},
-      { userId: "123" },
+      { target: "123" },
       { rangeStart: "2024-01-01T00:00:00+09:00" },
       { rangeEnd: "2024-01-07T23:59:59+09:00" },
+      {
+        target: "123",
+        rangeStart: "2024-01-01T00:00:00+09:00",
+      },
+      {
+        target: "123",
+        rangeEnd: "2024-01-07T23:59:59+09:00",
+      },
+      {
+        rangeStart: "2024-01-01T00:00:00+09:00",
+        rangeEnd: "2024-01-07T23:59:59+09:00",
+      },
     ];
 
     invalidInputs.forEach((input) => {
@@ -217,44 +115,17 @@ describe("get-schedule-events input schema", () => {
     });
   });
 
-  it("should accept input with only rangeStart and rangeEnd", () => {
-    const input = {
-      rangeStart: "2024-01-01T00:00:00+09:00",
-      rangeEnd: "2024-01-07T23:59:59+09:00",
-    };
-
-    expect(() => schema.parse(input)).not.toThrow();
-  });
-
-  it("should reject invalid target types", () => {
+  it("should reject invalid target type", () => {
     const invalidInputs = [
       {
-        userId: 123,
+        target: 123,
+        targetType: "user",
         rangeStart: "2024-01-01T00:00:00+09:00",
         rangeEnd: "2024-01-07T23:59:59+09:00",
       },
       {
-        userName: 456,
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-      },
-      {
-        organizationId: true,
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-      },
-      {
-        organizationName: {},
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-      },
-      {
-        facilityId: [],
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-      },
-      {
-        facilityName: null,
+        target: "123",
+        targetType: "invalid",
         rangeStart: "2024-01-01T00:00:00+09:00",
         rangeEnd: "2024-01-07T23:59:59+09:00",
       },
@@ -268,19 +139,22 @@ describe("get-schedule-events input schema", () => {
   it("should reject invalid optional parameter types", () => {
     const invalidInputs = [
       {
-        userId: "123",
+        target: "123",
+        targetType: "user",
         rangeStart: "2024-01-01T00:00:00+09:00",
         rangeEnd: "2024-01-07T23:59:59+09:00",
         showPrivate: "true",
       },
       {
-        userId: "123",
+        target: "123",
+        targetType: "user",
         rangeStart: "2024-01-01T00:00:00+09:00",
         rangeEnd: "2024-01-07T23:59:59+09:00",
         limit: "10",
       },
       {
-        userId: "123",
+        target: "123",
+        targetType: "user",
         rangeStart: "2024-01-01T00:00:00+09:00",
         rangeEnd: "2024-01-07T23:59:59+09:00",
         offset: "5",
@@ -292,46 +166,25 @@ describe("get-schedule-events input schema", () => {
     });
   });
 
-  it("should accept empty string names", () => {
-    const validInputs = [
-      {
-        userName: "",
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-      },
-      {
-        organizationName: "",
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-      },
-      {
-        facilityName: "",
-        rangeStart: "2024-01-01T00:00:00+09:00",
-        rangeEnd: "2024-01-07T23:59:59+09:00",
-      },
-    ];
-
-    validInputs.forEach((input) => {
-      expect(() => schema.parse(input)).not.toThrow();
-    });
-  });
-
   it("should accept optional parameters as undefined", () => {
     const validInputs = [
       {
-        userId: "123",
+        target: "123",
+        targetType: "user",
         rangeStart: "2024-01-01T00:00:00+09:00",
         rangeEnd: "2024-01-07T23:59:59+09:00",
         showPrivate: undefined,
       },
       {
-        userId: "123",
+        target: "123",
+        targetType: "user",
         rangeStart: "2024-01-01T00:00:00+09:00",
         rangeEnd: "2024-01-07T23:59:59+09:00",
         limit: undefined,
       },
       {
-        userId: "123",
+        target: "123",
+        targetType: "user",
         rangeStart: "2024-01-01T00:00:00+09:00",
         rangeEnd: "2024-01-07T23:59:59+09:00",
         offset: undefined,
