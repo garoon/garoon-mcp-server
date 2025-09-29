@@ -8,6 +8,13 @@ export const eventTypeSchema = () =>
       "Event type that determines validation rules: 'REGULAR' = event with specific start/end times (can be modified by isAllDay flag start-00:00, end-23:59), 'ALL_DAY' = event spanning full days without time specifications (only date matters)",
     );
 
+export const eventTypeResponseSchema = () =>
+  z
+    .enum(["REGULAR", "ALL_DAY", "TEMPORARY", "REPEATING"])
+    .describe(
+      "Event type in API responses: 'REGULAR' = event with specific start/end times, 'ALL_DAY' = event spanning full days, 'TEMPORARY' = temporary event, 'REPEATING' = recurring event",
+    );
+
 export const eventMenuSchema = () =>
   z.string().describe("The event label (e.g., 'Meeting', 'Holiday', etc.)");
 

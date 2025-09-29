@@ -2,7 +2,7 @@ import { z } from "zod";
 import { hasNextSchema, idSchema } from "../../../schemas/base/index.js";
 import {
   attendeeSchema,
-  eventTypeSchema,
+  eventTypeResponseSchema,
   eventMenuSchema,
   subjectSchema,
   notesSchema,
@@ -19,7 +19,7 @@ import { createStructuredOutputSchema } from "../../../schemas/helper.js";
 
 const eventObjectSchema = z.object({
   id: idSchema().describe("Unique identifier for the schedule event"),
-  eventType: eventTypeSchema().optional(),
+  eventType: eventTypeResponseSchema().optional(),
   eventMenu: eventMenuSchema().optional(),
   subject: subjectSchema(),
   notes: notesSchema().optional(),
