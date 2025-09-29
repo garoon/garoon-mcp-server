@@ -56,6 +56,10 @@ export const inputSchema = {
     .describe(
       "Whether to include private events in the search results. When true, includes both public and private events. When false, only public events are returned",
     ),
-  limit: limitSchema(),
-  offset: offsetSchema(),
+  limit: limitSchema().describe(
+    "Maximum number of events to return (1-1000, default: 100 - server default)",
+  ),
+  offset: offsetSchema().describe(
+    "Starting position for results (0 or greater, default: 0 - server default)",
+  ),
 };
