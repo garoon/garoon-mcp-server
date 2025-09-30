@@ -7,9 +7,6 @@ import {
   ServerRequest,
 } from "@modelcontextprotocol/sdk/types.js";
 
-const API_FIELDS =
-  "id,subject,start,end,notes,eventType,eventMenu,visibilityType,isStartOnly,isAllDay,attendees,facilities,facilityUsingPurpose,watchers";
-
 type HandlerInput = {
   target: string;
   targetType: "user" | "organization" | "facility";
@@ -20,7 +17,7 @@ type HandlerInput = {
   offset?: number;
 };
 
-export const searchScheduleEventsHandler = async (
+export const getScheduleEventsHandler = async (
   input: HandlerInput,
   _extra: RequestHandlerExtra<ServerRequest, ServerNotification>,
 ) => {
@@ -35,12 +32,10 @@ export const searchScheduleEventsHandler = async (
   } = input;
 
   const params = new URLSearchParams({
-    fields: API_FIELDS,
     rangeStart: rangeStart,
     rangeEnd: rangeEnd,
     target: target,
     targetType: targetType,
-    orderBy: "updatedAt asc",
   });
 
   if (showPrivate !== undefined) {

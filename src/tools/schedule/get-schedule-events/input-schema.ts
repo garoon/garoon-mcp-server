@@ -18,12 +18,12 @@ export const inputSchema = {
   rangeStart: z
     .string()
     .describe(
-      "Start datetime of the search range in RFC 3339 format (e.g., 2024-01-01T00:00:00+09:00)",
+      "Start datetime of the search range in RFC 3339 format (e.g., 2024-01-01T00:00:00+09:00). Must be before rangeEnd",
     ),
   rangeEnd: z
     .string()
     .describe(
-      "End datetime of the search range in RFC 3339 format (e.g., 2024-01-07T23:59:59+09:00)",
+      "End datetime of the search range in RFC 3339 format (e.g., 2024-01-07T23:59:59+09:00). Must be after rangeStart",
     ),
   showPrivate: z
     .boolean()

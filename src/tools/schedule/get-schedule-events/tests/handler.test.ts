@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { searchScheduleEventsHandler } from "../handler.js";
+import { getScheduleEventsHandler } from "../handler.js";
 import * as client from "../../../../client.js";
 
 vi.mock("../../../../client.js", async () => {
@@ -10,7 +10,7 @@ vi.mock("../../../../client.js", async () => {
   };
 });
 
-describe("searchScheduleEventsHandler", () => {
+describe("getScheduleEventsHandler", () => {
   const mockGetRequest = vi.mocked(client.getRequest);
 
   beforeEach(() => {
@@ -50,7 +50,7 @@ describe("searchScheduleEventsHandler", () => {
       rangeEnd: "2024-01-07T23:59:59+09:00",
     };
 
-    const result = await searchScheduleEventsHandler(input, {} as any);
+    const result = await getScheduleEventsHandler(input, {} as any);
 
     const expectedParams = new URLSearchParams({
       fields:
@@ -90,7 +90,7 @@ describe("searchScheduleEventsHandler", () => {
       rangeEnd: "2024-01-07T23:59:59+09:00",
     };
 
-    await searchScheduleEventsHandler(input, {} as any);
+    await getScheduleEventsHandler(input, {} as any);
 
     const callArgs = mockGetRequest.mock.calls[0][0];
     expect(callArgs).toContain("target=789");
@@ -112,7 +112,7 @@ describe("searchScheduleEventsHandler", () => {
       rangeEnd: "2024-01-07T23:59:59+09:00",
     };
 
-    await searchScheduleEventsHandler(input, {} as any);
+    await getScheduleEventsHandler(input, {} as any);
 
     const callArgs = mockGetRequest.mock.calls[0][0];
     expect(callArgs).toContain("target=202");
@@ -137,7 +137,7 @@ describe("searchScheduleEventsHandler", () => {
       offset: 5,
     };
 
-    await searchScheduleEventsHandler(input, {} as any);
+    await getScheduleEventsHandler(input, {} as any);
 
     const callArgs = mockGetRequest.mock.calls[0][0];
     expect(callArgs).toContain("showPrivate=false");
@@ -160,7 +160,7 @@ describe("searchScheduleEventsHandler", () => {
       rangeEnd: "2024-01-07T23:59:59+09:00",
     };
 
-    const result = await searchScheduleEventsHandler(input, {} as any);
+    const result = await getScheduleEventsHandler(input, {} as any);
 
     const structuredContent = result.structuredContent as any;
     expect(structuredContent.result.events).toHaveLength(0);
@@ -209,7 +209,7 @@ describe("searchScheduleEventsHandler", () => {
       rangeEnd: "2024-01-07T23:59:59+09:00",
     };
 
-    const result = await searchScheduleEventsHandler(input, {} as any);
+    const result = await getScheduleEventsHandler(input, {} as any);
 
     const structuredContent = result.structuredContent as any;
     expect(structuredContent.result.events).toHaveLength(2);
@@ -242,7 +242,7 @@ describe("searchScheduleEventsHandler", () => {
       rangeEnd: "2024-01-07T23:59:59+09:00",
     };
 
-    const result = await searchScheduleEventsHandler(input, {} as any);
+    const result = await getScheduleEventsHandler(input, {} as any);
 
     expect(result).toHaveProperty("structuredContent");
     expect(result).toHaveProperty("content");
