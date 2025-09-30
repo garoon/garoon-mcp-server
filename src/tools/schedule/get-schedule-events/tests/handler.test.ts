@@ -53,13 +53,10 @@ describe("getScheduleEventsHandler", () => {
     const result = await getScheduleEventsHandler(input, {} as any);
 
     const expectedParams = new URLSearchParams({
-      fields:
-        "id,subject,start,end,notes,eventType,eventMenu,visibilityType,isStartOnly,isAllDay,attendees,facilities,facilityUsingPurpose,watchers",
       rangeStart: input.rangeStart,
       rangeEnd: input.rangeEnd,
       target: input.target,
       targetType: input.targetType,
-      orderBy: "updatedAt asc",
     });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
