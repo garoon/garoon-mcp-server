@@ -15,6 +15,11 @@ if [ -f .env.local ]; then
     ARGS+=( -e "GAROON_PFX_FILE_PATH=${GAROON_PFX_FILE_PATH}" )
     ARGS+=( -e "GAROON_PFX_FILE_PASSWORD=${GAROON_PFX_FILE_PASSWORD}" )
   fi
+
+  if [ -n "${GAROON_BASIC_AUTH_USERNAME:-}" ] && [ -n "${GAROON_BASIC_AUTH_PASSWORD:-}" ]; then
+    ARGS+=( -e "GAROON_BASIC_AUTH_USERNAME=${GAROON_BASIC_AUTH_USERNAME}" )
+    ARGS+=( -e "GAROON_BASIC_AUTH_PASSWORD=${GAROON_BASIC_AUTH_PASSWORD}" )
+  fi
 fi
 
 npx @modelcontextprotocol/inspector "${ARGS[@]}" tsx src/index.ts
