@@ -77,6 +77,8 @@ docker run --rm -i \
   -e http_proxy \   # Optional
   -e GAROON_PFX_FILE_PATH \  # Optional
   -e GAROON_PFX_FILE_PASSWORD \  # Optional
+  -e GAROON_BASIC_AUTH_USERNAME \  # Optional
+  -e GAROON_BASIC_AUTH_PASSWORD \  # Optional
   garoon-mcp-server:latest
 ```
 
@@ -108,6 +110,8 @@ The server uses Basic Authentication with the Garoon API:
 
 - Credentials are read from environment variables
 - Authentication header is automatically added to all requests via `X-Cybozu-Authorization`
+- Basic Authentication via `GAROON_BASIC_AUTH_USERNAME` and `GAROON_BASIC_AUTH_PASSWORD` is supported for sites that require it
+- Client certificate authentication is supported via PFX files specified by `GAROON_PFX_FILE_PATH` and `GAROON_PFX_FILE_PASSWORD`
 - Supports proxy configuration via `https_proxy`/`http_proxy` environment variables
 
 ### Error Handling

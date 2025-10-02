@@ -23,12 +23,16 @@ http_proxy=http://localhost:7890
 https_proxy=http://localhost:7890
 GAROON_PFX_FILE_PATH=absolute/path/to/pfx_file
 GAROON_PFX_FILE_PASSWORD=pfx_password
+GAROON_BASIC_AUTH_USERNAME=username
+GAROON_BASIC_AUTH_PASSWORD=password
 EOS
 pnpm run dev
 ```
 
 If your site doesn't require a client certificate, leave `GAROON_PFX_FILE_PATH` and `GAROON_PFX_FILE_PASSWORD` empty.
 If you don't use proxy, leave `http_proxy` or `https_proxy` empty.
+
+If your site uses Basic Authentication, set `GAROON_BASIC_AUTH_USERNAME` and `GAROON_BASIC_AUTH_PASSWORD`.
 
 Reference: https://github.com/modelcontextprotocol/inspector
 
@@ -39,6 +43,8 @@ Reference: https://github.com/modelcontextprotocol/inspector
 Configure in `.vscode/mcp.json`:
 If your site doesn't require a client certificate, leave `GAROON_PFX_FILE_PATH` and `GAROON_PFX_FILE_PASSWORD` empty.
 If you don't use proxy, leave `http_proxy` or `https_proxy` empty.
+
+If your site uses Basic Authentication, set `GAROON_BASIC_AUTH_USERNAME` and `GAROON_BASIC_AUTH_PASSWORD`.
 
 ```json
 {
@@ -54,7 +60,9 @@ If you don't use proxy, leave `http_proxy` or `https_proxy` empty.
         "http_proxy": "http://localhost:7890",
         "https_proxy": "http://localhost:7890",
         "GAROON_PFX_FILE_PATH": "/absolute/path/to/pfx_file",
-        "GAROON_PFX_FILE_PASSWORD": "pfx_password"
+        "GAROON_PFX_FILE_PASSWORD": "pfx_password",
+        "GAROON_BASIC_AUTH_USERNAME": "username",
+        "GAROON_BASIC_AUTH_PASSWORD": "password"
       }
     },
     "garoon-mcp-server-docker": {
@@ -78,6 +86,10 @@ If you don't use proxy, leave `http_proxy` or `https_proxy` empty.
         "GAROON_PFX_FILE_PATH",
         "-e",
         "GAROON_PFX_FILE_PASSWORD",
+        "-e",
+        "GAROON_BASIC_AUTH_USERNAME",
+        "-e",
+        "GAROON_BASIC_AUTH_PASSWORD",
         "garoon-mcp-server:latest"
       ],
       "env": {
@@ -87,7 +99,9 @@ If you don't use proxy, leave `http_proxy` or `https_proxy` empty.
         "http_proxy": "http://localhost:7890",
         "https_proxy": "http://localhost:7890",
         "GAROON_PFX_FILE_PATH": "/absolute/path/to/pfx_file",
-        "GAROON_PFX_FILE_PASSWORD": "pfx_password"
+        "GAROON_PFX_FILE_PASSWORD": "pfx_password",
+        "GAROON_BASIC_AUTH_USERNAME": "username",
+        "GAROON_BASIC_AUTH_PASSWORD": "password"
       }
     }
   }
@@ -100,6 +114,8 @@ Configure in `.cursor/mcp.json`
 Configure in `.mcp.json`
 If your site doesn't require a client certificate, leave `GAROON_PFX_FILE_PATH` and `GAROON_PFX_FILE_PASSWORD` empty.
 If you don't use proxy, leave `http_proxy` or `https_proxy` empty.
+
+If your site uses Basic Authentication, set `GAROON_BASIC_AUTH_USERNAME` and `GAROON_BASIC_AUTH_PASSWORD`.
 
 ```json
 {
@@ -114,7 +130,9 @@ If you don't use proxy, leave `http_proxy` or `https_proxy` empty.
         "http_proxy": "http://localhost:7890",
         "https_proxy": "http://localhost:7890",
         "GAROON_PFX_FILE_PATH": "/absolute/path/to/pfx_file",
-        "GAROON_PFX_FILE_PASSWORD": "pfx_password"
+        "GAROON_PFX_FILE_PASSWORD": "pfx_password",
+        "GAROON_BASIC_AUTH_USERNAME": "username",
+        "GAROON_BASIC_AUTH_PASSWORD": "password"
       }
     },
     "garoon-mcp-server-docker": {
@@ -137,6 +155,10 @@ If you don't use proxy, leave `http_proxy` or `https_proxy` empty.
         "GAROON_PFX_FILE_PATH",
         "-e",
         "GAROON_PFX_FILE_PASSWORD",
+        "-e",
+        "GAROON_BASIC_AUTH_USERNAME",
+        "-e",
+        "GAROON_BASIC_AUTH_PASSWORD",
         "garoon-mcp-server:latest"
       ],
       "env": {
@@ -146,7 +168,9 @@ If you don't use proxy, leave `http_proxy` or `https_proxy` empty.
         "http_proxy": "http://localhost:7890",
         "https_proxy": "http://localhost:7890",
         "GAROON_PFX_FILE_PATH": "/absolute/path/to/pfx_file",
-        "GAROON_PFX_FILE_PASSWORD": "pfx_password"
+        "GAROON_PFX_FILE_PASSWORD": "pfx_password",
+        "GAROON_BASIC_AUTH_USERNAME": "username",
+        "GAROON_BASIC_AUTH_PASSWORD": "password"
       }
     }
   }

@@ -23,7 +23,9 @@
         "GAROON_PASSWORD": "${user_config.garoon_password}",
         "https_proxy": "${user_config.https_proxy}",
         "GAROON_PFX_FILE_PATH": "${user_config.garoon_pfx_file_path}",
-        "GAROON_PFX_FILE_PASSWORD": "${user_config.garoon_pfx_file_password}"
+        "GAROON_PFX_FILE_PASSWORD": "${user_config.garoon_pfx_file_password}",
+        "GAROON_BASIC_AUTH_USERNAME": "${user_config.garoon_basic_auth_username}",
+        "GAROON_BASIC_AUTH_PASSWORD": "${user_config.garoon_basic_auth_password}"
       }
     }
   },
@@ -75,6 +77,22 @@
       "type": "string",
       "title": "PFX File Password",
       "description": "Password for PFX client certificate file",
+      "required": false,
+      "sensitive": true,
+      "default": ""
+    },
+    "garoon_basic_auth_username": {
+      "type": "string",
+      "title": "Basic Auth Username",
+      "description": "Username for HTTP Basic Authentication",
+      "required": false,
+      "sensitive": false,
+      "default": ""
+    },
+    "garoon_basic_auth_password": {
+      "type": "string",
+      "title": "Basic Auth Password",
+      "description": "Password for HTTP Basic Authentication",
       "required": false,
       "sensitive": true,
       "default": ""
