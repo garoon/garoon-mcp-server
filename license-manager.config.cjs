@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 const { createConfig } = require("@cybozu/license-manager");
 
 const config = createConfig({
