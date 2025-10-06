@@ -12,6 +12,7 @@ mkdir -p build/tmp
 cp package.json \
   pnpm-lock.yaml \
   manifest.json \
+  icon.png \
   LICENSE \
   NOTICE \
   README.md \
