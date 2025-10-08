@@ -26,12 +26,12 @@ const config = createConfig({
     if (dep.name === "jsbi") {
       // Apache 2.0 requires the copyright notice to be provided
       // ref: https://github.com/GoogleChromeLabs/jsbi/blob/5382367c7e3199858d36bb620977e1f90605bcb9/lib/jsbi.ts
-      const copyright = "\nCopyright 2018 Google Inc.\n\n";
+      const copyright = "Copyright 2018 Google Inc.";
       const licenseText = fs.readFileSync(
         path.join(dep.path, "LICENSE"),
         "utf8",
       );
-      return { licenseText: copyright + licenseText };
+      return { licenseText: `${copyright}\n\n${licenseText}` };
     }
     return undefined;
   },
