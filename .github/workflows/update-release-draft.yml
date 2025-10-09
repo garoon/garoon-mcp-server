@@ -25,8 +25,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  build-dxt:
-    name: Build DXT Package
+  build-mcpb:
+    name: Build MCPB Package
     needs:
       - release-draft
     runs-on: ubuntu-latest
@@ -43,21 +43,21 @@ jobs:
           node-version-file: .node-version
           cache: "pnpm"
 
-      - name: Build DXT
+      - name: Build MCPB
         run: |
           pnpm install --frozen-lockfile
-          pnpm run build:dxt
+          pnpm run build:mcpb
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: garoon-mcp-server.dxt
-          path: build/garoon-mcp-server.dxt
+          name: garoon-mcp-server.mcpb
+          path: build/garoon-mcp-server.mcpb
 
   upload-binaries:
-    name: Upload DXT Package to Release Draft
+    name: Upload MCPB Package to Release Draft
     needs:
-      - build-dxt
+      - build-mcpb
       - release-draft
     permissions:
       contents: write
@@ -71,8 +71,8 @@ jobs:
         with:
           path: ./artifacts
 
-      - name: Upload DXT package
+      - name: Upload MCPB package
         run: |
-          gh release upload ${{ needs.release-draft.outputs.tag_name }} ./artifacts/garoon-mcp-server.dxt --clobber
+          gh release upload ${{ needs.release-draft.outputs.tag_name }} ./artifacts/garoon-mcp-server.mcpb --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

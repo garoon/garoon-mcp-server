@@ -4,7 +4,7 @@ set -eux
 cd "$(dirname "$0")/.."
 
 pnpm run clean
-BUILD_TYPE=dxt pnpm run build
+BUILD_TYPE=mcpb pnpm run build
 pnpm run license:extract
 
 mkdir -p build/tmp
@@ -21,6 +21,6 @@ cp -r dist build/tmp/
 
 pnpm --prefix build/tmp install --prod --frozen-lockfile --config.shamefully-hoist=true
 
-pnpm exec dxt pack build/tmp build/garoon-mcp-server.dxt
+pnpm exec mcpb pack build/tmp build/garoon-mcp-server.mcpb
 
-echo "DXT package created successfully at build/garoon-mcp-server.dxt"
+echo "MCPB package created successfully at build/garoon-mcp-server.mcpb"
