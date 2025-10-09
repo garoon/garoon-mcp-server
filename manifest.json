@@ -1,5 +1,5 @@
 {
-  "dxt_version": "0.1",
+  "manifest_version": "0.2",
   "name": "garoon-mcp-server",
   "display_name": "Garoon MCP Server",
   "version": "0.1.0",

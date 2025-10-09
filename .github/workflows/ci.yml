@@ -70,8 +70,8 @@ jobs:
           pnpm install --frozen-lockfile
           pnpm run typecheck
 
-  check-dxt:
-    name: DXT Manifest Validation
+  check-mcpb:
+    name: MCPB Manifest Validation
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -89,7 +89,7 @@ jobs:
       - name: Validate manifest.json
         run: |
           pnpm install --frozen-lockfile
-          pnpm run check:dxt
+          pnpm run check:mcpb
 
   license-check:
     name: Dependency License Check

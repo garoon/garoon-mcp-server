@@ -33,11 +33,11 @@
     "dev": "./scripts/run-inspector.sh",
     "prebuild": "node scripts/generate-build-constants.js",
     "build": "tsc",
-    "build:dxt": "./scripts/build-dxt.sh",
-    "check:dxt": "dxt validate .",
+    "build:mcpb": "./scripts/build-mcpb.sh",
+    "check:mcpb": "mcpb validate .",
     "clean": "pnpm \"/^clean:.*/\"",
     "clean:dist": "rm -rf dist",
-    "clean:dxt": "rm -rf build",
+    "clean:mcpb": "rm -rf build",
     "start": "node dist/index.js",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
@@ -59,7 +59,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@anthropic-ai/dxt": "^0.2.6",
+    "@anthropic-ai/mcpb": "^1.1.1",
     "@cybozu/eslint-config": "^24.3.0",
     "@cybozu/license-manager": "^1.4.0",
     "@types/node": "^24.5.2",
