@@ -56,7 +56,7 @@
     "@js-temporal/polyfill": "^0.5.1",
     "@modelcontextprotocol/sdk": "^1.19.1",
     "undici": "^7.16.0",
-    "zod": "^3.25.76"
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "@anthropic-ai/mcpb": "^1.1.1",
