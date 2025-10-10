@@ -12,7 +12,7 @@ RUN pnpm run license:extract
 
 RUN pnpm install --prod
 
-FROM gcr.io/distroless/nodejs22-debian12:nonroot@sha256:3c90d20cfa08093504ee4795fae9e2571b605dd975b3992e1ef8ccf8b146388a
+FROM gcr.io/distroless/nodejs22-debian12:nonroot@sha256:82f784c7f478cf5129d5446f99b442bbc17ef8ab48fbea25c58e05b2859896f7
 LABEL org.opencontainers.image.source=https://github.com/garoon/garoon-mcp-server
 
 WORKDIR /app
