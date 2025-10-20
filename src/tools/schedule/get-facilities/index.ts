@@ -6,7 +6,7 @@ import { getFacilitiesHandler } from "./handler.js";
 export const getFacilitiesTool = createTool(
   "get-facilities",
   {
-    title: "Get Garoon Facilities",
+    title: "Get Facilities",
     description:
       "Get facilities data from Garoon by searching facility names with optional limit and offset parameters.",
     inputSchema,
