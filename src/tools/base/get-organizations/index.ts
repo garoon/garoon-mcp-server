@@ -6,7 +6,7 @@ import { getOrganizationsHandler } from "./handler.js";
 export const getOrganizationsTool = createTool(
   "get-organizations",
   {
-    title: "Get Garoon Organization Data",
+    title: "Get Organizations",
     description:
       "Get Garoon organization's name, ID, and code data by searching for organization names - supports pagination with optional limit and offset parameters.",
     inputSchema,
