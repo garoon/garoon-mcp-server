@@ -2,7 +2,7 @@
   "manifest_version": "0.2",
   "name": "garoon-mcp-server",
   "display_name": "Garoon MCP Server",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "The official MCP Server for Garoon",
   "author": {
     "name": "Cybozu, Inc.",
