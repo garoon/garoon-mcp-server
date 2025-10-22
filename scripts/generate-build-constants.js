@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+// github.com/garoon/garoon-mcp-server/pull/61
 /**
  * Generate build-constants.ts with version and execution type
  * This script runs before TypeScript compilation to inject build-time values
