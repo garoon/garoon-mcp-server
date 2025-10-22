@@ -100,6 +100,9 @@ jobs:
       - validate-versions
     if: needs.check-draft.outputs.draft_exists == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
