@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { createTool } from "./register.js";
+import * as responseFilter from "../utils/response-filter.js";
 
 describe("createTool", () => {
   beforeEach(() => {
@@ -90,7 +91,12 @@ describe("createTool", () => {
   });
 
   it("should return successful result when callback doesn't throw", async () => {
-    const expectedResult = { success: true, data: "test data" };
+    const expectedResult = {
+      success: true,
+      data: "test data",
+      structuredContent: { result: { data: "test" } },
+      content: [{ type: "text" as const, text: '{"result":{"data":"test"}}' }],
+    };
     const mockCallback = vi.fn().mockResolvedValue(expectedResult);
 
     const tool = createTool(
@@ -107,7 +113,8 @@ describe("createTool", () => {
     const mockExtra = {} as any;
     const result = await tool.callback({}, mockExtra);
 
-    expect(result).toEqual(expectedResult);
+    expect(result.success).toBe(true);
+    expect(result.data).toBe("test data");
     expect(mockCallback).toHaveBeenCalledWith({}, mockExtra);
   });
 
@@ -186,5 +193,138 @@ describe("createTool", () => {
     await tool.callback(testArgs, testExtra);
 
     expect(mockCallback).toHaveBeenCalledWith(testArgs, testExtra);
+  });
+
+  describe("filtering integration", () => {
+    it("should apply response filter when callback succeeds", async () => {
+      const mockResponse = {
+        structuredContent: {
+          result: {
+            users: [{ id: "1", name: "User1" }],
+            hasNext: false,
+          },
+        },
+        content: [
+          {
+            type: "text" as const,
+            text: JSON.stringify({
+              result: {
+                users: [{ id: "1", name: "User1" }],
+                hasNext: false,
+              },
+            }),
+          },
+        ],
+      };
+
+      const mockCallback = vi.fn().mockResolvedValue(mockResponse);
+      const mockFilteredContent = {
+        result: {
+          hasNext: false,
+        },
+      };
+
+      vi.spyOn(responseFilter, "applyResponseFilter").mockReturnValue(
+        mockFilteredContent,
+      );
+
+      const tool = createTool(
+        "test-filter-tool",
+        {
+          title: "Test Filter Tool",
+          description: "A tool for testing filtering",
+          inputSchema: {},
+          outputSchema: {},
+        },
+        mockCallback,
+      );
+
+      const mockExtra = {} as any;
+      const result = await tool.callback({}, mockExtra);
+
+      expect(responseFilter.applyResponseFilter).toHaveBeenCalledWith(
+        mockResponse.structuredContent,
+        "test-filter-tool",
+      );
+      expect(result.structuredContent).toEqual(mockFilteredContent);
+      expect(result.content[0].text).toEqual(
+        JSON.stringify(mockFilteredContent, null, 2),
+      );
+    });
+
+    it("should not apply filter when callback returns error", async () => {
+      const mockErrorResponse = {
+        isError: true,
+        structuredContent: {
+          error: "Test error",
+        },
+        content: [{ type: "text" as const, text: "Test error" }],
+      };
+
+      const mockCallback = vi.fn().mockResolvedValue(mockErrorResponse);
+      const applyFilterSpy = vi.spyOn(
+        responseFilter,
+        "applyResponseFilter",
+      );
+
+      const tool = createTool(
+        "error-tool",
+        {
+          title: "Error Tool",
+          description: "A tool that returns error",
+          inputSchema: {},
+          outputSchema: {},
+        },
+        mockCallback,
+      );
+
+      const mockExtra = {} as any;
+      const result = await tool.callback({}, mockExtra);
+
+      expect(applyFilterSpy).not.toHaveBeenCalled();
+      expect(result).toEqual(mockErrorResponse);
+    });
+
+    it("should return original response when filter throws", async () => {
+      const mockResponse = {
+        structuredContent: {
+          result: {
+            users: [{ id: "1", name: "User1" }],
+          },
+        },
+        content: [{ type: "text" as const, text: "test" }],
+      };
+
+      const mockCallback = vi.fn().mockResolvedValue(mockResponse);
+
+      vi.spyOn(responseFilter, "applyResponseFilter").mockImplementation(
+        () => {
+          throw new Error("Filter error");
+        },
+      );
+
+      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {
+        return undefined as any;
+      });
+
+      const tool = createTool(
+        "filter-error-tool",
+        {
+          title: "Filter Error Tool",
+          description: "A tool where filtering fails",
+          inputSchema: {},
+          outputSchema: {},
+        },
+        mockCallback,
+      );
+
+      const mockExtra = {} as any;
+      const result = await tool.callback({}, mockExtra);
+
+      expect(consoleSpy).toHaveBeenCalled();
+      expect(result).toEqual(mockResponse);
+
+      consoleSpy.mockRestore();
+    });
   });
 });

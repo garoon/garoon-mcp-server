@@ -20,6 +20,7 @@ if [ -f .env.local ]; then
     ARGS+=( -e "GAROON_BASIC_AUTH_USERNAME=${GAROON_BASIC_AUTH_USERNAME}" )
     ARGS+=( -e "GAROON_BASIC_AUTH_PASSWORD=${GAROON_BASIC_AUTH_PASSWORD}" )
   fi
+  if [ -n "${GAROON_FILTER_PATH:-}" ]; then ARGS+=( -e "GAROON_FILTER_PATH=${GAROON_FILTER_PATH}" ); fi
 fi
 
 npx @modelcontextprotocol/inspector "${ARGS[@]}" tsx src/index.ts
