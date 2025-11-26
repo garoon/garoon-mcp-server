@@ -1,6 +1,8 @@
 import { VERSION, EXECUTION_TYPE } from "./build-constants.js";
 
-const GAROON_BASE_URL = process.env.GAROON_BASE_URL || "";
+const rawUrl = process.env.GAROON_BASE_URL || "";
+const GAROON_BASE_URL = rawUrl && /^https?:\/\//i.test(rawUrl) ? rawUrl : "";
+
 const API_CREDENTIAL = Buffer.from(
   `${process.env.GAROON_USERNAME}:${process.env.GAROON_PASSWORD}`,
 ).toString("base64");
