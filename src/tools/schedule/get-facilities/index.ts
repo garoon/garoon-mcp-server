@@ -4,11 +4,11 @@ import { outputSchema } from "./output-schema.js";
 import { getFacilitiesHandler } from "./handler.js";
 
 export const getFacilitiesTool = createTool(
-  "get-facilities",
+  "garoon-get-facilities",
   {
     title: "Get Facilities",
     description:
-      "Get facilities data from Garoon by searching facility names with optional limit and offset parameters.",
+      "Get facilities data from Garoon by searching facility names with optional limit and offset parameters in Garoon.",
     inputSchema,
     outputSchema,
   },

@@ -4,7 +4,7 @@ import { outputSchema } from "./output-schema.js";
 import { getOrganizationsHandler } from "./handler.js";
 
 export const getOrganizationsTool = createTool(
-  "get-organizations",
+  "garoon-get-organizations",
   {
     title: "Get Organizations",
     description:

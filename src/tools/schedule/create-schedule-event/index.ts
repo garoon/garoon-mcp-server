@@ -4,7 +4,7 @@ import { outputSchema } from "./output-schema.js";
 import { createScheduleEventHandler } from "./handler.js";
 
 export const createScheduleEvent = createTool(
-  "create-schedule-event",
+  "garoon-create-schedule-event",
   {
     title: "Create Schedule Event",
     description: "Create a new schedule event in Garoon",
