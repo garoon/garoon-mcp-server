@@ -4,10 +4,10 @@ import { outputSchema } from "./output-schema.js";
 import { getCurrentTimeHandler } from "./handler.js";
 
 export const getCurrentTimeTool = createTool(
-  "get-current-time",
+  "garoon-get-current-time",
   {
     title: "Get Current Datetime",
-    description: "Get the current datetime in RFC 3339 format.",
+    description: "Get the current datetime in RFC 3339 format in Garoon.",
     inputSchema,
     outputSchema,
   },
