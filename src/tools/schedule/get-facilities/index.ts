@@ -8,7 +8,7 @@ export const getFacilitiesTool = createTool(
   {
     title: "Get Facilities",
     description:
-      "Get facilities data from Garoon by searching facility names with optional limit and offset parameters in Garoon.",
+      "Get facilities data from Garoon by searching facility names with optional limit and offset parameters.",
     inputSchema,
     outputSchema,
   },
