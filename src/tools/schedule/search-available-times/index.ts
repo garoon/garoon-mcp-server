@@ -4,11 +4,11 @@ import { outputSchema } from "./output-schema.js";
 import { searchAvailableTimesHandler } from "./handler.js";
 
 export const searchAvailableTimes = createTool(
-  "search-available-times",
+  "garoon-search-available-times",
   {
     title: "Search Available Times",
     description:
-      "Search for available time slots for specified attendee or facility within given time ranges",
+      "Search for available time slots for specified attendee or facility within given time ranges in Garoon",
     inputSchema,
     outputSchema,
   },

@@ -4,7 +4,7 @@ import { outputSchema } from "./output-schema.js";
 import { getGaroonUsersHandler } from "./handler.js";
 
 export const getGaroonUsersTool = createTool(
-  "get-garoon-users",
+  "garoon-get-users",
   {
     title: "Get Garoon Users",
     description:

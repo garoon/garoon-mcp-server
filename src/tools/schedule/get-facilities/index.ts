@@ -4,7 +4,7 @@ import { outputSchema } from "./output-schema.js";
 import { getFacilitiesHandler } from "./handler.js";
 
 export const getFacilitiesTool = createTool(
-  "get-facilities",
+  "garoon-get-facilities",
   {
     title: "Get Facilities",
     description:
