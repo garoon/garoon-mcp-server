@@ -6,6 +6,7 @@ import { readFileSync } from "fs";
 import { registerTools } from "./tools/register.js";
 import { tools } from "./tools/index.js";
 import { VERSION } from "./build-constants.js";
+import { initializeFilterConfig } from "./utils/response-filter.js";
 
 const PFX_PATH = process.env.GAROON_PFX_FILE_PATH;
 const PFX_PASSPHRASE = process.env.GAROON_PFX_FILE_PASSWORD;
@@ -28,6 +29,8 @@ if (process.env.https_proxy || process.env.http_proxy) {
     }),
   );
 }
+
+initializeFilterConfig();
 
 const server = new McpServer({
   name: "Garoon MCP Server",

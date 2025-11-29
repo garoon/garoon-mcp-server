@@ -1,0 +1,8 @@
+{
+  "version": "1.0",
+  "tools": {
+    "get-schedule-events": [
+      "result.events[].notes"
+    ]
+  }
+}

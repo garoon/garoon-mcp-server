@@ -10,6 +10,7 @@ import type {
 } from "@modelcontextprotocol/sdk/types.js";
 import type { ZodRawShape, ZodTypeAny, z } from "zod";
 import { createErrorOutput } from "./error-handler.js";
+import { applyResponseFilter } from "../utils/response-filter.js";
 
 type ToolConfig<
   InputArgs extends ZodRawShape,
@@ -32,6 +33,45 @@ export type Tool<
   config: ToolConfig<InputArgs, OutputArgs>;
   callback: ToolCallback<InputArgs>;
 };
+
+function wrapWithFiltering<InputArgs extends ZodRawShape>(
+  callback: ToolCallback<InputArgs>,
+  toolName: string,
+): ToolCallback<InputArgs> {
+  return (async (
+    args: z.objectOutputType<InputArgs, ZodTypeAny>,
+    extra: RequestHandlerExtra<ServerRequest, ServerNotification>,
+  ) => {
+    try {
+      const result = await callback(args, extra);
+
+      if ("isError" in result && result.isError) {
+        return result;
+      }
+
+      const filteredContent = applyResponseFilter(
+        (result as Record<string, unknown>).structuredContent,
+        toolName,
+      );
+
+      return {
+        ...result,
+        structuredContent: filteredContent,
+        content: [
+          {
+            type: "text" as const,
+            text: JSON.stringify(filteredContent, null, 2),
+          },
+        ],
+      };
+    } catch (error) {
+      console.error(
+        `[Filter] Failed to filter response for tool "${toolName}": ${error instanceof Error ? error.message : String(error)}`,
+      );
+      return await callback(args, extra);
+    }
+  }) as ToolCallback<InputArgs>;
+}
 
 function wrapWithErrorHandling<InputArgs extends ZodRawShape>(
   callback: ToolCallback<InputArgs>,
@@ -58,10 +98,11 @@ export function createTool<
   config: ToolConfig<InputArgs, OutputArgs>,
   callback: ToolCallback<InputArgs>,
 ): Tool<InputArgs, OutputArgs> {
+  const wrappedWithFiltering = wrapWithFiltering(callback, name);
   return {
     name,
     config,
-    callback: wrapWithErrorHandling(callback),
+    callback: wrapWithErrorHandling(wrappedWithFiltering),
   };
 }
 
