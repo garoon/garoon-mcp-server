@@ -9,7 +9,6 @@ describe("garoon-get-facilities-in-group outputSchema", () => {
     const validOutput = {
       result: {
         facilities: [],
-        hasNext: false,
       },
     };
 
@@ -23,7 +22,6 @@ describe("garoon-get-facilities-in-group outputSchema", () => {
           { id: "5", name: "Room A", code: "roa", notes: "" },
           { id: "6", name: "Room B", code: "rob" },
         ],
-        hasNext: true,
       },
     };
 
