@@ -31,13 +31,11 @@ describe("getFacilitiesInGroupHandler", () => {
           notes: "memo",
         },
       ],
-      hasNext: false,
     };
 
     const expectedResult = {
       result: {
         facilities: [{ id: "5", name: "Room A", code: "roa", notes: "memo" }],
-        hasNext: false,
       },
     };
 
@@ -61,7 +59,6 @@ describe("getFacilitiesInGroupHandler", () => {
   it("should get facilities in group with all parameters", async () => {
     const mockApiResponse = {
       facilities: [],
-      hasNext: true,
     };
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
