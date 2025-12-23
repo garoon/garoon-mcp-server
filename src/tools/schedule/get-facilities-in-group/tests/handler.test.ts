@@ -29,13 +29,22 @@ describe("getFacilitiesInGroupHandler", () => {
           name: "Room A",
           code: "roa",
           notes: "memo",
+          facilityGroup: "1",
         },
       ],
     };
 
     const expectedResult = {
       result: {
-        facilities: [{ id: "5", name: "Room A", code: "roa", notes: "memo" }],
+        facilities: [
+          {
+            id: "5",
+            name: "Room A",
+            code: "roa",
+            notes: "memo",
+            facilityGroup: "1",
+          },
+        ],
       },
     };
 

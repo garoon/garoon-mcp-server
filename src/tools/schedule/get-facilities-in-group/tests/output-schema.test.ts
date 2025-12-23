@@ -19,8 +19,14 @@ describe("garoon-get-facilities-in-group outputSchema", () => {
     const validOutput = {
       result: {
         facilities: [
-          { id: "5", name: "Room A", code: "roa", notes: "" },
-          { id: "6", name: "Room B", code: "rob" },
+          {
+            id: "5",
+            name: "Room A",
+            code: "roa",
+            notes: "",
+            facilityGroup: "1",
+          },
+          { id: "6", name: "Room B", code: "rob", facilityGroup: "1" },
         ],
       },
     };
