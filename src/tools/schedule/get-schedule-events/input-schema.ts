@@ -30,7 +30,7 @@ export const inputSchema = {
     .default(true)
     .optional()
     .describe(
-      "Whether to include private events in the search results. When true, includes both public and private events. When false, only public events are returned",
+      "Whether to include private events in the search results. When true, includes both public and private events. When false, only public events are returned. NOTE: If GAROON_PUBLIC_ONLY is set to 'true', this parameter will be automatically overridden to false and only public events will be returned, regardless of the value specified",
     ),
   limit: limitSchema().describe(
     "Maximum number of events to return (1-1000, default: 100 - server default)",

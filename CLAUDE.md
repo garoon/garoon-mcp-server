@@ -79,6 +79,7 @@ docker run --rm -i \
   -e GAROON_PFX_FILE_PASSWORD \  # Optional
   -e GAROON_BASIC_AUTH_USERNAME \  # Optional
   -e GAROON_BASIC_AUTH_PASSWORD \  # Optional
+  -e GAROON_PUBLIC_ONLY \  # Optional
   garoon-mcp-server:latest
 ```
 

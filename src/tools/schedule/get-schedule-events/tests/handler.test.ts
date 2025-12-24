@@ -250,4 +250,200 @@ describe("getScheduleEventsHandler", () => {
     const structuredContent = result.structuredContent as any;
     expect(structuredContent.result).toEqual(mockApiResponse);
   });
+
+  it("should not filter events when PUBLIC_ONLY is disabled (the filter is applied in handler based on PUBLIC_ONLY from index.ts)", async () => {
+    const mockApiResponse = {
+      events: [
+        {
+          id: "1",
+          subject: "Public Event",
+          visibilityType: "PUBLIC",
+          start: {
+            dateTime: "2024-01-01T10:00:00+09:00",
+            timeZone: "Asia/Tokyo",
+          },
+        },
+        {
+          id: "2",
+          subject: "Private Event",
+          visibilityType: "PRIVATE",
+          start: {
+            dateTime: "2024-01-02T14:00:00+09:00",
+            timeZone: "Asia/Tokyo",
+          },
+        },
+      ],
+      hasNext: false,
+    };
+
+    mockGetRequest.mockResolvedValue(mockApiResponse);
+
+    const input = {
+      target: "123",
+      targetType: "user" as const,
+      rangeStart: "2024-01-01T00:00:00+09:00",
+      rangeEnd: "2024-01-07T23:59:59+09:00",
+    };
+
+    const result = await getScheduleEventsHandler(input, {} as any);
+
+    const structuredContent = result.structuredContent as any;
+    expect(structuredContent.result.events.length).toBeGreaterThan(0);
+  });
+
+  describe("PUBLIC_ONLY mode", () => {
+    let originalPublicOnly: string | undefined;
+
+    beforeEach(() => {
+      originalPublicOnly = process.env.GAROON_PUBLIC_ONLY;
+      process.env.GAROON_PUBLIC_ONLY = "true";
+      vi.resetModules();
+    });
+
+    afterEach(() => {
+      if (originalPublicOnly === undefined) {
+        delete process.env.GAROON_PUBLIC_ONLY;
+      } else {
+        process.env.GAROON_PUBLIC_ONLY = originalPublicOnly;
+      }
+      vi.resetModules();
+    });
+
+    it("should filter out private events when PUBLIC_ONLY is true", async () => {
+      const { getScheduleEventsHandler: handlerWithPublicOnly } = await import(
+        "../handler.js"
+      );
+
+      const mockApiResponse = {
+        events: [
+          {
+            id: "1",
+            subject: "Public Event",
+            visibilityType: "PUBLIC",
+            start: {
+              dateTime: "2024-01-01T10:00:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+          },
+          {
+            id: "2",
+            subject: "Private Event",
+            visibilityType: "PRIVATE",
+            start: {
+              dateTime: "2024-01-02T14:00:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+          },
+        ],
+        hasNext: false,
+      };
+
+      mockGetRequest.mockResolvedValue(mockApiResponse);
+
+      const input = {
+        target: "123",
+        targetType: "user" as const,
+        rangeStart: "2024-01-01T00:00:00+09:00",
+        rangeEnd: "2024-01-07T23:59:59+09:00",
+        showPrivate: true,
+      };
+
+      const result = await handlerWithPublicOnly(input, {} as any);
+
+      const callArgs = mockGetRequest.mock.calls[0][0];
+      expect(callArgs).toContain("showPrivate=false");
+
+      const structuredContent = result.structuredContent as any;
+      expect(structuredContent.result.events).toHaveLength(1);
+      expect(structuredContent.result.events[0].subject).toBe("Public Event");
+      expect(structuredContent.result.events[0].visibilityType).toBe("PUBLIC");
+    });
+
+    it("should override showPrivate parameter when PUBLIC_ONLY is true", async () => {
+      const { getScheduleEventsHandler: handlerWithPublicOnly } = await import(
+        "../handler.js"
+      );
+
+      const mockApiResponse = {
+        events: [],
+        hasNext: false,
+      };
+
+      mockGetRequest.mockResolvedValue(mockApiResponse);
+
+      const input = {
+        target: "123",
+        targetType: "user" as const,
+        rangeStart: "2024-01-01T00:00:00+09:00",
+        rangeEnd: "2024-01-07T23:59:59+09:00",
+        showPrivate: true,
+      };
+
+      await handlerWithPublicOnly(input, {} as any);
+
+      const callArgs = mockGetRequest.mock.calls[0][0];
+      expect(callArgs).toContain("showPrivate=false");
+    });
+
+    it("should handle mixed visibility events when PUBLIC_ONLY is true", async () => {
+      const { getScheduleEventsHandler: handlerWithPublicOnly } = await import(
+        "../handler.js"
+      );
+
+      const mockApiResponse = {
+        events: [
+          {
+            id: "1",
+            subject: "Public Event 1",
+            visibilityType: "PUBLIC",
+            start: {
+              dateTime: "2024-01-01T10:00:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+          },
+          {
+            id: "2",
+            subject: "Private Event",
+            visibilityType: "PRIVATE",
+            start: {
+              dateTime: "2024-01-02T14:00:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+          },
+          {
+            id: "3",
+            subject: "Public Event 2",
+            visibilityType: "PUBLIC",
+            start: {
+              dateTime: "2024-01-03T16:00:00+09:00",
+              timeZone: "Asia/Tokyo",
+            },
+          },
+        ],
+        hasNext: false,
+      };
+
+      mockGetRequest.mockResolvedValue(mockApiResponse);
+
+      const input = {
+        target: "123",
+        targetType: "user" as const,
+        rangeStart: "2024-01-01T00:00:00+09:00",
+        rangeEnd: "2024-01-07T23:59:59+09:00",
+      };
+
+      const result = await handlerWithPublicOnly(input, {} as any);
+
+      const structuredContent = result.structuredContent as any;
+
+      expect(structuredContent.result.events).toHaveLength(2);
+      expect(structuredContent.result.events[0].subject).toBe("Public Event 1");
+      expect(structuredContent.result.events[1].subject).toBe("Public Event 2");
+      expect(
+        structuredContent.result.events.every(
+          (event: any) => event.visibilityType === "PUBLIC",
+        ),
+      ).toBe(true);
+    });
+  });
 });
