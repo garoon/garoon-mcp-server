@@ -6,6 +6,7 @@ import {
   ServerNotification,
   ServerRequest,
 } from "@modelcontextprotocol/sdk/types.js";
+import { IS_PUBLIC_ONLY } from "../../../constants.js";
 
 type HandlerInput = {
   target: string;
@@ -38,9 +39,7 @@ export const getScheduleEventsHandler = async (
     targetType: targetType,
   });
 
-  const PUBLIC_ONLY = process.env.GAROON_PUBLIC_ONLY === "true";
-
-  if (PUBLIC_ONLY) {
+  if (IS_PUBLIC_ONLY) {
     params.set("showPrivate", "false");
   } else if (showPrivate !== undefined) {
     params.set("showPrivate", showPrivate.toString());
@@ -59,7 +58,7 @@ export const getScheduleEventsHandler = async (
   type ResponseType = z.infer<typeof outputSchema.result>;
   const result = await getRequest<ResponseType>(endpoint);
 
-  if (PUBLIC_ONLY && result?.events) {
+  if (IS_PUBLIC_ONLY && result?.events) {
     result.events = result.events.filter(
       (event) => event.visibilityType !== "PRIVATE",
     );

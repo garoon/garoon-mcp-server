@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { getScheduleEventsHandler } from "../handler.js";
 import * as client from "../../../../client.js";
+import * as constants from "../../../../constants.js";
 
 vi.mock("../../../../client.js", async () => {
   const actual = await vi.importActual("../../../../client.js");
@@ -251,7 +252,7 @@ describe("getScheduleEventsHandler", () => {
     expect(structuredContent.result).toEqual(mockApiResponse);
   });
 
-  it("should not filter events when PUBLIC_ONLY is disabled (the filter is applied in handler based on PUBLIC_ONLY from index.ts)", async () => {
+  it("should not filter events when IS_PUBLIC_ONLY is disabled (the filter is applied in handler based on PUBLIC_ONLY from index.ts)", async () => {
     const mockApiResponse = {
       events: [
         {
@@ -291,23 +292,17 @@ describe("getScheduleEventsHandler", () => {
     expect(structuredContent.result.events.length).toBeGreaterThan(0);
   });
 
-  describe("PUBLIC_ONLY mode", () => {
-    let originalPublicOnly: string | undefined;
-
+  describe("IS_PUBLIC_ONLY mode", () => {
     beforeEach(() => {
-      originalPublicOnly = process.env.GAROON_PUBLIC_ONLY;
-      process.env.GAROON_PUBLIC_ONLY = "true";
+      vi.clearAllMocks();
+      vi.spyOn(constants, "IS_PUBLIC_ONLY", "get").mockReturnValue(true);
     });
 
     afterEach(() => {
-      if (originalPublicOnly === undefined) {
-        delete process.env.GAROON_PUBLIC_ONLY;
-      } else {
-        process.env.GAROON_PUBLIC_ONLY = originalPublicOnly;
-      }
+      vi.restoreAllMocks();
     });
 
-    it("should filter out private events when PUBLIC_ONLY is true", async () => {
+    it("should filter out private events when IS_PUBLIC_ONLY is true", async () => {
       const mockApiResponse = {
         events: [
           {
@@ -353,7 +348,7 @@ describe("getScheduleEventsHandler", () => {
       expect(structuredContent.result.events[0].visibilityType).toBe("PUBLIC");
     });
 
-    it("should override showPrivate parameter when PUBLIC_ONLY is true", async () => {
+    it("should override showPrivate parameter when IS_PUBLIC_ONLY is true", async () => {
       const mockApiResponse = {
         events: [],
         hasNext: false,
@@ -375,7 +370,7 @@ describe("getScheduleEventsHandler", () => {
       expect(callArgs).toContain("showPrivate=false");
     });
 
-    it("should handle mixed visibility events when PUBLIC_ONLY is true", async () => {
+    it("should handle mixed visibility events when IS_PUBLIC_ONLY is true", async () => {
       const mockApiResponse = {
         events: [
           {

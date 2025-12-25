@@ -102,7 +102,7 @@
     "garoon_public_only": {
       "type": "string",
       "title": "Public Only Mode",
-      "description": "Filter out private schedule events when set to 'true' (default: 'false')",
+      "description": "Filter out highly confidential information when set to 'true' (default: 'false')",
       "required": false,
       "sensitive": false,
       "default": "false"
