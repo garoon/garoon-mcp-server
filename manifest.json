@@ -26,7 +26,8 @@
         "GAROON_PFX_FILE_PATH": "${user_config.garoon_pfx_file_path}",
         "GAROON_PFX_FILE_PASSWORD": "${user_config.garoon_pfx_file_password}",
         "GAROON_BASIC_AUTH_USERNAME": "${user_config.garoon_basic_auth_username}",
-        "GAROON_BASIC_AUTH_PASSWORD": "${user_config.garoon_basic_auth_password}"
+        "GAROON_BASIC_AUTH_PASSWORD": "${user_config.garoon_basic_auth_password}",
+        "GAROON_PUBLIC_ONLY": "${user_config.garoon_public_only}"
       }
     }
   },
@@ -97,6 +98,14 @@
       "required": false,
       "sensitive": true,
       "default": ""
+    },
+    "garoon_public_only": {
+      "type": "string",
+      "title": "Public Only Mode",
+      "description": "Filter out highly confidential information when set to 'true' (default: 'false')",
+      "required": false,
+      "sensitive": false,
+      "default": "false"
     }
   },
   "keywords": ["Garoon"],

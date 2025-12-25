@@ -6,6 +6,7 @@ import {
   ServerNotification,
   ServerRequest,
 } from "@modelcontextprotocol/sdk/types.js";
+import { IS_PUBLIC_ONLY } from "../../../constants.js";
 
 type HandlerInput = {
   target: string;
@@ -38,7 +39,9 @@ export const getScheduleEventsHandler = async (
     targetType: targetType,
   });
 
-  if (showPrivate !== undefined) {
+  if (IS_PUBLIC_ONLY) {
+    params.set("showPrivate", "false");
+  } else if (showPrivate !== undefined) {
     params.set("showPrivate", showPrivate.toString());
   }
 
@@ -54,6 +57,12 @@ export const getScheduleEventsHandler = async (
 
   type ResponseType = z.infer<typeof outputSchema.result>;
   const result = await getRequest<ResponseType>(endpoint);
+
+  if (IS_PUBLIC_ONLY && result?.events) {
+    result.events = result.events.filter(
+      (event) => event.visibilityType !== "PRIVATE",
+    );
+  }
 
   const output = { result };
   const validatedOutput = z.object(outputSchema).parse(output);

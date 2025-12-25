@@ -1,3 +1,5 @@
+export const IS_PUBLIC_ONLY = process.env.GAROON_PUBLIC_ONLY === "true";
+
 export const GAROON_SUPPORTED_TIMEZONES = [
   "Etc/GMT+12",
   "Etc/GMT+11",
