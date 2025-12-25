@@ -6,7 +6,6 @@ import {
   ServerNotification,
   ServerRequest,
 } from "@modelcontextprotocol/sdk/types.js";
-import { PUBLIC_ONLY } from "../../../constants.js";
 
 type HandlerInput = {
   target: string;
@@ -38,6 +37,8 @@ export const getScheduleEventsHandler = async (
     target: target,
     targetType: targetType,
   });
+
+  const PUBLIC_ONLY = process.env.GAROON_PUBLIC_ONLY === "true";
 
   if (PUBLIC_ONLY) {
     params.set("showPrivate", "false");
