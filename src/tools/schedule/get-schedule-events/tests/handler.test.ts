@@ -297,7 +297,6 @@ describe("getScheduleEventsHandler", () => {
     beforeEach(() => {
       originalPublicOnly = process.env.GAROON_PUBLIC_ONLY;
       process.env.GAROON_PUBLIC_ONLY = "true";
-      vi.resetModules();
     });
 
     afterEach(() => {
@@ -306,14 +305,9 @@ describe("getScheduleEventsHandler", () => {
       } else {
         process.env.GAROON_PUBLIC_ONLY = originalPublicOnly;
       }
-      vi.resetModules();
     });
 
     it("should filter out private events when PUBLIC_ONLY is true", async () => {
-      const { getScheduleEventsHandler: handlerWithPublicOnly } = await import(
-        "../handler.js"
-      );
-
       const mockApiResponse = {
         events: [
           {
@@ -348,7 +342,7 @@ describe("getScheduleEventsHandler", () => {
         showPrivate: true,
       };
 
-      const result = await handlerWithPublicOnly(input, {} as any);
+      const result = await getScheduleEventsHandler(input, {} as any);
 
       const callArgs = mockGetRequest.mock.calls[0][0];
       expect(callArgs).toContain("showPrivate=false");
@@ -360,10 +354,6 @@ describe("getScheduleEventsHandler", () => {
     });
 
     it("should override showPrivate parameter when PUBLIC_ONLY is true", async () => {
-      const { getScheduleEventsHandler: handlerWithPublicOnly } = await import(
-        "../handler.js"
-      );
-
       const mockApiResponse = {
         events: [],
         hasNext: false,
@@ -379,17 +369,13 @@ describe("getScheduleEventsHandler", () => {
         showPrivate: true,
       };
 
-      await handlerWithPublicOnly(input, {} as any);
+      await getScheduleEventsHandler(input, {} as any);
 
       const callArgs = mockGetRequest.mock.calls[0][0];
       expect(callArgs).toContain("showPrivate=false");
     });
 
     it("should handle mixed visibility events when PUBLIC_ONLY is true", async () => {
-      const { getScheduleEventsHandler: handlerWithPublicOnly } = await import(
-        "../handler.js"
-      );
-
       const mockApiResponse = {
         events: [
           {
@@ -432,7 +418,7 @@ describe("getScheduleEventsHandler", () => {
         rangeEnd: "2024-01-07T23:59:59+09:00",
       };
 
-      const result = await handlerWithPublicOnly(input, {} as any);
+      const result = await getScheduleEventsHandler(input, {} as any);
 
       const structuredContent = result.structuredContent as any;
 
