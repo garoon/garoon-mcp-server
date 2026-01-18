@@ -61,7 +61,7 @@
     "@anthropic-ai/mcpb": "^1.1.1",
     "@cybozu/eslint-config": "^24.3.0",
     "@cybozu/license-manager": "^1.4.0",
-    "@types/node": "^24.6.2",
+    "@types/node": "^25.0.6",
     "@vitest/coverage-v8": "^3.2.4",
     "eslint": "^9.37.0",
     "prettier": "^3.6.2",
