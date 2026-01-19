@@ -58,7 +58,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@anthropic-ai/mcpb": "^1.1.1",
+    "@anthropic-ai/mcpb": "^2.1.2",
     "@cybozu/eslint-config": "^24.3.0",
     "@cybozu/license-manager": "^1.4.0",
     "@types/node": "^25.0.6",
