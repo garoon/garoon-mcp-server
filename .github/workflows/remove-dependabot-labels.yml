@@ -1,0 +1,31 @@
+name: Remove Dependabot Semantic Versioning Labels
+
+on:
+  pull_request:
+    types: [opened, labeled]
+
+permissions:
+  contents: read
+
+jobs:
+  remove-semver-labels:
+    name: Remove Semantic Versioning Labels
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Remove major/minor/patch labels
+        run: |
+          labels_to_remove=("major" "minor" "patch")
+
+          for label in "${labels_to_remove[@]}"; do
+            if gh pr view ${{ github.event.pull_request.number }} --json labels --jq '.labels[].name' | grep -q "^${label}$"; then
+              echo "Removing label: ${label}"
+              gh pr edit ${{ github.event.pull_request.number }} --remove-label "${label}"
+            else
+              echo "Label not found: ${label}"
+            fi
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
