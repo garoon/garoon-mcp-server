@@ -103,6 +103,8 @@ Refer to the [Configuration Items](#configuration-items) section below for detai
         "GAROON_BASIC_AUTH_USERNAME",
         "-e",
         "GAROON_BASIC_AUTH_PASSWORD",
+        "-e",
+        "GAROON_PUBLIC_ONLY",
         "ghcr.io/garoon/mcp-server:latest"
       ],
       "env": {
@@ -111,7 +113,8 @@ Refer to the [Configuration Items](#configuration-items) section below for detai
         "GAROON_PASSWORD": "password",
         "https_proxy": "http://proxy.example.com:8080",
         "GAROON_BASIC_AUTH_USERNAME": "username",
-        "GAROON_BASIC_AUTH_PASSWORD": "password"
+        "GAROON_BASIC_AUTH_PASSWORD": "password",
+        "GAROON_PUBLIC_ONLY": "false"
       }
     }
   }
@@ -141,6 +144,8 @@ When using a client certificate, you need to mount the `*.pfx` file on the host 
         "GAROON_PFX_FILE_PATH",
         "-e",
         "GAROON_PFX_FILE_PASSWORD",
+        "-e",
+        "GAROON_PUBLIC_ONLY",
         "ghcr.io/garoon/mcp-server:latest"
       ],
       "env": {
@@ -148,7 +153,8 @@ When using a client certificate, you need to mount the `*.pfx` file on the host 
         "GAROON_USERNAME": "username",
         "GAROON_PASSWORD": "password",
         "GAROON_PFX_FILE_PATH": "/cert.pfx",
-        "GAROON_PFX_FILE_PASSWORD": "password"
+        "GAROON_PFX_FILE_PASSWORD": "password",
+        "GAROON_PUBLIC_ONLY": "false"
       }
     }
   }
@@ -173,7 +179,8 @@ When using a client certificate, you need to mount the `*.pfx` file on the host 
         "GAROON_PFX_FILE_PATH": "/absolute/path/to/pfx_file.pfx",
         "GAROON_PFX_FILE_PASSWORD": "pfx_password",
         "GAROON_BASIC_AUTH_USERNAME": "username",
-        "GAROON_BASIC_AUTH_PASSWORD": "password"
+        "GAROON_BASIC_AUTH_PASSWORD": "password",
+        "GAROON_PUBLIC_ONLY": "false"
       }
     }
   }
@@ -192,7 +199,8 @@ Try using an absolute path or the `npx` command instead.
       "env": {
         "GAROON_BASE_URL": "https://example.cybozu.com/g",
         "GAROON_USERNAME": "username",
-        "GAROON_PASSWORD": "password"
+        "GAROON_PASSWORD": "password",
+        "GAROON_PUBLIC_ONLY": "false"
       }
     }
   }
@@ -228,6 +236,8 @@ Try using an absolute path or the `npx` command instead.
         "GAROON_BASIC_AUTH_USERNAME",
         "-e",
         "GAROON_BASIC_AUTH_PASSWORD",
+        "-e",
+        "GAROON_PUBLIC_ONLY",
         "ghcr.io/garoon/mcp-server:latest"
       ],
       "env": {
@@ -236,7 +246,8 @@ Try using an absolute path or the `npx` command instead.
         "GAROON_PASSWORD": "password",
         "https_proxy": "http://proxy.example.com:8080",
         "GAROON_BASIC_AUTH_USERNAME": "username",
-        "GAROON_BASIC_AUTH_PASSWORD": "password"
+        "GAROON_BASIC_AUTH_PASSWORD": "password",
+        "GAROON_PUBLIC_ONLY": "false"
       }
     }
   }
@@ -267,6 +278,8 @@ When using a client certificate, you need to mount the `*.pfx` file on the host 
         "GAROON_PFX_FILE_PATH",
         "-e",
         "GAROON_PFX_FILE_PASSWORD",
+        "-e",
+        "GAROON_PUBLIC_ONLY",
         "ghcr.io/garoon/mcp-server:latest"
       ],
       "env": {
@@ -274,7 +287,8 @@ When using a client certificate, you need to mount the `*.pfx` file on the host 
         "GAROON_USERNAME": "username",
         "GAROON_PASSWORD": "password",
         "GAROON_PFX_FILE_PATH": "/cert.pfx",
-        "GAROON_PFX_FILE_PASSWORD": "password"
+        "GAROON_PFX_FILE_PASSWORD": "password",
+        "GAROON_PUBLIC_ONLY": "false"
       }
     }
   }
@@ -300,7 +314,8 @@ When using a client certificate, you need to mount the `*.pfx` file on the host 
         "GAROON_PFX_FILE_PATH": "/absolute/path/to/pfx_file.pfx",
         "GAROON_PFX_FILE_PASSWORD": "pfx_password",
         "GAROON_BASIC_AUTH_USERNAME": "username",
-        "GAROON_BASIC_AUTH_PASSWORD": "password"
+        "GAROON_BASIC_AUTH_PASSWORD": "password",
+        "GAROON_PUBLIC_ONLY": "false"
       }
     }
   }
@@ -320,7 +335,8 @@ Try using an absolute path or the `npx` command instead.
       "env": {
         "GAROON_BASE_URL": "https://example.cybozu.com/g",
         "GAROON_USERNAME": "username",
-        "GAROON_PASSWORD": "password"
+        "GAROON_PASSWORD": "password",
+        "GAROON_PUBLIC_ONLY": "false"
       }
     }
   }
@@ -331,16 +347,17 @@ Try using an absolute path or the `npx` command instead.
 
 ## Configuration Items
 
-| MCPB                  | Docker/npm Environment Variable | Description                                                                                                                           | Required |
-| --------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `Garoon Base URL`     | `GAROON_BASE_URL`               | Base URL of Garoon environment<br>Example 1: `https://example.cybozu.com/g`<br>Example 2: `https://example.com/cgi-bin/cbgrn/grn.cgi` | ✓        |
-| `Garoon Username`     | `GAROON_USERNAME`               | Garoon login name                                                                                                                     | ✓        |
-| `Garoon Password`     | `GAROON_PASSWORD`               | Garoon login password                                                                                                                 | ✓        |
-| `HTTPS Proxy`         | `https_proxy`                   | HTTPS proxy URL<br>Example: `http://proxy.example.com:8080`                                                                           | -        |
-| `PFX File Path`       | `GAROON_PFX_FILE_PATH`          | Absolute path to client certificate (`*.pfx`)                                                                                         | -        |
-| `PFX File Password`   | `GAROON_PFX_FILE_PASSWORD`      | Client certificate password                                                                                                           | -        |
-| `Basic Auth Username` | `GAROON_BASIC_AUTH_USERNAME`    | Basic authentication username                                                                                                         | -        |
-| `Basic Auth Password` | `GAROON_BASIC_AUTH_PASSWORD`    | Basic authentication password                                                                                                         | -        |
+| MCPB                  | Docker/npm Environment Variable | Description                                                                                                                                   | Required |
+| --------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `Garoon Base URL`     | `GAROON_BASE_URL`               | Base URL of Garoon environment<br>Example 1: `https://example.cybozu.com/g`<br>Example 2: `https://example.com/cgi-bin/cbgrn/grn.cgi`         | ✓        |
+| `Garoon Username`     | `GAROON_USERNAME`               | Garoon login name                                                                                                                             | ✓        |
+| `Garoon Password`     | `GAROON_PASSWORD`               | Garoon login password                                                                                                                         | ✓        |
+| `HTTPS Proxy`         | `https_proxy`                   | HTTPS proxy URL<br>Example: `http://proxy.example.com:8080`                                                                                   | -        |
+| `PFX File Path`       | `GAROON_PFX_FILE_PATH`          | Absolute path to client certificate (`*.pfx`)                                                                                                 | -        |
+| `PFX File Password`   | `GAROON_PFX_FILE_PASSWORD`      | Client certificate password                                                                                                                   | -        |
+| `Basic Auth Username` | `GAROON_BASIC_AUTH_USERNAME`    | Basic authentication username                                                                                                                 | -        |
+| `Basic Auth Password` | `GAROON_BASIC_AUTH_PASSWORD`    | Basic authentication password                                                                                                                 | -        |
+| `Public Only Mode`    | `GAROON_PUBLIC_ONLY`            | Public-only mode to exclude private schedule events<br>When set to `true`, highly confidential private events are excluded (default: `false`) | -        |
 
 **Notes:**
 
@@ -348,16 +365,18 @@ Try using an absolute path or the `npx` command instead.
 
 ## Tool List
 
-| Tool Name                 | Description                                                                                                    |
-| ------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| Create Schedule Event     | Creates a schedule event.                                                                                      |
-| Get Schedule Events       | Retrieves schedule events for specified users, organizations, or facilities.                                   |
-| Search Available Times    | Searches for available time slots based on specified conditions such as users and time ranges.                 |
-| Get Facilities            | Searches for facility IDs by facility name.                                                                    |
-| Get Current Datetime      | Gets the current date and time.                                                                                |
-| Get Garoon Users          | Searches for user IDs, display names, and login names by name.<br>Also supports prompts like "me" or "myself". |
-| Get Organizations         | Searches for organization IDs by organization name.                                                            |
-| Get Users In Organization | Gets users belonging to the specified organization ID.                                                         |
+| Tool Name                        | Description                                                                                                    |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| garoon-create-schedule-event     | Creates a schedule event.                                                                                      |
+| garoon-get-schedule-events       | Retrieves schedule events for specified users, organizations, or facilities.                                   |
+| garoon-search-available-times    | Searches for available time slots based on specified conditions such as users and time ranges.                 |
+| garoon-get-facilities            | Searches for facility IDs by facility name.                                                                    |
+| garoon-get-facility-groups       | Retrieves a list of facility groups.                                                                           |
+| garoon-get-facilities-in-group   | Retrieves facilities that belong to a specific facility group.                                                 |
+| garoon-get-current-time          | Gets the current date and time.                                                                                |
+| garoon-get-users                 | Searches for user IDs, display names, and login names by name.<br>Also supports prompts like "me" or "myself". |
+| garoon-get-organizations         | Searches for organization IDs by organization name.                                                            |
+| garoon-get-users-in-organization | Gets users belonging to the specified organization ID.                                                         |
 
 **Notes:**
 
