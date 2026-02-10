@@ -365,18 +365,18 @@ Try using an absolute path or the `npx` command instead.
 
 ## Tool List
 
-| Tool Name                        | Description                                                                                                    |
-| -------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| garoon-create-schedule-event     | Creates a schedule event.                                                                                      |
-| garoon-get-schedule-events       | Retrieves schedule events for specified users, organizations, or facilities.                                   |
-| garoon-search-available-times    | Searches for available time slots based on specified conditions such as users and time ranges.                 |
-| garoon-get-facilities            | Searches for facility IDs by facility name.                                                                    |
-| garoon-get-facility-groups       | Retrieves a list of facility groups.                                                                           |
-| garoon-get-facilities-in-group   | Retrieves facilities that belong to a specific facility group.                                                 |
-| garoon-get-current-time          | Gets the current date and time.                                                                                |
-| garoon-get-users                 | Searches for user IDs, display names, and login names by name.<br>Also supports prompts like "me" or "myself". |
-| garoon-get-organizations         | Searches for organization IDs by organization name.                                                            |
-| garoon-get-users-in-organization | Gets users belonging to the specified organization ID.                                                         |
+| Tool Name                  | Description                                                                                                    |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Create Schedule Event      | Creates a schedule event.                                                                                      |
+| Get Schedule Events        | Retrieves schedule events for specified users, organizations, or facilities.                                   |
+| Search Available Times     | Searches for available time slots based on specified conditions such as users and time ranges.                 |
+| Get Facilities             | Searches for facility IDs by facility name.                                                                    |
+| Garoon Get Facility Groups | Retrieves a list of facility groups.                                                                           |
+| Get Facilities In Group    | Retrieves facilities that belong to a specific facility group.                                                 |
+| Get Current Datetime       | Gets the current date and time.                                                                                |
+| Get Garoon Users           | Searches for user IDs, display names, and login names by name.<br>Also supports prompts like "me" or "myself". |
+| Get Organizations          | Searches for organization IDs by organization name.                                                            |
+| Get Users In Organization  | Gets users belonging to the specified organization ID.                                                         |
 
 **Notes:**
 

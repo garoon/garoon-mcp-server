@@ -365,18 +365,18 @@ npm install -g @garoon/mcp-server
 
 ## ツール一覧
 
-| ツール名                         | 説明                                                                                                   |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| garoon-create-schedule-event     | スケジュールを作成します。                                                                             |
-| garoon-get-schedule-events       | ユーザー/組織/施設を指定し、対象の予定を取得します。                                                   |
-| garoon-search-available-times    | ユーザーや時間範囲などの条件を指定して空き時間を検索します。                                           |
-| garoon-get-facilities            | 施設名から施設IDを検索します。                                                                         |
-| garoon-get-facility-groups       | 施設グループの一覧を取得します。                                                                       |
-| garoon-get-facilities-in-group   | 指定した施設グループに所属する施設を取得します。                                                       |
-| garoon-get-current-time          | 現在の日時を取得します。                                                                               |
-| garoon-get-users                 | 名前からユーザーID/表示名/ログイン名を検索します。<br>「私」「自分」等のプロンプトにも対応しています。 |
-| garoon-get-organizations         | 組織名から組織IDを検索します。                                                                         |
-| garoon-get-users-in-organization | 指定した組織IDに所属するユーザーを取得します。                                                         |
+| ツール名                   | 説明                                                                                                   |
+| -------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Create Schedule Event      | スケジュールを作成します。                                                                             |
+| Get Schedule Events        | ユーザー/組織/施設を指定し、対象の予定を取得します。                                                   |
+| Search Available Times     | ユーザーや時間範囲などの条件を指定して空き時間を検索します。                                           |
+| Get Facilities             | 施設名から施設IDを検索します。                                                                         |
+| Garoon Get Facility Groups | 施設グループの一覧を取得します。                                                                       |
+| Get Facilities In Group    | 指定した施設グループに所属する施設を取得します。                                                       |
+| Get Current Datetime       | 現在の日時を取得します。                                                                               |
+| Get Garoon Users           | 名前からユーザーID/表示名/ログイン名を検索します。<br>「私」「自分」等のプロンプトにも対応しています。 |
+| Get Organizations          | 組織名から組織IDを検索します。                                                                         |
+| Get Users In Organization  | 指定した組織IDに所属するユーザーを取得します。                                                         |
 
 **注意事項:**
 
