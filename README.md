@@ -383,6 +383,7 @@ npm install -g @garoon/mcp-server
 - ツールは内部的にGaroonのREST APIを使用しています。
   パッケージ版をご利用の場合、バージョンによってはツールが使用するREST APIがGaroon側に存在しない場合がございます。\
   REST APIの対応バージョンについては[Garoon APIドキュメント](https://cybozu.dev/ja/garoon/docs/rest-api/)をご参照ください。
+- 本MCPサーバーはDB分割構成には対応していません。
 
 ## サポート方針
 

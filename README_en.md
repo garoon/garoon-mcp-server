@@ -383,6 +383,7 @@ Try using an absolute path or the `npx` command instead.
 - Tools internally use Garoon's REST API.
   If you are using the package version, depending on the version, the REST API used by the tools may not exist on the Garoon side.\
   For REST API version compatibility, please refer to the [Garoon API documentation](https://cybozu.dev/en/garoon/docs/rest-api/).
+- This MCP server does not support the DB-distributed edition.
 
 ## Support Policy
 
