@@ -347,17 +347,17 @@ npm install -g @garoon/mcp-server
 
 ## 設定項目
 
-| MCPB                  | Docker/npmの環境変数         | 説明                                                                                                                    | 必須 |
-| --------------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---- |
-| `Garoon Base URL`     | `GAROON_BASE_URL`            | Garoon環境のベースURL<br>例1: `https://example.cybozu.com/g`<br>例2: `https://example.com/cgi-bin/cbgrn/grn.cgi`        | ✓    |
-| `Garoon Username`     | `GAROON_USERNAME`            | Garoonのログイン名                                                                                                      | ✓    |
-| `Garoon Password`     | `GAROON_PASSWORD`            | Garoonのログインパスワード                                                                                              | ✓    |
-| `HTTPS Proxy`         | `https_proxy`                | HTTPSプロキシのURL<br>例: `http://proxy.example.com:8080`                                                               | -    |
-| `PFX File Path`       | `GAROON_PFX_FILE_PATH`       | クライアント証明書（`*.pfx`）の絶対パス                                                                                 | -    |
-| `PFX File Password`   | `GAROON_PFX_FILE_PASSWORD`   | クライアント証明書のパスワード                                                                                          | -    |
-| `Basic Auth Username` | `GAROON_BASIC_AUTH_USERNAME` | Basic認証のユーザー名                                                                                                   | -    |
-| `Basic Auth Password` | `GAROON_BASIC_AUTH_PASSWORD` | Basic認証のパスワード                                                                                                   | -    |
-| `Public Only Mode`    | `GAROON_PUBLIC_ONLY`         | プライベート予定を除外するモード<br>`true`に設定すると機密性の高いプライベート予定が除外されます（デフォルト: `false`） | -    |
+| MCPB                  | Docker/npmの環境変数         | 説明                                                                                                                          | 必須 |
+| --------------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---- |
+| `Garoon Base URL`     | `GAROON_BASE_URL`            | Garoon環境のベースURL<br>例1: `https://example.cybozu.com/g`<br>例2: `https://example.com/cgi-bin/cbgrn/grn.cgi`              | ✓    |
+| `Garoon Username`     | `GAROON_USERNAME`            | Garoonのログイン名                                                                                                            | ✓    |
+| `Garoon Password`     | `GAROON_PASSWORD`            | Garoonのログインパスワード                                                                                                    | ✓    |
+| `HTTPS Proxy`         | `https_proxy`                | HTTPSプロキシのURL<br>例: `http://proxy.example.com:8080`                                                                     | -    |
+| `PFX File Path`       | `GAROON_PFX_FILE_PATH`       | クライアント証明書（`*.pfx`）の絶対パス                                                                                       | -    |
+| `PFX File Password`   | `GAROON_PFX_FILE_PASSWORD`   | クライアント証明書のパスワード                                                                                                | -    |
+| `Basic Auth Username` | `GAROON_BASIC_AUTH_USERNAME` | Basic認証のユーザー名                                                                                                         | -    |
+| `Basic Auth Password` | `GAROON_BASIC_AUTH_PASSWORD` | Basic認証のパスワード                                                                                                         | -    |
+| `Public Only Mode`    | `GAROON_PUBLIC_ONLY`         | 非公開予定を除外するモード（デフォルト: `false`）<br>`true`に設定すると予定取得ツールはレスポンスから非公開予定を除外します。 | -    |
 
 **注意事項:**
 

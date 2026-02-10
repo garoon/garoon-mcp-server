@@ -347,17 +347,17 @@ Try using an absolute path or the `npx` command instead.
 
 ## Configuration Items
 
-| MCPB                  | Docker/npm Environment Variable | Description                                                                                                                                   | Required |
-| --------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `Garoon Base URL`     | `GAROON_BASE_URL`               | Base URL of Garoon environment<br>Example 1: `https://example.cybozu.com/g`<br>Example 2: `https://example.com/cgi-bin/cbgrn/grn.cgi`         | ✓        |
-| `Garoon Username`     | `GAROON_USERNAME`               | Garoon login name                                                                                                                             | ✓        |
-| `Garoon Password`     | `GAROON_PASSWORD`               | Garoon login password                                                                                                                         | ✓        |
-| `HTTPS Proxy`         | `https_proxy`                   | HTTPS proxy URL<br>Example: `http://proxy.example.com:8080`                                                                                   | -        |
-| `PFX File Path`       | `GAROON_PFX_FILE_PATH`          | Absolute path to client certificate (`*.pfx`)                                                                                                 | -        |
-| `PFX File Password`   | `GAROON_PFX_FILE_PASSWORD`      | Client certificate password                                                                                                                   | -        |
-| `Basic Auth Username` | `GAROON_BASIC_AUTH_USERNAME`    | Basic authentication username                                                                                                                 | -        |
-| `Basic Auth Password` | `GAROON_BASIC_AUTH_PASSWORD`    | Basic authentication password                                                                                                                 | -        |
-| `Public Only Mode`    | `GAROON_PUBLIC_ONLY`            | Public-only mode to exclude private schedule events<br>When set to `true`, highly confidential private events are excluded (default: `false`) | -        |
+| MCPB                  | Docker/npm Environment Variable | Description                                                                                                                                      | Required |
+| --------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
+| `Garoon Base URL`     | `GAROON_BASE_URL`               | Base URL of Garoon environment<br>Example 1: `https://example.cybozu.com/g`<br>Example 2: `https://example.com/cgi-bin/cbgrn/grn.cgi`            | ✓        |
+| `Garoon Username`     | `GAROON_USERNAME`               | Garoon login name                                                                                                                                | ✓        |
+| `Garoon Password`     | `GAROON_PASSWORD`               | Garoon login password                                                                                                                            | ✓        |
+| `HTTPS Proxy`         | `https_proxy`                   | HTTPS proxy URL<br>Example: `http://proxy.example.com:8080`                                                                                      | -        |
+| `PFX File Path`       | `GAROON_PFX_FILE_PATH`          | Absolute path to client certificate (`*.pfx`)                                                                                                    | -        |
+| `PFX File Password`   | `GAROON_PFX_FILE_PASSWORD`      | Client certificate password                                                                                                                      | -        |
+| `Basic Auth Username` | `GAROON_BASIC_AUTH_USERNAME`    | Basic authentication username                                                                                                                    | -        |
+| `Basic Auth Password` | `GAROON_BASIC_AUTH_PASSWORD`    | Basic authentication password                                                                                                                    | -        |
+| `Public Only Mode`    | `GAROON_PUBLIC_ONLY`            | Mode to exclude private schedule events (default: `false`)<br>When set to `true`, schedule retrieval tools exclude private events from responses | -        |
 
 **Notes:**
 
