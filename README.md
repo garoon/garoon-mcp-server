@@ -103,6 +103,8 @@ npm install -g @garoon/mcp-server
         "GAROON_BASIC_AUTH_USERNAME",
         "-e",
         "GAROON_BASIC_AUTH_PASSWORD",
+        "-e",
+        "GAROON_PUBLIC_ONLY",
         "ghcr.io/garoon/mcp-server:latest"
       ],
       "env": {
@@ -111,7 +113,8 @@ npm install -g @garoon/mcp-server
         "GAROON_PASSWORD": "password",
         "https_proxy": "http://proxy.example.com:8080",
         "GAROON_BASIC_AUTH_USERNAME": "username",
-        "GAROON_BASIC_AUTH_PASSWORD": "password"
+        "GAROON_BASIC_AUTH_PASSWORD": "password",
+        "GAROON_PUBLIC_ONLY": "false"
       }
     }
   }
@@ -141,6 +144,8 @@ npm install -g @garoon/mcp-server
         "GAROON_PFX_FILE_PATH",
         "-e",
         "GAROON_PFX_FILE_PASSWORD",
+        "-e",
+        "GAROON_PUBLIC_ONLY",
         "ghcr.io/garoon/mcp-server:latest"
       ],
       "env": {
@@ -148,7 +153,8 @@ npm install -g @garoon/mcp-server
         "GAROON_USERNAME": "username",
         "GAROON_PASSWORD": "password",
         "GAROON_PFX_FILE_PATH": "/cert.pfx",
-        "GAROON_PFX_FILE_PASSWORD": "password"
+        "GAROON_PFX_FILE_PASSWORD": "password",
+        "GAROON_PUBLIC_ONLY": "false"
       }
     }
   }
@@ -173,7 +179,8 @@ npm install -g @garoon/mcp-server
         "GAROON_PFX_FILE_PATH": "/absolute/path/to/pfx_file.pfx",
         "GAROON_PFX_FILE_PASSWORD": "pfx_password",
         "GAROON_BASIC_AUTH_USERNAME": "username",
-        "GAROON_BASIC_AUTH_PASSWORD": "password"
+        "GAROON_BASIC_AUTH_PASSWORD": "password",
+        "GAROON_PUBLIC_ONLY": "false"
       }
     }
   }
@@ -192,7 +199,8 @@ npm install -g @garoon/mcp-server
       "env": {
         "GAROON_BASE_URL": "https://example.cybozu.com/g",
         "GAROON_USERNAME": "username",
-        "GAROON_PASSWORD": "password"
+        "GAROON_PASSWORD": "password",
+        "GAROON_PUBLIC_ONLY": "false"
       }
     }
   }
@@ -228,6 +236,8 @@ npm install -g @garoon/mcp-server
         "GAROON_BASIC_AUTH_USERNAME",
         "-e",
         "GAROON_BASIC_AUTH_PASSWORD",
+        "-e",
+        "GAROON_PUBLIC_ONLY",
         "ghcr.io/garoon/mcp-server:latest"
       ],
       "env": {
@@ -236,7 +246,8 @@ npm install -g @garoon/mcp-server
         "GAROON_PASSWORD": "password",
         "https_proxy": "http://proxy.example.com:8080",
         "GAROON_BASIC_AUTH_USERNAME": "username",
-        "GAROON_BASIC_AUTH_PASSWORD": "password"
+        "GAROON_BASIC_AUTH_PASSWORD": "password",
+        "GAROON_PUBLIC_ONLY": "false"
       }
     }
   }
@@ -267,6 +278,8 @@ npm install -g @garoon/mcp-server
         "GAROON_PFX_FILE_PATH",
         "-e",
         "GAROON_PFX_FILE_PASSWORD",
+        "-e",
+        "GAROON_PUBLIC_ONLY",
         "ghcr.io/garoon/mcp-server:latest"
       ],
       "env": {
@@ -274,7 +287,8 @@ npm install -g @garoon/mcp-server
         "GAROON_USERNAME": "username",
         "GAROON_PASSWORD": "password",
         "GAROON_PFX_FILE_PATH": "/cert.pfx",
-        "GAROON_PFX_FILE_PASSWORD": "password"
+        "GAROON_PFX_FILE_PASSWORD": "password",
+        "GAROON_PUBLIC_ONLY": "false"
       }
     }
   }
@@ -300,7 +314,8 @@ npm install -g @garoon/mcp-server
         "GAROON_PFX_FILE_PATH": "/absolute/path/to/pfx_file.pfx",
         "GAROON_PFX_FILE_PASSWORD": "pfx_password",
         "GAROON_BASIC_AUTH_USERNAME": "username",
-        "GAROON_BASIC_AUTH_PASSWORD": "password"
+        "GAROON_BASIC_AUTH_PASSWORD": "password",
+        "GAROON_PUBLIC_ONLY": "false"
       }
     }
   }
@@ -320,7 +335,8 @@ npm install -g @garoon/mcp-server
       "env": {
         "GAROON_BASE_URL": "https://example.cybozu.com/g",
         "GAROON_USERNAME": "username",
-        "GAROON_PASSWORD": "password"
+        "GAROON_PASSWORD": "password",
+        "GAROON_PUBLIC_ONLY": "false"
       }
     }
   }
@@ -331,16 +347,17 @@ npm install -g @garoon/mcp-server
 
 ## 設定項目
 
-| MCPB                  | Docker/npmの環境変数         | 説明                                                                                                             | 必須 |
-| --------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---- |
-| `Garoon Base URL`     | `GAROON_BASE_URL`            | Garoon環境のベースURL<br>例1: `https://example.cybozu.com/g`<br>例2: `https://example.com/cgi-bin/cbgrn/grn.cgi` | ✓    |
-| `Garoon Username`     | `GAROON_USERNAME`            | Garoonのログイン名                                                                                               | ✓    |
-| `Garoon Password`     | `GAROON_PASSWORD`            | Garoonのログインパスワード                                                                                       | ✓    |
-| `HTTPS Proxy`         | `https_proxy`                | HTTPSプロキシのURL<br>例: `http://proxy.example.com:8080`                                                        | -    |
-| `PFX File Path`       | `GAROON_PFX_FILE_PATH`       | クライアント証明書（`*.pfx`）の絶対パス                                                                          | -    |
-| `PFX File Password`   | `GAROON_PFX_FILE_PASSWORD`   | クライアント証明書のパスワード                                                                                   | -    |
-| `Basic Auth Username` | `GAROON_BASIC_AUTH_USERNAME` | Basic認証のユーザー名                                                                                            | -    |
-| `Basic Auth Password` | `GAROON_BASIC_AUTH_PASSWORD` | Basic認証のパスワード                                                                                            | -    |
+| MCPB                  | Docker/npmの環境変数         | 説明                                                                                                                          | 必須 |
+| --------------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---- |
+| `Garoon Base URL`     | `GAROON_BASE_URL`            | Garoon環境のベースURL<br>例1: `https://example.cybozu.com/g`<br>例2: `https://example.com/cgi-bin/cbgrn/grn.cgi`              | ✓    |
+| `Garoon Username`     | `GAROON_USERNAME`            | Garoonのログイン名                                                                                                            | ✓    |
+| `Garoon Password`     | `GAROON_PASSWORD`            | Garoonのログインパスワード                                                                                                    | ✓    |
+| `HTTPS Proxy`         | `https_proxy`                | HTTPSプロキシのURL<br>例: `http://proxy.example.com:8080`                                                                     | -    |
+| `PFX File Path`       | `GAROON_PFX_FILE_PATH`       | クライアント証明書（`*.pfx`）の絶対パス                                                                                       | -    |
+| `PFX File Password`   | `GAROON_PFX_FILE_PASSWORD`   | クライアント証明書のパスワード                                                                                                | -    |
+| `Basic Auth Username` | `GAROON_BASIC_AUTH_USERNAME` | Basic認証のユーザー名                                                                                                         | -    |
+| `Basic Auth Password` | `GAROON_BASIC_AUTH_PASSWORD` | Basic認証のパスワード                                                                                                         | -    |
+| `Public Only Mode`    | `GAROON_PUBLIC_ONLY`         | 非公開予定を除外するモード（デフォルト: `false`）<br>`true`に設定すると予定取得ツールはレスポンスから非公開予定を除外します。 | -    |
 
 **注意事項:**
 
@@ -348,22 +365,25 @@ npm install -g @garoon/mcp-server
 
 ## ツール一覧
 
-| ツール名                  | 説明                                                                                                   |
-| ------------------------- | ------------------------------------------------------------------------------------------------------ |
-| Create Schedule Event     | スケジュールを作成します。                                                                             |
-| Get Schedule Events       | ユーザー/組織/施設を指定し、対象の予定を取得します。                                                   |
-| Search Available Times    | ユーザーや時間範囲などの条件を指定して空き時間を検索します。                                           |
-| Get Facilities            | 施設名から施設IDを検索します。                                                                         |
-| Get Current Datetime      | 現在の日時を取得します。                                                                               |
-| Get Garoon Users          | 名前からユーザーID/表示名/ログイン名を検索します。<br>「私」「自分」等のプロンプトにも対応しています。 |
-| Get Organizations         | 組織名から組織IDを検索します。                                                                         |
-| Get Users In Organization | 指定した組織IDに所属するユーザーを取得します。                                                         |
+| ツール名                   | 説明                                                                                                   |
+| -------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Create Schedule Event      | スケジュールを作成します。                                                                             |
+| Get Schedule Events        | ユーザー/組織/施設を指定し、対象の予定を取得します。                                                   |
+| Search Available Times     | ユーザーや時間範囲などの条件を指定して空き時間を検索します。                                           |
+| Get Facilities             | 施設名から施設IDを検索します。                                                                         |
+| Garoon Get Facility Groups | 施設グループの一覧を取得します。                                                                       |
+| Get Facilities In Group    | 指定した施設グループに所属する施設を取得します。                                                       |
+| Get Current Datetime       | 現在の日時を取得します。                                                                               |
+| Get Garoon Users           | 名前からユーザーID/表示名/ログイン名を検索します。<br>「私」「自分」等のプロンプトにも対応しています。 |
+| Get Organizations          | 組織名から組織IDを検索します。                                                                         |
+| Get Users In Organization  | 指定した組織IDに所属するユーザーを取得します。                                                         |
 
 **注意事項:**
 
 - ツールは内部的にGaroonのREST APIを使用しています。
   パッケージ版をご利用の場合、バージョンによってはツールが使用するREST APIがGaroon側に存在しない場合がございます。\
   REST APIの対応バージョンについては[Garoon APIドキュメント](https://cybozu.dev/ja/garoon/docs/rest-api/)をご参照ください。
+- 本MCPサーバーはDB分割構成には対応していません。
 
 ## サポート方針
 
