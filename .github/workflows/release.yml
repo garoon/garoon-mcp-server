@@ -117,6 +117,11 @@ jobs:
           cache: "pnpm"
           registry-url: "https://registry.npmjs.org"
 
+      # For trusted publishing, npm must be 11.5.1 or later
+      # ref. https://docs.npmjs.com/trusted-publishers
+      - name: Install latest npm
+        run: npm install -g npm@latest
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
