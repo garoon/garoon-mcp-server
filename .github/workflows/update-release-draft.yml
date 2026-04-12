@@ -20,7 +20,7 @@ jobs:
       tag_name: ${{ steps.release-drafter.outputs.tag_name }}
     steps:
       - name: Run Release Drafter
-        uses: release-drafter/release-drafter@b1476f6e6eb133afa41ed8589daba6dc69b4d3f5 # v6.1.0
+        uses: release-drafter/release-drafter@5de93583980a40bd78603b6dfdcda5b4df377b32 # v7.2.0
         id: release-drafter
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -35,7 +35,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
+        uses: pnpm/action-setup@08c4be7e2e672a47d11bd04269e27e5f3e8529cb # v6.0.0
 
       - name: Set up Node
         uses: actions/setup-node@v6
@@ -49,7 +49,7 @@ jobs:
           pnpm run build:mcpb
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: garoon-mcp-server.mcpb
           path: build/garoon-mcp-server.mcpb
@@ -67,7 +67,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Download artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           path: ./artifacts
 
