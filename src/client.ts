@@ -59,6 +59,61 @@ export async function postRequest<T>(
   throw new HttpErrorResponse(response.status, responseText);
 }
 
+export async function patchRequest<T>(
+  endpoint: string,
+  body: string,
+): Promise<T> {
+  const requestUrl = `${GAROON_BASE_URL}${endpoint}`;
+  const response = await fetch(requestUrl, {
+    method: "PATCH",
+    headers: {
+      ...BASE_HEADERS,
+      "Content-Type": "application/json",
+    },
+    body,
+  });
+  if (response.ok) {
+    return response.json() as T;
+  }
+  const responseText = await response.text();
+  throw new HttpErrorResponse(response.status, responseText);
+}
+
+export async function putRequest<T>(
+  endpoint: string,
+  body: string,
+): Promise<T> {
+  const requestUrl = `${GAROON_BASE_URL}${endpoint}`;
+  const response = await fetch(requestUrl, {
+    method: "PUT",
+    headers: {
+      ...BASE_HEADERS,
+      "Content-Type": "application/json",
+    },
+    body,
+  });
+  if (response.ok) {
+    return response.json() as T;
+  }
+  const responseText = await response.text();
+  throw new HttpErrorResponse(response.status, responseText);
+}
+
+export async function deleteRequest(endpoint: string): Promise<void> {
+  const requestUrl = `${GAROON_BASE_URL}${endpoint}`;
+  const response = await fetch(requestUrl, {
+    method: "DELETE",
+    headers: {
+      ...BASE_HEADERS,
+    },
+  });
+  if (response.ok) {
+    return;
+  }
+  const responseText = await response.text();
+  throw new HttpErrorResponse(response.status, responseText);
+}
+
 export async function getRequest<T>(endpoint: string): Promise<T> {
   const requestUrl = `${GAROON_BASE_URL}${endpoint}`;
   const response = await fetch(requestUrl, {

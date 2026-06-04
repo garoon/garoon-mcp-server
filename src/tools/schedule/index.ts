@@ -4,6 +4,13 @@ import { searchAvailableTimes } from "./search-available-times/index.js";
 import { getFacilitiesTool } from "./get-facilities/index.js";
 import { getFacilityGroupsTool } from "./get-facility-groups/index.js";
 import { getFacilitiesInGroupTool } from "./get-facilities-in-group/index.js";
+import { getScheduleEventTool } from "./get-schedule-event/index.js";
+import { updateScheduleEventTool } from "./update-schedule-event/index.js";
+import { deleteScheduleEventTool } from "./delete-schedule-event/index.js";
+import { getScheduleDatastoreTool } from "./get-schedule-datastore/index.js";
+import { addScheduleDatastoreTool } from "./add-schedule-datastore/index.js";
+import { updateScheduleDatastoreTool } from "./update-schedule-datastore/index.js";
+import { deleteScheduleDatastoreTool } from "./delete-schedule-datastore/index.js";
 
 export const scheduleTools = [
   createScheduleEvent,
@@ -12,4 +19,11 @@ export const scheduleTools = [
   getFacilitiesTool,
   getFacilityGroupsTool,
   getFacilitiesInGroupTool,
+  getScheduleEventTool,
+  updateScheduleEventTool,
+  deleteScheduleEventTool,
+  getScheduleDatastoreTool,
+  addScheduleDatastoreTool,
+  updateScheduleDatastoreTool,
+  deleteScheduleDatastoreTool,
 ];

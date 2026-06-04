@@ -10,8 +10,10 @@ export const categorySchema = () =>
     description: z
       .string()
       .nullable()
-      .describe("Category memo (null if none exists)"),
+      .describe("Category memo (null if none exists)")
+      .optional(),
     hasSubCategories: z
       .boolean()
-      .describe("Whether this category has child categories"),
+      .describe("Whether this category has child categories")
+      .optional(),
   });
