@@ -121,7 +121,7 @@ describe("updateBulletinTopicHandler", () => {
 
     expect(mockPatchRequest).toHaveBeenCalledWith(
       "/api/v1/bulletin/topics/1",
-      JSON.stringify({ body: "New body only" }),
+      JSON.stringify({ body: "New body only", isHtmlBody: false }),
     );
 
     const structuredContent = result.structuredContent as any;

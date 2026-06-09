@@ -31,8 +31,13 @@ export const updateBulletinTopicHandler = async (
   const requestBody: Record<string, unknown> = {};
 
   if (input.subject !== undefined) requestBody.subject = input.subject;
-  if (input.body !== undefined) requestBody.body = input.body;
-  if (input.isHtmlBody !== undefined) requestBody.isHtmlBody = input.isHtmlBody;
+  if (input.body !== undefined) {
+    requestBody.body = input.body;
+    // Garoon API requires isHtmlBody when body is specified
+    requestBody.isHtmlBody = input.isHtmlBody ?? false;
+  } else if (input.isHtmlBody !== undefined) {
+    requestBody.isHtmlBody = input.isHtmlBody;
+  }
   if (input.manuallySender !== undefined)
     requestBody.manuallySender = input.manuallySender;
   if (input.allowComments !== undefined)
