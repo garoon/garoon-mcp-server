@@ -7,6 +7,7 @@ import { Tool } from "./register.js";
 import { scheduleTools } from "./schedule/index.js";
 import { spaceTools } from "./space/index.js";
 import { todoTools } from "./todo/index.js";
+import { commandTools } from "./command/index.js";
 import { workflowTools } from "./workflow/index.js";
 
 export const tools: Array<Tool<any, any>> = [
@@ -19,4 +20,5 @@ export const tools: Array<Tool<any, any>> = [
   ...presenceTools,
   ...todoTools,
   ...notificationTools,
+  ...commandTools,
 ];
