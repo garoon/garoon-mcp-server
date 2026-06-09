@@ -27,7 +27,7 @@ This MCP server mainly uses REST API. Garoon also has SOAP API, but it is legacy
 
 ```bash
 # Install dependencies
-pnpm install
+pnpm install --frozen-lockfile
 
 # Build the TypeScript project
 pnpm run build

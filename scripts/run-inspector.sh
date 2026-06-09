@@ -2,6 +2,11 @@
 
 cd "$(dirname "$0")/.."
 
+if ! [ -x node_modules/.bin/mcp-inspector ]; then
+  echo "Error: mcp-inspector is not installed. Run 'pnpm install --frozen-lockfile' first." >&2
+  exit 1
+fi
+
 ARGS=()
 if [ -f .env.local ]; then
   source .env.local
@@ -26,4 +31,4 @@ if [ -f .env.local ]; then
   fi
 fi
 
-npx @modelcontextprotocol/inspector "${ARGS[@]}" tsx src/index.ts
+pnpm exec mcp-inspector "${ARGS[@]}" tsx src/index.ts
