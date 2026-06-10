@@ -23,7 +23,7 @@ const config = createConfig({
     ],
     allowPackages: [
       // If caniuse-lite becomes a production dependency in the future, manual review of CC-BY-4.0 attribution requirements will be needed.
-      "caniuse-lite@1.0.30001765",
+      "caniuse-lite@1.0.30001797",
     ],
   },
   extract: {
