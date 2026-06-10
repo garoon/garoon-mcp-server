@@ -5,6 +5,7 @@
 The [MCP Inspector](https://github.com/modelcontextprotocol/inspector) is an official debug tool.
 
 ```shell
+pnpm install --frozen-lockfile
 pnpm run dev
 ```
 
@@ -41,7 +42,7 @@ EOS
 npm package
 
 ```shell
-pnpm install
+pnpm install --frozen-lockfile
 pnpm run build
 ```
 

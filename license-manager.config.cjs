@@ -16,6 +16,9 @@ const config = createConfig({
       "BlueOak-1.0.0",
       "(BSD-3-Clause OR GPL-2.0)",
       "(MIT OR CC0-1.0)",
+      "MIT OR Apache-2.0",
+      "0BSD",
+      "(WTFPL OR MIT)",
       "Unlicense",
     ],
     allowPackages: [
