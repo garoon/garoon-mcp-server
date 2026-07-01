@@ -2,13 +2,11 @@ import type {
   McpServer,
   ToolCallback,
 } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { RequestHandlerExtra } from "@modelcontextprotocol/sdk/shared/protocol.js";
 import type {
   ToolAnnotations,
-  ServerRequest,
-  ServerNotification,
+  CallToolResult,
 } from "@modelcontextprotocol/sdk/types.js";
-import type { ZodRawShape, ZodTypeAny, z } from "zod";
+import type { ZodRawShape } from "zod";
 import { createErrorOutput } from "./error-handler.js";
 
 type ToolConfig<
@@ -36,13 +34,11 @@ export type Tool<
 function wrapWithErrorHandling<InputArgs extends ZodRawShape>(
   callback: ToolCallback<InputArgs>,
 ): ToolCallback<InputArgs> {
-  return (async (
-    args: z.objectOutputType<InputArgs, ZodTypeAny>,
-    extra: RequestHandlerExtra<ServerRequest, ServerNotification>,
-  ) => {
+  type Params = Parameters<ToolCallback<InputArgs>>;
+  const invoke = callback as (...args: Params) => Promise<CallToolResult>;
+  return (async (...args: Params) => {
     try {
-      const result = await callback(args, extra);
-      return result;
+      return await invoke(...args);
     } catch (error) {
       return createErrorOutput(error);
     }
