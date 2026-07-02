@@ -42,9 +42,9 @@ describe("createScheduleEventHandler", () => {
         dateTime: "2024-07-27T11:00:00+09:00",
         timeZone: "Asia/Tokyo",
       },
-    };
+    } as Parameters<typeof createScheduleEventHandler>[0];
 
-    const result = await createScheduleEventHandler(input, {} as any);
+    const result = await createScheduleEventHandler(input);
 
     expect(mockPostRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/events",
@@ -56,13 +56,7 @@ describe("createScheduleEventHandler", () => {
       }),
     );
 
-    expect(result).toHaveProperty("structuredContent");
-    expect(result).toHaveProperty("content");
-    expect(result.content).toHaveLength(1);
-    expect(result.content[0].type).toBe("text");
-
-    const structuredContent = result.structuredContent as any;
-    expect(structuredContent.result).toEqual(mockApiResponse);
+    expect(result).toEqual(mockApiResponse);
   });
 
   it("should successfully create schedule event with all fields", async () => {
@@ -139,7 +133,7 @@ describe("createScheduleEventHandler", () => {
       isAllDay: false,
     };
 
-    const result = await createScheduleEventHandler(input, {} as any);
+    const result = await createScheduleEventHandler(input);
 
     expect(mockPostRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/events",
@@ -172,8 +166,7 @@ describe("createScheduleEventHandler", () => {
       }),
     );
 
-    const structuredContent = result.structuredContent as any;
-    expect(structuredContent.result).toEqual(mockApiResponse);
+    expect(result).toEqual(mockApiResponse);
   });
 
   it("should handle ALL_DAY event type", async () => {
@@ -208,9 +201,9 @@ describe("createScheduleEventHandler", () => {
       },
       eventType: "ALL_DAY" as const,
       isAllDay: true,
-    };
+    } as Parameters<typeof createScheduleEventHandler>[0];
 
-    const result = await createScheduleEventHandler(input, {} as any);
+    const result = await createScheduleEventHandler(input);
 
     expect(mockPostRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/events",
@@ -229,8 +222,7 @@ describe("createScheduleEventHandler", () => {
       }),
     );
 
-    const structuredContent = result.structuredContent as any;
-    expect(structuredContent.result).toEqual(mockApiResponse);
+    expect(result).toEqual(mockApiResponse);
   });
 
   it("should handle start-only event", async () => {
@@ -256,9 +248,9 @@ describe("createScheduleEventHandler", () => {
         timeZone: "Asia/Tokyo",
       },
       isStartOnly: true,
-    };
+    } as Parameters<typeof createScheduleEventHandler>[0];
 
-    const result = await createScheduleEventHandler(input, {} as any);
+    const result = await createScheduleEventHandler(input);
 
     expect(mockPostRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/events",
@@ -272,7 +264,6 @@ describe("createScheduleEventHandler", () => {
       }),
     );
 
-    const structuredContent = result.structuredContent as any;
-    expect(structuredContent.result).toEqual(mockApiResponse);
+    expect(result).toEqual(mockApiResponse);
   });
 });

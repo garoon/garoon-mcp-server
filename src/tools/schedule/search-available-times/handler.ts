@@ -1,11 +1,8 @@
 import { z } from "zod";
 import { postRequest } from "../../../client.js";
+import type { InferToolInput } from "../../register.js";
+import { inputSchema } from "./input-schema.js";
 import { outputSchema } from "./output-schema.js";
-import type { RequestHandlerExtra } from "@modelcontextprotocol/sdk/shared/protocol.js";
-import {
-  ServerNotification,
-  ServerRequest,
-} from "@modelcontextprotocol/sdk/types.js";
 
 const hasAttendeeId = (attendee: {
   id?: string;
@@ -24,24 +21,7 @@ const hasFacilityId = (facility: {
 };
 
 export const searchAvailableTimesHandler = async (
-  input: {
-    timeRanges: Array<{
-      start: string;
-      end: string;
-    }>;
-    timeInterval: number;
-    attendees?: Array<{
-      type: "ORGANIZATION" | "USER";
-      id?: string;
-      code?: string;
-    }>;
-    facilities?: Array<{
-      id?: string;
-      code?: string;
-    }>;
-    facilitySearchCondition?: "AND" | "OR";
-  },
-  _extra: RequestHandlerExtra<ServerRequest, ServerNotification>,
+  input: InferToolInput<typeof inputSchema>,
 ) => {
   const {
     timeRanges,
@@ -75,23 +55,5 @@ export const searchAvailableTimesHandler = async (
   };
 
   type ResponseType = z.infer<typeof outputSchema.result>;
-  const apiResult = await postRequest<ResponseType>(
-    endpoint,
-    JSON.stringify(requestBody),
-  );
-
-  const output = {
-    result: apiResult,
-  };
-  const validatedOutput = z.object(outputSchema).parse(output);
-
-  return {
-    structuredContent: validatedOutput,
-    content: [
-      {
-        type: "text" as const,
-        text: JSON.stringify(validatedOutput, null, 2),
-      },
-    ],
-  };
+  return postRequest<ResponseType>(endpoint, JSON.stringify(requestBody));
 };

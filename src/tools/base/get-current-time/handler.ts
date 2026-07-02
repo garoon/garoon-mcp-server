@@ -1,18 +1,10 @@
-import { z } from "zod";
 import { Temporal } from "@js-temporal/polyfill";
 import { GAROON_SUPPORTED_TIMEZONES } from "../../../constants.js";
-import { outputSchema } from "./output-schema.js";
-import type { RequestHandlerExtra } from "@modelcontextprotocol/sdk/shared/protocol.js";
-import {
-  ServerNotification,
-  ServerRequest,
-} from "@modelcontextprotocol/sdk/types.js";
+import type { InferToolInput } from "../../register.js";
+import { inputSchema } from "./input-schema.js";
 
 export const getCurrentTimeHandler = async (
-  input: {
-    timezone?: string;
-  },
-  _extra: RequestHandlerExtra<ServerRequest, ServerNotification>,
+  input: InferToolInput<typeof inputSchema>,
 ) => {
   const { timezone } = input;
   const selectedTimezone = timezone || "UTC";
@@ -27,21 +19,8 @@ export const getCurrentTimeHandler = async (
     .toString({ smallestUnit: "second" })
     .replace(/\[.*$/, "");
 
-  const output = {
-    result: {
-      timezone: selectedTimezone,
-      datetime: datetimeString,
-    },
-  };
-  const validatedOutput = z.object(outputSchema).parse(output);
-
   return {
-    structuredContent: validatedOutput,
-    content: [
-      {
-        type: "text" as const,
-        text: JSON.stringify(validatedOutput, null, 2),
-      },
-    ],
+    timezone: selectedTimezone,
+    datetime: datetimeString,
   };
 };

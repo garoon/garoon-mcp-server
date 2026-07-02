@@ -65,7 +65,7 @@ describe("searchAvailableTimesHandler", () => {
       facilitySearchCondition: "OR" as const,
     };
 
-    const result = await searchAvailableTimesHandler(input, {} as any);
+    const result = await searchAvailableTimesHandler(input);
 
     expect(mockPostRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/searchAvailableTimes",
@@ -81,14 +81,9 @@ describe("searchAvailableTimesHandler", () => {
       }),
     );
 
-    expect(result).toHaveProperty("structuredContent");
-    expect(result).toHaveProperty("content");
-    expect(result.content).toHaveLength(1);
-    expect(result.content[0].type).toBe("text");
-
-    const structuredContent = result.structuredContent as any;
-    expect(structuredContent.result.availableTimes).toHaveLength(2);
-    expect(structuredContent.result.availableTimes[0]).toEqual({
+    const output = result as any;
+    expect(output.availableTimes).toHaveLength(2);
+    expect(output.availableTimes[0]).toEqual({
       start: {
         dateTime: "2024-07-27T09:00:00+09:00",
         timeZone: "Asia/Tokyo",
@@ -149,7 +144,7 @@ describe("searchAvailableTimesHandler", () => {
       facilitySearchCondition: "AND" as const,
     };
 
-    const result = await searchAvailableTimesHandler(input, {} as any);
+    const result = await searchAvailableTimesHandler(input);
 
     expect(mockPostRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/searchAvailableTimes",
@@ -166,8 +161,8 @@ describe("searchAvailableTimesHandler", () => {
       }),
     );
 
-    const structuredContent = result.structuredContent as any;
-    expect(structuredContent.result.availableTimes).toHaveLength(2);
+    const output = result as any;
+    expect(output.availableTimes).toHaveLength(2);
   });
 
   it("should handle empty available times result", async () => {
@@ -188,10 +183,10 @@ describe("searchAvailableTimesHandler", () => {
       attendees: [{ type: "USER" as const, id: "1" }],
     };
 
-    const result = await searchAvailableTimesHandler(input, {} as any);
+    const result = await searchAvailableTimesHandler(input);
 
-    const structuredContent = result.structuredContent as any;
-    expect(structuredContent.result.availableTimes).toHaveLength(0);
+    const output = result as any;
+    expect(output.availableTimes).toHaveLength(0);
   });
 
   it("should handle OR condition with facility information", async () => {
@@ -245,7 +240,7 @@ describe("searchAvailableTimesHandler", () => {
       facilitySearchCondition: "OR" as const,
     };
 
-    const result = await searchAvailableTimesHandler(input, {} as any);
+    const result = await searchAvailableTimesHandler(input);
 
     expect(mockPostRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/searchAvailableTimes",
@@ -258,10 +253,10 @@ describe("searchAvailableTimesHandler", () => {
       }),
     );
 
-    const structuredContent = result.structuredContent as any;
-    expect(structuredContent.result.availableTimes).toHaveLength(2);
+    const output = result as any;
+    expect(output.availableTimes).toHaveLength(2);
 
-    expect(structuredContent.result.availableTimes[0].facility).toEqual({
+    expect(output.availableTimes[0].facility).toEqual({
       id: "1",
       code: "f1",
       name: "f1",
@@ -309,7 +304,7 @@ describe("searchAvailableTimesHandler", () => {
       facilitySearchCondition: "AND" as const,
     };
 
-    const result = await searchAvailableTimesHandler(input, {} as any);
+    const result = await searchAvailableTimesHandler(input);
 
     expect(mockPostRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/searchAvailableTimes",
@@ -322,11 +317,11 @@ describe("searchAvailableTimesHandler", () => {
       }),
     );
 
-    const structuredContent = result.structuredContent as any;
-    expect(structuredContent.result.availableTimes).toHaveLength(2);
+    const output = result as any;
+    expect(output.availableTimes).toHaveLength(2);
 
-    expect(structuredContent.result.availableTimes[0].facility).toBeUndefined();
-    expect(structuredContent.result.availableTimes[1].facility).toBeUndefined();
+    expect(output.availableTimes[0].facility).toBeUndefined();
+    expect(output.availableTimes[1].facility).toBeUndefined();
   });
 
   it("should handle request with only required fields", async () => {
@@ -357,7 +352,7 @@ describe("searchAvailableTimesHandler", () => {
       timeInterval: 30,
     };
 
-    const result = await searchAvailableTimesHandler(input, {} as any);
+    const result = await searchAvailableTimesHandler(input);
 
     expect(mockPostRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/searchAvailableTimes",
@@ -367,7 +362,7 @@ describe("searchAvailableTimesHandler", () => {
       }),
     );
 
-    const structuredContent = result.structuredContent as any;
-    expect(structuredContent.result.availableTimes).toHaveLength(1);
+    const output = result as any;
+    expect(output.availableTimes).toHaveLength(1);
   });
 });

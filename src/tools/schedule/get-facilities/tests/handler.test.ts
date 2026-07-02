@@ -35,36 +35,26 @@ describe("getFacilitiesHandler", () => {
     };
 
     const expectedResult = {
-      result: {
-        facilities: [
-          {
-            id: "123",
-            code: "101",
-            name: "Conference Room 1",
-            notes: "Large conference room with projector",
-          },
-        ],
-        hasNext: false,
-      },
+      facilities: [
+        {
+          id: "123",
+          code: "101",
+          name: "Conference Room 1",
+          notes: "Large conference room with projector",
+        },
+      ],
+      hasNext: false,
     };
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    const result = await getFacilitiesHandler(
-      { name: "Conference Room" },
-      {} as any,
-    );
+    const result = await getFacilitiesHandler({ name: "Conference Room" });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/facilities?name=Conference+Room",
     );
 
-    expect(result.content).toHaveLength(1);
-    expect(result.content[0].type).toBe("text");
-    expect(JSON.parse(result.content[0].text as string)).toEqual(
-      expectedResult,
-    );
-    expect(result.structuredContent).toEqual(expectedResult);
+    expect(result).toEqual(expectedResult);
   });
 
   it("should successfully get facilities data with name and limit", async () => {
@@ -81,10 +71,7 @@ describe("getFacilitiesHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getFacilitiesHandler(
-      { name: "Conference Room", limit: 10 },
-      {} as any,
-    );
+    await getFacilitiesHandler({ name: "Conference Room", limit: 10 });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/facilities?name=Conference+Room&limit=10",
@@ -105,7 +92,7 @@ describe("getFacilitiesHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getFacilitiesHandler({ name: "Meeting Room", offset: 5 }, {} as any);
+    await getFacilitiesHandler({ name: "Meeting Room", offset: 5 });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/facilities?name=Meeting+Room&offset=5",
@@ -127,10 +114,11 @@ describe("getFacilitiesHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getFacilitiesHandler(
-      { name: "Training Room", limit: 20, offset: 10 },
-      {} as any,
-    );
+    await getFacilitiesHandler({
+      name: "Training Room",
+      limit: 20,
+      offset: 10,
+    });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/facilities?name=Training+Room&limit=20&offset=10",
@@ -152,7 +140,7 @@ describe("getFacilitiesHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getFacilitiesHandler({ name: "会議室A" }, {} as any);
+    await getFacilitiesHandler({ name: "会議室A" });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/facilities?name=%E4%BC%9A%E8%AD%B0%E5%AE%A4A",
@@ -166,23 +154,15 @@ describe("getFacilitiesHandler", () => {
     };
 
     const expectedResult = {
-      result: {
-        facilities: [],
-        hasNext: false,
-      },
+      facilities: [],
+      hasNext: false,
     };
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    const result = await getFacilitiesHandler(
-      { name: "nonexistent" },
-      {} as any,
-    );
+    const result = await getFacilitiesHandler({ name: "nonexistent" });
 
-    expect(result.content).toHaveLength(1);
-    expect(JSON.parse(result.content[0].text as string)).toEqual(
-      expectedResult,
-    );
+    expect(result).toEqual(expectedResult);
   });
 
   it("should handle multiple facilities", async () => {
@@ -206,13 +186,12 @@ describe("getFacilitiesHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    const result = await getFacilitiesHandler({ name: "Room" }, {} as any);
+    const result = await getFacilitiesHandler({ name: "Room" });
 
-    expect(result.content).toHaveLength(1);
-    const parsedResult = JSON.parse(result.content[0].text as string);
-    expect(parsedResult.result.facilities).toHaveLength(2);
-    expect(parsedResult.result.facilities[0].name).toBe("Conference Room 1");
-    expect(parsedResult.result.facilities[1].name).toBe("Meeting Room 2");
+    const output = result as any;
+    expect(output.facilities).toHaveLength(2);
+    expect(output.facilities[0].name).toBe("Conference Room 1");
+    expect(output.facilities[1].name).toBe("Meeting Room 2");
   });
 
   it("should handle facilities with special characters in names", async () => {
@@ -236,15 +215,12 @@ describe("getFacilitiesHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    const result = await getFacilitiesHandler({ name: "Room" }, {} as any);
+    const result = await getFacilitiesHandler({ name: "Room" });
 
-    expect(result.content).toHaveLength(1);
-    const parsedResult = JSON.parse(result.content[0].text as string);
-    expect(parsedResult.result.facilities).toHaveLength(2);
-    expect(parsedResult.result.facilities[0].name).toBe("Room-101 & Room-102");
-    expect(parsedResult.result.facilities[1].name).toBe(
-      "Training Room (Large)",
-    );
+    const output = result as any;
+    expect(output.facilities).toHaveLength(2);
+    expect(output.facilities[0].name).toBe("Room-101 & Room-102");
+    expect(output.facilities[1].name).toBe("Training Room (Large)");
   });
 
   it("should handle facilities without notes", async () => {
@@ -261,15 +237,11 @@ describe("getFacilitiesHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    const result = await getFacilitiesHandler(
-      { name: "Conference Room" },
-      {} as any,
-    );
+    const result = await getFacilitiesHandler({ name: "Conference Room" });
 
-    expect(result.content).toHaveLength(1);
-    const parsedResult = JSON.parse(result.content[0].text as string);
-    expect(parsedResult.result.facilities[0].name).toBe("Conference Room 1");
-    expect(parsedResult.result.facilities[0].notes).toBeUndefined();
+    const output = result as any;
+    expect(output.facilities[0].name).toBe("Conference Room 1");
+    expect(output.facilities[0].notes).toBeUndefined();
   });
 
   it("should handle hasNext true", async () => {
@@ -286,14 +258,10 @@ describe("getFacilitiesHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    const result = await getFacilitiesHandler(
-      { name: "Conference Room" },
-      {} as any,
-    );
+    const result = await getFacilitiesHandler({ name: "Conference Room" });
 
-    expect(result.content).toHaveLength(1);
-    const parsedResult = JSON.parse(result.content[0].text as string);
-    expect(parsedResult.result.hasNext).toBe(true);
+    const output = result as any;
+    expect(output.hasNext).toBe(true);
   });
 
   it("should handle zero limit and offset values", async () => {
@@ -304,10 +272,7 @@ describe("getFacilitiesHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getFacilitiesHandler(
-      { name: "Room", limit: 0, offset: 0 },
-      {} as any,
-    );
+    await getFacilitiesHandler({ name: "Room", limit: 0, offset: 0 });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/facilities?name=Room",
@@ -322,10 +287,7 @@ describe("getFacilitiesHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getFacilitiesHandler(
-      { name: "Room", limit: -1, offset: -5 },
-      {} as any,
-    );
+    await getFacilitiesHandler({ name: "Room", limit: -1, offset: -5 });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/facilities?name=Room&limit=-1&offset=-5",

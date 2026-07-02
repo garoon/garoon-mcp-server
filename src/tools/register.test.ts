@@ -1,7 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { createTool } from "./register.js";
+import { z } from "zod";
+import { defineTool } from "./register.js";
+import { createStructuredOutputSchema } from "../schemas/helper.js";
 
-describe("createTool", () => {
+const mockExtra = {} as never;
+const emptyOutputSchema = createStructuredOutputSchema({});
+
+describe("defineTool", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -10,23 +15,46 @@ describe("createTool", () => {
     vi.restoreAllMocks();
   });
 
-  it("should catch errors in the callback through wrapWithErrorHandling", async () => {
-    const mockCallback = vi.fn().mockImplementation(() => {
-      throw new Error("Test error");
+  it("should wrap the handler result into a validated structured output", async () => {
+    const outputSchema = createStructuredOutputSchema({
+      value: z.string(),
     });
 
-    const tool = createTool(
-      "test-tool",
-      {
-        title: "Test Tool",
-        description: "A tool for testing error handling",
-        inputSchema: {},
-        outputSchema: {},
-      },
-      mockCallback,
-    );
+    const tool = defineTool({
+      name: "success-tool",
+      title: "Success Tool",
+      description: "A tool that succeeds",
+      inputSchema: {},
+      outputSchema,
+      handler: async () => ({ value: "test data" }),
+    });
 
-    const mockExtra = {} as any;
+    const result = await tool.callback({}, mockExtra);
+
+    const expectedStructured = { result: { value: "test data" } };
+    expect(result).toEqual({
+      structuredContent: expectedStructured,
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(expectedStructured, null, 2),
+        },
+      ],
+    });
+  });
+
+  it("should catch synchronous errors thrown in the handler", async () => {
+    const tool = defineTool({
+      name: "sync-error-tool",
+      title: "Sync Error Tool",
+      description: "A tool for testing error handling",
+      inputSchema: {},
+      outputSchema: emptyOutputSchema,
+      handler: () => {
+        throw new Error("Test error");
+      },
+    });
+
     const result = await tool.callback({}, mockExtra);
 
     expect(result).toEqual({
@@ -37,36 +65,24 @@ describe("createTool", () => {
       content: [
         {
           type: "text",
-          text: JSON.stringify(
-            {
-              error: "Test error",
-            },
-            null,
-            2,
-          ),
+          text: JSON.stringify({ error: "Test error" }, null, 2),
         },
       ],
     });
-    expect(mockCallback).toHaveBeenCalledWith({}, mockExtra);
   });
 
-  it("should catch async errors in the callback", async () => {
-    const mockCallback = vi.fn().mockImplementation(async () => {
-      throw new Error("Async test error");
+  it("should catch asynchronous errors thrown in the handler", async () => {
+    const tool = defineTool({
+      name: "async-error-tool",
+      title: "Async Error Tool",
+      description: "A tool for testing async error handling",
+      inputSchema: {},
+      outputSchema: emptyOutputSchema,
+      handler: async () => {
+        throw new Error("Async test error");
+      },
     });
 
-    const tool = createTool(
-      "async-test-tool",
-      {
-        title: "Async Test Tool",
-        description: "A tool for testing async error handling",
-        inputSchema: {},
-        outputSchema: {},
-      },
-      mockCallback,
-    );
-
-    const mockExtra = {} as any;
     const result = await tool.callback({}, mockExtra);
 
     expect(result).toEqual({
@@ -77,74 +93,25 @@ describe("createTool", () => {
       content: [
         {
           type: "text",
-          text: JSON.stringify(
-            {
-              error: "Async test error",
-            },
-            null,
-            2,
-          ),
+          text: JSON.stringify({ error: "Async test error" }, null, 2),
         },
       ],
     });
   });
 
-  it("should return successful result when callback doesn't throw", async () => {
-    const expectedResult = { success: true, data: "test data" };
-    const mockCallback = vi.fn().mockResolvedValue(expectedResult);
-
-    const tool = createTool(
-      "success-tool",
-      {
-        title: "Success Tool",
-        description: "A tool that succeeds",
-        inputSchema: {},
-        outputSchema: {},
-      },
-      mockCallback,
-    );
-
-    const mockExtra = {} as any;
-    const result = await tool.callback({}, mockExtra);
-
-    expect(result).toEqual(expectedResult);
-    expect(mockCallback).toHaveBeenCalledWith({}, mockExtra);
-  });
-
-  it("should create tool with correct name and config", () => {
-    const mockCallback = vi.fn();
-    const config = {
-      title: "Test Tool",
-      description: "A test tool",
+  it("should handle non-Error objects thrown in the handler", async () => {
+    const tool = defineTool({
+      name: "string-error-tool",
+      title: "String Error Tool",
+      description: "A tool that throws string",
       inputSchema: {},
-      outputSchema: {},
-    };
-
-    const tool = createTool("test-tool", config, mockCallback);
-
-    expect(tool.name).toBe("test-tool");
-    expect(tool.config).toEqual(config);
-    expect(typeof tool.callback).toBe("function");
-  });
-
-  it("should handle non-Error objects thrown in callback", async () => {
-    const mockCallback = vi.fn().mockImplementation(() => {
-      // eslint-disable-next-line no-throw-literal
-      throw "String error";
+      outputSchema: emptyOutputSchema,
+      handler: () => {
+        // eslint-disable-next-line no-throw-literal
+        throw "String error";
+      },
     });
 
-    const tool = createTool(
-      "string-error-tool",
-      {
-        title: "String Error Tool",
-        description: "A tool that throws string",
-        inputSchema: {},
-        outputSchema: {},
-      },
-      mockCallback,
-    );
-
-    const mockExtra = {} as any;
     const result = await tool.callback({}, mockExtra);
 
     expect(result).toEqual({
@@ -155,36 +122,75 @@ describe("createTool", () => {
       content: [
         {
           type: "text",
-          text: JSON.stringify(
-            {
-              error: "Unknown error occurred",
-            },
-            null,
-            2,
-          ),
+          text: JSON.stringify({ error: "Unknown error occurred" }, null, 2),
         },
       ],
     });
   });
 
-  it("should pass arguments correctly to wrapped callback", async () => {
-    const mockCallback = vi.fn().mockResolvedValue("success");
-    const testArgs = { param1: "value1", param2: "value2" };
-    const testExtra = { requestId: "123" } as any;
+  it("should return a validation error when the handler result violates the schema", async () => {
+    const outputSchema = createStructuredOutputSchema({
+      value: z.string(),
+    });
 
-    const tool = createTool(
-      "args-tool",
-      {
-        title: "Args Tool",
-        description: "A tool that receives arguments",
-        inputSchema: {},
-        outputSchema: {},
-      },
-      mockCallback,
+    const tool = defineTool({
+      name: "invalid-output-tool",
+      title: "Invalid Output Tool",
+      description: "A tool that returns an invalid result",
+      inputSchema: {},
+      outputSchema,
+      // @ts-expect-error the value type mismatch is caught statically; this test
+      // verifies the runtime validation path in defineTool as a safety net.
+      handler: async () => ({ value: 123 }),
+    });
+
+    const result = await tool.callback({}, mockExtra);
+
+    expect(result.isError).toBe(true);
+    expect((result.structuredContent as { error: string }).error).toContain(
+      "Validation error",
     );
+  });
 
-    await tool.callback(testArgs, testExtra);
+  it("should pass the parsed input and extra to the handler", async () => {
+    const handler = vi.fn().mockResolvedValue(undefined);
 
-    expect(mockCallback).toHaveBeenCalledWith(testArgs, testExtra);
+    const tool = defineTool({
+      name: "args-tool",
+      title: "Args Tool",
+      description: "A tool that receives arguments",
+      inputSchema: {},
+      outputSchema: emptyOutputSchema,
+      handler,
+    });
+
+    const testArgs = { param1: "value1" };
+    await tool.callback(testArgs, mockExtra);
+
+    expect(handler).toHaveBeenCalledWith(testArgs, mockExtra);
+  });
+
+  it("should build config from the definition fields", () => {
+    const inputSchema = {};
+    const outputSchema = emptyOutputSchema;
+
+    const tool = defineTool({
+      name: "config-tool",
+      title: "Config Tool",
+      description: "A tool for verifying config",
+      inputSchema,
+      outputSchema,
+      handler: async () => undefined,
+    });
+
+    expect(tool.name).toBe("config-tool");
+    expect(tool.config).toEqual({
+      title: "Config Tool",
+      description: "A tool for verifying config",
+      inputSchema,
+      outputSchema,
+      annotations: undefined,
+    });
+    expect(typeof tool.callback).toBe("function");
   });
 });

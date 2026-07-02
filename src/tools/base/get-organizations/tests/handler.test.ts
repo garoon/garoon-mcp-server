@@ -34,32 +34,25 @@ describe("getOrganizationsHandler", () => {
     };
 
     const expectedResult = {
-      result: {
-        organizations: [
-          {
-            id: "123",
-            name: "Sales Department",
-            code: "sales",
-          },
-        ],
-        hasNext: false,
-      },
+      organizations: [
+        {
+          id: "123",
+          name: "Sales Department",
+          code: "sales",
+        },
+      ],
+      hasNext: false,
     };
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    const result = await getOrganizationsHandler({ name: "Sales" }, {} as any);
+    const result = await getOrganizationsHandler({ name: "Sales" });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/base/organizations?name=Sales",
     );
 
-    expect(result.content).toHaveLength(1);
-    expect(result.content[0].type).toBe("text");
-    expect(JSON.parse(result.content[0].text as string)).toEqual(
-      expectedResult,
-    );
-    expect(result.structuredContent).toEqual(expectedResult);
+    expect(result).toEqual(expectedResult);
   });
 
   it("should handle all parameters (name, limit, offset)", async () => {
@@ -76,10 +69,7 @@ describe("getOrganizationsHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getOrganizationsHandler(
-      { name: "Eng", limit: 10, offset: 5 },
-      {} as any,
-    );
+    await getOrganizationsHandler({ name: "Eng", limit: 10, offset: 5 });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/base/organizations?name=Eng&limit=10&offset=5",
@@ -100,7 +90,7 @@ describe("getOrganizationsHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getOrganizationsHandler({ name: "営業部" }, {} as any);
+    await getOrganizationsHandler({ name: "営業部" });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/base/organizations?name=%E5%96%B6%E6%A5%AD%E9%83%A8",
@@ -114,23 +104,15 @@ describe("getOrganizationsHandler", () => {
     };
 
     const expectedResult = {
-      result: {
-        organizations: [],
-        hasNext: false,
-      },
+      organizations: [],
+      hasNext: false,
     };
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    const result = await getOrganizationsHandler(
-      { name: "nonexistent" },
-      {} as any,
-    );
+    const result = await getOrganizationsHandler({ name: "nonexistent" });
 
-    expect(result.content).toHaveLength(1);
-    expect(JSON.parse(result.content[0].text as string)).toEqual(
-      expectedResult,
-    );
+    expect(result).toEqual(expectedResult);
   });
 
   it("should handle multiple organizations", async () => {
@@ -152,14 +134,12 @@ describe("getOrganizationsHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    const result = await getOrganizationsHandler({ name: "Sales" }, {} as any);
+    const result = await getOrganizationsHandler({ name: "Sales" });
 
-    expect(result.content).toHaveLength(1);
-    const parsedResult = JSON.parse(result.content[0].text as string);
-    expect(parsedResult.result.organizations).toHaveLength(2);
-    expect(parsedResult.result.organizations[0].name).toBe("Sales Department");
-    expect(parsedResult.result.organizations[1].name).toBe("Sales Support");
-    expect(parsedResult.result.hasNext).toBe(true);
+    expect((result as any).organizations).toHaveLength(2);
+    expect((result as any).organizations[0].name).toBe("Sales Department");
+    expect((result as any).organizations[1].name).toBe("Sales Support");
+    expect((result as any).hasNext).toBe(true);
   });
 
   it("should handle organizations with special characters in names", async () => {
@@ -181,12 +161,10 @@ describe("getOrganizationsHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    const result = await getOrganizationsHandler({ name: "R&D" }, {} as any);
+    const result = await getOrganizationsHandler({ name: "R&D" });
 
-    expect(result.content).toHaveLength(1);
-    const parsedResult = JSON.parse(result.content[0].text as string);
-    expect(parsedResult.result.organizations).toHaveLength(2);
-    expect(parsedResult.result.organizations[0].name).toBe("R&D Department");
-    expect(parsedResult.result.organizations[1].name).toBe("IT/Security Team");
+    expect((result as any).organizations).toHaveLength(2);
+    expect((result as any).organizations[0].name).toBe("R&D Department");
+    expect((result as any).organizations[1].name).toBe("IT/Security Team");
   });
 });

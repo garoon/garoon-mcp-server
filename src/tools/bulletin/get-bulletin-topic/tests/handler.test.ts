@@ -43,24 +43,13 @@ describe("getBulletinTopicHandler", () => {
       category: { id: "5", name: "General" },
     };
 
-    const expectedResult = {
-      result: {
-        topic: mockApiResponse,
-      },
-    };
-
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    const result = await getBulletinTopicHandler({ topicId: "1" }, {} as any);
+    const result = await getBulletinTopicHandler({ topicId: "1" });
 
     expect(mockGetRequest).toHaveBeenCalledWith("/api/v1/bulletin/topics/1");
 
-    expect(result.content).toHaveLength(1);
-    expect(result.content[0].type).toBe("text");
-    expect(JSON.parse(result.content[0].text as string)).toEqual(
-      expectedResult,
-    );
-    expect(result.structuredContent).toEqual(expectedResult);
+    expect(result.topic).toEqual(mockApiResponse);
   });
 
   it("should encode topicId in URL", async () => {
@@ -87,7 +76,7 @@ describe("getBulletinTopicHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getBulletinTopicHandler({ topicId: "200" }, {} as any);
+    await getBulletinTopicHandler({ topicId: "200" });
 
     expect(mockGetRequest).toHaveBeenCalledWith("/api/v1/bulletin/topics/200");
   });

@@ -38,27 +38,15 @@ describe("getBulletinTopicsHandler", () => {
       hasNext: false,
     };
 
-    const expectedResult = {
-      result: mockApiResponse,
-    };
-
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    const result = await getBulletinTopicsHandler(
-      { categoryId: "1" },
-      {} as any,
-    );
+    const result = await getBulletinTopicsHandler({ categoryId: "1" });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/bulletin/categories/1?",
     );
 
-    expect(result.content).toHaveLength(1);
-    expect(result.content[0].type).toBe("text");
-    expect(JSON.parse(result.content[0].text as string)).toEqual(
-      expectedResult,
-    );
-    expect(result.structuredContent).toEqual(expectedResult);
+    expect(result).toEqual(mockApiResponse);
   });
 
   it("should get topics with all parameters", async () => {
@@ -69,10 +57,7 @@ describe("getBulletinTopicsHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getBulletinTopicsHandler(
-      { categoryId: "5", limit: 20, offset: 10 },
-      {} as any,
-    );
+    await getBulletinTopicsHandler({ categoryId: "5", limit: 20, offset: 10 });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/bulletin/categories/5?limit=20&offset=10",
@@ -87,7 +72,7 @@ describe("getBulletinTopicsHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getBulletinTopicsHandler({ categoryId: "100" }, {} as any);
+    await getBulletinTopicsHandler({ categoryId: "100" });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/bulletin/categories/100?",

@@ -4,6 +4,7 @@ import { searchAvailableTimes } from "./search-available-times/index.js";
 import { getFacilitiesTool } from "./get-facilities/index.js";
 import { getFacilityGroupsTool } from "./get-facility-groups/index.js";
 import { getFacilitiesInGroupTool } from "./get-facilities-in-group/index.js";
+import type { ToolDefinition } from "../register.js";
 
 export const scheduleTools = [
   createScheduleEvent,
@@ -12,4 +13,4 @@ export const scheduleTools = [
   getFacilitiesTool,
   getFacilityGroupsTool,
   getFacilitiesInGroupTool,
-];
+] as const satisfies readonly ToolDefinition[];

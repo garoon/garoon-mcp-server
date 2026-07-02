@@ -1,11 +1,8 @@
 import { z } from "zod";
 import { postRequest } from "../../../client.js";
+import type { InferToolInput } from "../../register.js";
+import { inputSchema } from "./input-schema.js";
 import { outputSchema } from "./output-schema.js";
-import type { RequestHandlerExtra } from "@modelcontextprotocol/sdk/shared/protocol.js";
-import {
-  ServerNotification,
-  ServerRequest,
-} from "@modelcontextprotocol/sdk/types.js";
 
 function hasAttendeeId(attendee: {
   id?: string;
@@ -28,39 +25,7 @@ function hasWatcherId(watcher: {
 }
 
 export const createScheduleEventHandler = async (
-  input: {
-    subject?: string;
-    start: {
-      dateTime: string;
-      timeZone: string;
-    };
-    end?: {
-      dateTime: string;
-      timeZone: string;
-    };
-    attendees?: Array<{
-      type: "ORGANIZATION" | "USER";
-      id?: string;
-      code?: string;
-    }>;
-    eventType?: "REGULAR" | "ALL_DAY";
-    eventMenu?: string;
-    notes?: string;
-    visibilityType?: "PUBLIC" | "PRIVATE";
-    facilities?: Array<{
-      id?: string;
-      code?: string;
-    }>;
-    facilityUsingPurpose?: string;
-    watchers?: Array<{
-      type: "ORGANIZATION" | "USER" | "ROLE";
-      id?: string;
-      code?: string;
-    }>;
-    isStartOnly?: boolean;
-    isAllDay?: boolean;
-  },
-  _extra: RequestHandlerExtra<ServerRequest, ServerNotification>,
+  input: InferToolInput<typeof inputSchema>,
 ) => {
   const {
     subject,
@@ -130,23 +95,5 @@ export const createScheduleEventHandler = async (
   };
 
   type ResponseType = z.infer<typeof outputSchema.result>;
-  const result = await postRequest<ResponseType>(
-    endpoint,
-    JSON.stringify(requestBody),
-  );
-
-  const output = {
-    result: result,
-  };
-  const validatedOutput = z.object(outputSchema).parse(output);
-
-  return {
-    structuredContent: validatedOutput,
-    content: [
-      {
-        type: "text" as const,
-        text: JSON.stringify(validatedOutput, null, 2),
-      },
-    ],
-  };
+  return postRequest<ResponseType>(endpoint, JSON.stringify(requestBody));
 };
