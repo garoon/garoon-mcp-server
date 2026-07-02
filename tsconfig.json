@@ -5,7 +5,6 @@
     "moduleResolution": "NodeNext",
     "outDir": "./dist",
     "rootDir": "./src",
-    "baseUrl": "./",
     "strict": true,
     "noUnusedLocals": true,
     "forceConsistentCasingInFileNames": true,
