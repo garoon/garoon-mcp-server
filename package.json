@@ -63,7 +63,7 @@
     "@cybozu/license-manager": "^1.4.0",
     "@modelcontextprotocol/inspector": "^0.22.0",
     "@types/node": "^25.0.6",
-    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/coverage-v8": "^4.1.9",
     "eslint": "^9.37.0",
     "prettier": "^3.6.2",
     "tsx": "^4.20.6",
