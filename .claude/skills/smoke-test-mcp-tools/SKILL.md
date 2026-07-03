@@ -111,7 +111,7 @@ Finish by emitting:
 2. **Detail table**:
 
    | Tool | Sample prompt | Verdict | Notes (error / collected ID) |
-   | --- | --- | --- | --- |
+   | ---- | ------------- | ------- | ---------------------------- |
 
 3. **Manual cleanup**: the events created in Phase 3 (subject / event ID / URL if
    available), noting that manual deletion is required because no delete tool exists.
