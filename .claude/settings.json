@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pnpm run fix >/dev/null 2>&1 || true",
+            "timeout": 120,
+            "statusMessage": "Running lint fix (pnpm run fix)..."
+          }
+        ]
+      }
+    ]
+  }
+}
