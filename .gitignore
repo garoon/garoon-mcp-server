@@ -1,9 +1,11 @@
 .idea
 
 # MCP settings
-.mcp.json
 .vscode/mcp.json
 .cursor/mcp.json
+
+# Claude Code
+.claude/settings.local.json
 
 # Node
 node_modules/

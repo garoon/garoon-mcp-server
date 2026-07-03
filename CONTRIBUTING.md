@@ -1,5 +1,33 @@
 # Contributing Guide
 
+## Configure environment variables
+
+This repository uses [direnv](https://direnv.net/) to provide the Garoon
+credentials to the development tools. Define the variables in a `.envrc` at the
+repository root. `.envrc` is gitignored, so each developer creates their own with
+the following command.
+
+```shell
+cat << 'EOS' > .envrc
+export GAROON_BASE_URL=https://example.cybozu.com/g
+export GAROON_USERNAME=username
+export GAROON_PASSWORD=password
+export GAROON_PUBLIC_ONLY=false
+# Optional
+# export https_proxy=http://localhost:7890
+# export http_proxy=http://localhost:7890
+# export GAROON_PFX_FILE_PATH=/absolute/path/to/pfx_file
+# export GAROON_PFX_FILE_PASSWORD=pfx_password
+# export GAROON_BASIC_AUTH_USERNAME=username
+# export GAROON_BASIC_AUTH_PASSWORD=password
+EOS
+
+direnv allow
+```
+
+The variables exported by direnv are consumed by both the MCP Inspector
+(`pnpm run dev`) and Claude Code (`.mcp.json`, see below).
+
 ## Run MCP Inspector
 
 The [MCP Inspector](https://github.com/modelcontextprotocol/inspector) is an official debug tool.
@@ -9,23 +37,29 @@ pnpm install --frozen-lockfile
 pnpm run dev
 ```
 
+The Inspector inherits the variables exported by direnv and passes them to the
+server via `process.env`.
+
 ref: https://modelcontextprotocol.io/docs/tools/inspector
 
-You can set environment variables at startup using `.env.local`.
+## Verify tools with Claude Code
+
+The repository ships a `.mcp.json` that registers the built server with
+[Claude Code](https://claude.ai/code) as the `garoon` server. It reads the
+credentials from the environment via `${VAR}` expansion, so the same direnv
+setup applies.
 
 ```shell
-cat << EOS > .env.local
-GAROON_BASE_URL=https://example.cybozu.com/g
-GAROON_USERNAME=username
-GAROON_PASSWORD=password
-http_proxy=http://localhost:7890
-https_proxy=http://localhost:7890
-GAROON_PFX_FILE_PATH=absolute/path/to/pfx_file
-GAROON_PFX_FILE_PASSWORD=pfx_password
-GAROON_BASIC_AUTH_USERNAME=username
-GAROON_BASIC_AUTH_PASSWORD=password
-GAROON_PUBLIC_ONLY=false
-EOS
+pnpm run build          # produce dist/ that .mcp.json launches
+claude mcp list         # confirm `garoon` is connected
+```
+
+The `smoke-test-mcp-tools` skill smoke-tests every tool by invoking it against a
+live Garoon environment and reporting PASS / FAIL / BLOCKED. Run it from within
+Claude Code:
+
+```
+/smoke-test-mcp-tools
 ```
 
 ## Build

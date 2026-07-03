@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "garoon": {
+      "command": "node",
+      "args": ["dist/index.js"],
+      "env": {
+        "GAROON_BASE_URL": "${GAROON_BASE_URL}",
+        "GAROON_USERNAME": "${GAROON_USERNAME}",
+        "GAROON_PASSWORD": "${GAROON_PASSWORD}",
+        "GAROON_PUBLIC_ONLY": "${GAROON_PUBLIC_ONLY:-false}",
+        "https_proxy": "${https_proxy:-}",
+        "http_proxy": "${http_proxy:-}",
+        "GAROON_PFX_FILE_PATH": "${GAROON_PFX_FILE_PATH:-}",
+        "GAROON_PFX_FILE_PASSWORD": "${GAROON_PFX_FILE_PASSWORD:-}",
+        "GAROON_BASIC_AUTH_USERNAME": "${GAROON_BASIC_AUTH_USERNAME:-}",
+        "GAROON_BASIC_AUTH_PASSWORD": "${GAROON_BASIC_AUTH_PASSWORD:-}"
+      }
+    }
+  }
+}

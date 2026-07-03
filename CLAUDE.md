@@ -36,7 +36,7 @@ pnpm run build
 ### Development
 
 ```bash
-# Run with MCP Inspector for debugging (Create .env.local)
+# Run with MCP Inspector for debugging (requires direnv; see CONTRIBUTING.md)
 pnpm run dev
 
 # Build TypeScript
