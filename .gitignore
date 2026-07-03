@@ -1,4 +1,8 @@
-.idea
+# OS
+.DS_Store
+
+# IDE / Editor
+.idea/
 
 # MCP settings
 .vscode/mcp.json
@@ -16,7 +20,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-## Env
+# Env
 .env
 .env.local
 .envrc

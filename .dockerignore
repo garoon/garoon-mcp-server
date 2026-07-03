@@ -1,33 +1,28 @@
-# Dependencies
-node_modules/
+# Ignore everything by default, then re-include only the files required to
+# install dependencies and build the server. This allow-list keeps the build
+# context and the resulting image minimal, and prevents local or generated
+# files from leaking in regardless of what exists in the working tree.
+*
 
-# Build output
-dist/
+# Application source (test files are excluded again below)
+!src/
 
-# Development files
-.git/
-.gitignore
-.env*
-*.log
+# Dependency installation
+!package.json
+!pnpm-lock.yaml
 
-# Test files
-coverage/
-**/*.test.ts
-**/__tests__/
+# Build configuration
+!tsconfig.json
+!license-manager.config.cjs
 
-# Documentation
-README.md
-references/
-
-# Development tools
-.vscode/
-eslint.config.js
-mise.toml
-
-# Scripts
+# Build scripts (only the one used during the build)
+!scripts/
 scripts/*
 !scripts/generate-build-constants.js
 
-# Docker files
-Dockerfile
-.dockerignore
+# License file copied into the final image
+!LICENSE
+
+# Exclude tests even though src/ is included
+**/*.test.ts
+**/__tests__/
