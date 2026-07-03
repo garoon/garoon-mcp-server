@@ -34,35 +34,27 @@ describe("getUsersInOrganizationHandler", () => {
     };
 
     const expectedResult = {
-      result: {
-        users: [
-          {
-            id: "123",
-            name: "John Doe",
-            code: "john.doe",
-          },
-        ],
-        hasNext: false,
-      },
+      users: [
+        {
+          id: "123",
+          name: "John Doe",
+          code: "john.doe",
+        },
+      ],
+      hasNext: false,
     };
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    const result = await getUsersInOrganizationHandler(
-      { organizationId: "123" },
-      {} as any,
-    );
+    const result = await getUsersInOrganizationHandler({
+      organizationId: "123",
+    });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/base/organizations/123/users",
     );
 
-    expect(result.content).toHaveLength(1);
-    expect(result.content[0].type).toBe("text");
-    expect(JSON.parse(result.content[0].text as string)).toEqual(
-      expectedResult,
-    );
-    expect(result.structuredContent).toEqual(expectedResult);
+    expect(result).toEqual(expectedResult);
   });
 
   it("should handle limit and offset parameters", async () => {
@@ -79,10 +71,11 @@ describe("getUsersInOrganizationHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getUsersInOrganizationHandler(
-      { organizationId: "123", limit: 10, offset: 20 },
-      {} as any,
-    );
+    await getUsersInOrganizationHandler({
+      organizationId: "123",
+      limit: 10,
+      offset: 20,
+    });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/base/organizations/123/users?limit=10&offset=20",
@@ -97,10 +90,7 @@ describe("getUsersInOrganizationHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getUsersInOrganizationHandler(
-      { organizationId: "123", limit: 5 },
-      {} as any,
-    );
+    await getUsersInOrganizationHandler({ organizationId: "123", limit: 5 });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/base/organizations/123/users?limit=5",
@@ -115,10 +105,7 @@ describe("getUsersInOrganizationHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getUsersInOrganizationHandler(
-      { organizationId: "123", offset: 10 },
-      {} as any,
-    );
+    await getUsersInOrganizationHandler({ organizationId: "123", offset: 10 });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/base/organizations/123/users?offset=10",
@@ -133,10 +120,9 @@ describe("getUsersInOrganizationHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getUsersInOrganizationHandler(
-      { organizationId: "special/chars#123" },
-      {} as any,
-    );
+    await getUsersInOrganizationHandler({
+      organizationId: "special/chars#123",
+    });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/base/organizations/special%2Fchars%23123/users",
@@ -150,19 +136,16 @@ describe("getUsersInOrganizationHandler", () => {
     };
 
     const expectedResult = {
-      result: {
-        users: [],
-        hasNext: false,
-      },
+      users: [],
+      hasNext: false,
     };
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    const result = await getUsersInOrganizationHandler(
-      { organizationId: "123" },
-      {} as any,
-    );
+    const result = await getUsersInOrganizationHandler({
+      organizationId: "123",
+    });
 
-    expect(result.structuredContent).toEqual(expectedResult);
+    expect(result).toEqual(expectedResult);
   });
 });

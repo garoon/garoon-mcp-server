@@ -37,35 +37,28 @@ describe("getFacilityGroupsHandler", () => {
     };
 
     const expectedResult = {
-      result: {
-        facilityGroups: [
-          {
-            id: "1",
-            name: "name1",
-            code: "code",
-            notes: "memo",
-            parentFacilityGroup: "2",
-            childFacilityGroups: [{ id: "10" }],
-          },
-        ],
-        hasNext: false,
-      },
+      facilityGroups: [
+        {
+          id: "1",
+          name: "name1",
+          code: "code",
+          notes: "memo",
+          parentFacilityGroup: "2",
+          childFacilityGroups: [{ id: "10" }],
+        },
+      ],
+      hasNext: false,
     };
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    const result = await getFacilityGroupsHandler({}, {} as any);
+    const result = await getFacilityGroupsHandler({});
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/facilityGroups?",
     );
 
-    expect(result.content).toHaveLength(1);
-    expect(result.content[0].type).toBe("text");
-    expect(JSON.parse(result.content[0].text as string)).toEqual(
-      expectedResult,
-    );
-    expect(result.structuredContent).toEqual(expectedResult);
+    expect(result).toEqual(expectedResult);
   });
 
   it("should successfully get facility groups with limit", async () => {
@@ -76,7 +69,7 @@ describe("getFacilityGroupsHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getFacilityGroupsHandler({ limit: 30 }, {} as any);
+    await getFacilityGroupsHandler({ limit: 30 });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/facilityGroups?limit=30",
@@ -91,7 +84,7 @@ describe("getFacilityGroupsHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getFacilityGroupsHandler({ offset: 10 }, {} as any);
+    await getFacilityGroupsHandler({ offset: 10 });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/facilityGroups?offset=10",
@@ -106,7 +99,7 @@ describe("getFacilityGroupsHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getFacilityGroupsHandler({ limit: 30, offset: 60 }, {} as any);
+    await getFacilityGroupsHandler({ limit: 30, offset: 60 });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/facilityGroups?limit=30&offset=60",
@@ -121,7 +114,7 @@ describe("getFacilityGroupsHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getFacilityGroupsHandler({ limit: 0, offset: 0 }, {} as any);
+    await getFacilityGroupsHandler({ limit: 0, offset: 0 });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/facilityGroups?",

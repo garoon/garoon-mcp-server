@@ -51,7 +51,7 @@ describe("getScheduleEventsHandler", () => {
       rangeEnd: "2024-01-07T23:59:59+09:00",
     };
 
-    const result = await getScheduleEventsHandler(input, {} as any);
+    const result = await getScheduleEventsHandler(input);
 
     const expectedParams = new URLSearchParams({
       rangeStart: input.rangeStart,
@@ -64,13 +64,7 @@ describe("getScheduleEventsHandler", () => {
       `/api/v1/schedule/events?${expectedParams.toString()}`,
     );
 
-    expect(result).toHaveProperty("structuredContent");
-    expect(result).toHaveProperty("content");
-    expect(result.content).toHaveLength(1);
-    expect(result.content[0].type).toBe("text");
-
-    const structuredContent = result.structuredContent as any;
-    expect(structuredContent.result).toEqual(mockApiResponse);
+    expect(result).toEqual(mockApiResponse);
   });
 
   it("should successfully search events with organization target", async () => {
@@ -88,7 +82,7 @@ describe("getScheduleEventsHandler", () => {
       rangeEnd: "2024-01-07T23:59:59+09:00",
     };
 
-    await getScheduleEventsHandler(input, {} as any);
+    await getScheduleEventsHandler(input);
 
     const callArgs = mockGetRequest.mock.calls[0][0];
     expect(callArgs).toContain("target=789");
@@ -110,7 +104,7 @@ describe("getScheduleEventsHandler", () => {
       rangeEnd: "2024-01-07T23:59:59+09:00",
     };
 
-    await getScheduleEventsHandler(input, {} as any);
+    await getScheduleEventsHandler(input);
 
     const callArgs = mockGetRequest.mock.calls[0][0];
     expect(callArgs).toContain("target=202");
@@ -135,7 +129,7 @@ describe("getScheduleEventsHandler", () => {
       offset: 5,
     };
 
-    await getScheduleEventsHandler(input, {} as any);
+    await getScheduleEventsHandler(input);
 
     const callArgs = mockGetRequest.mock.calls[0][0];
     expect(callArgs).toContain("showPrivate=false");
@@ -158,11 +152,11 @@ describe("getScheduleEventsHandler", () => {
       rangeEnd: "2024-01-07T23:59:59+09:00",
     };
 
-    const result = await getScheduleEventsHandler(input, {} as any);
+    const result = await getScheduleEventsHandler(input);
 
-    const structuredContent = result.structuredContent as any;
-    expect(structuredContent.result.events).toHaveLength(0);
-    expect(structuredContent.result.hasNext).toBe(false);
+    const output = result as any;
+    expect(output.events).toHaveLength(0);
+    expect(output.hasNext).toBe(false);
   });
 
   it("should handle multiple events with pagination", async () => {
@@ -207,13 +201,13 @@ describe("getScheduleEventsHandler", () => {
       rangeEnd: "2024-01-07T23:59:59+09:00",
     };
 
-    const result = await getScheduleEventsHandler(input, {} as any);
+    const result = await getScheduleEventsHandler(input);
 
-    const structuredContent = result.structuredContent as any;
-    expect(structuredContent.result.events).toHaveLength(2);
-    expect(structuredContent.result.hasNext).toBe(true);
-    expect(structuredContent.result.events[0].subject).toBe("Event 1");
-    expect(structuredContent.result.events[1].subject).toBe("Event 2");
+    const output = result as any;
+    expect(output.events).toHaveLength(2);
+    expect(output.hasNext).toBe(true);
+    expect(output.events[0].subject).toBe("Event 1");
+    expect(output.events[1].subject).toBe("Event 2");
   });
 
   it("should return proper response structure", async () => {
@@ -240,16 +234,9 @@ describe("getScheduleEventsHandler", () => {
       rangeEnd: "2024-01-07T23:59:59+09:00",
     };
 
-    const result = await getScheduleEventsHandler(input, {} as any);
+    const result = await getScheduleEventsHandler(input);
 
-    expect(result).toHaveProperty("structuredContent");
-    expect(result).toHaveProperty("content");
-    expect(result.content).toHaveLength(1);
-    expect(result.content[0].type).toBe("text");
-    expect(typeof result.content[0].text).toBe("string");
-
-    const structuredContent = result.structuredContent as any;
-    expect(structuredContent.result).toEqual(mockApiResponse);
+    expect(result).toEqual(mockApiResponse);
   });
 
   it("should not filter events when IS_PUBLIC_ONLY is disabled (the filter is applied in handler based on PUBLIC_ONLY from index.ts)", async () => {
@@ -286,10 +273,10 @@ describe("getScheduleEventsHandler", () => {
       rangeEnd: "2024-01-07T23:59:59+09:00",
     };
 
-    const result = await getScheduleEventsHandler(input, {} as any);
+    const result = await getScheduleEventsHandler(input);
 
-    const structuredContent = result.structuredContent as any;
-    expect(structuredContent.result.events.length).toBeGreaterThan(0);
+    const output = result as any;
+    expect(output.events.length).toBeGreaterThan(0);
   });
 
   describe("IS_PUBLIC_ONLY mode", () => {
@@ -337,15 +324,15 @@ describe("getScheduleEventsHandler", () => {
         showPrivate: true,
       };
 
-      const result = await getScheduleEventsHandler(input, {} as any);
+      const result = await getScheduleEventsHandler(input);
 
       const callArgs = mockGetRequest.mock.calls[0][0];
       expect(callArgs).toContain("showPrivate=false");
 
-      const structuredContent = result.structuredContent as any;
-      expect(structuredContent.result.events).toHaveLength(1);
-      expect(structuredContent.result.events[0].subject).toBe("Public Event");
-      expect(structuredContent.result.events[0].visibilityType).toBe("PUBLIC");
+      const output = result as any;
+      expect(output.events).toHaveLength(1);
+      expect(output.events[0].subject).toBe("Public Event");
+      expect(output.events[0].visibilityType).toBe("PUBLIC");
     });
 
     it("should override showPrivate parameter when IS_PUBLIC_ONLY is true", async () => {
@@ -364,7 +351,7 @@ describe("getScheduleEventsHandler", () => {
         showPrivate: true,
       };
 
-      await getScheduleEventsHandler(input, {} as any);
+      await getScheduleEventsHandler(input);
 
       const callArgs = mockGetRequest.mock.calls[0][0];
       expect(callArgs).toContain("showPrivate=false");
@@ -413,17 +400,15 @@ describe("getScheduleEventsHandler", () => {
         rangeEnd: "2024-01-07T23:59:59+09:00",
       };
 
-      const result = await getScheduleEventsHandler(input, {} as any);
+      const result = await getScheduleEventsHandler(input);
 
-      const structuredContent = result.structuredContent as any;
+      const output = result as any;
 
-      expect(structuredContent.result.events).toHaveLength(2);
-      expect(structuredContent.result.events[0].subject).toBe("Public Event 1");
-      expect(structuredContent.result.events[1].subject).toBe("Public Event 2");
+      expect(output.events).toHaveLength(2);
+      expect(output.events[0].subject).toBe("Public Event 1");
+      expect(output.events[1].subject).toBe("Public Event 2");
       expect(
-        structuredContent.result.events.every(
-          (event: any) => event.visibilityType === "PUBLIC",
-        ),
+        output.events.every((event: any) => event.visibilityType === "PUBLIC"),
       ).toBe(true);
     });
   });

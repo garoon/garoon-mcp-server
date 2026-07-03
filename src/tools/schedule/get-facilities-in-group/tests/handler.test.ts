@@ -35,34 +35,26 @@ describe("getFacilitiesInGroupHandler", () => {
     };
 
     const expectedResult = {
-      result: {
-        facilities: [
-          {
-            id: "5",
-            name: "Room A",
-            code: "roa",
-            notes: "memo",
-            facilityGroup: "1",
-          },
-        ],
-      },
+      facilities: [
+        {
+          id: "5",
+          name: "Room A",
+          code: "roa",
+          notes: "memo",
+          facilityGroup: "1",
+        },
+      ],
     };
 
     mockGetRequest.mockResolvedValue(mockApiResponse as any);
 
-    const result = await getFacilitiesInGroupHandler(
-      { facilityGroupId: "1" },
-      {} as any,
-    );
+    const result = await getFacilitiesInGroupHandler({ facilityGroupId: "1" });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/facilityGroups/1/facilities?",
     );
 
-    expect(JSON.parse(result.content[0].text as string)).toEqual(
-      expectedResult,
-    );
-    expect(result.structuredContent).toEqual(expectedResult);
+    expect(result).toEqual(expectedResult);
   });
 
   it("should get facilities in group with all parameters", async () => {
@@ -72,10 +64,11 @@ describe("getFacilitiesInGroupHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getFacilitiesInGroupHandler(
-      { facilityGroupId: "1", limit: 5, offset: 10 },
-      {} as any,
-    );
+    await getFacilitiesInGroupHandler({
+      facilityGroupId: "1",
+      limit: 5,
+      offset: 10,
+    });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/facilityGroups/1/facilities?limit=5&offset=10",

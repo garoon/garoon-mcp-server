@@ -34,22 +34,13 @@ describe("getBulletinCategoriesHandler", () => {
       hasNext: false,
     };
 
-    const expectedResult = {
-      result: mockApiResponse,
-    };
-
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    const result = await getBulletinCategoriesHandler({}, {} as any);
+    const result = await getBulletinCategoriesHandler({});
 
     expect(mockGetRequest).toHaveBeenCalledWith("/api/v1/bulletin/categories?");
 
-    expect(result.content).toHaveLength(1);
-    expect(result.content[0].type).toBe("text");
-    expect(JSON.parse(result.content[0].text as string)).toEqual(
-      expectedResult,
-    );
-    expect(result.structuredContent).toEqual(expectedResult);
+    expect(result).toEqual(mockApiResponse);
   });
 
   it("should pass parentId parameter", async () => {
@@ -60,7 +51,7 @@ describe("getBulletinCategoriesHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getBulletinCategoriesHandler({ parentId: 5 }, {} as any);
+    await getBulletinCategoriesHandler({ parentId: 5 });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/bulletin/categories?parentId=5",
@@ -75,7 +66,7 @@ describe("getBulletinCategoriesHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getBulletinCategoriesHandler({ parentId: -1 }, {} as any);
+    await getBulletinCategoriesHandler({ parentId: -1 });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/bulletin/categories?parentId=-1",
@@ -90,10 +81,7 @@ describe("getBulletinCategoriesHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getBulletinCategoriesHandler(
-      { parentId: 1, limit: 50, offset: 10 },
-      {} as any,
-    );
+    await getBulletinCategoriesHandler({ parentId: 1, limit: 50, offset: 10 });
 
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/bulletin/categories?parentId=1&limit=50&offset=10",
@@ -108,7 +96,7 @@ describe("getBulletinCategoriesHandler", () => {
 
     mockGetRequest.mockResolvedValue(mockApiResponse);
 
-    await getBulletinCategoriesHandler({ limit: 0, offset: 0 }, {} as any);
+    await getBulletinCategoriesHandler({ limit: 0, offset: 0 });
 
     expect(mockGetRequest).toHaveBeenCalledWith("/api/v1/bulletin/categories?");
   });

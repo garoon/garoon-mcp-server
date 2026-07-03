@@ -1,9 +1,9 @@
 import { baseTools } from "./base/index.js";
 import { bulletinTools } from "./bulletin/index.js";
-import { Tool } from "./register.js";
+import type { ToolDefinition } from "./register.js";
 import { scheduleTools } from "./schedule/index.js";
 
-export const tools: Array<Tool<any, any>> = [
+export const tools: readonly ToolDefinition[] = [
   ...scheduleTools,
   ...baseTools,
   ...bulletinTools,

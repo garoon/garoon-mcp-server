@@ -36,59 +36,35 @@ describe("getCurrentTimeHandler", () => {
   });
 
   it("should successfully get current time with timezone", async () => {
-    const result = await getCurrentTimeHandler(
-      { timezone: "Asia/Tokyo" },
-      {} as any,
-    );
+    const result = await getCurrentTimeHandler({ timezone: "Asia/Tokyo" });
 
-    expect(result.content).toHaveLength(1);
-    expect(result.content[0].type).toBe("text");
-
-    const parsedResult = JSON.parse(result.content[0].text as string);
-    expect(parsedResult.result.timezone).toBe("Asia/Tokyo");
-    expect(parsedResult.result.datetime).toBe("2024-07-27T11:00:00+09:00");
+    expect(result.timezone).toBe("Asia/Tokyo");
+    expect(result.datetime).toBe("2024-07-27T11:00:00+09:00");
   });
 
   it("should use UTC as default timezone when not provided", async () => {
-    const result = await getCurrentTimeHandler({}, {} as any);
+    const result = await getCurrentTimeHandler({});
 
-    expect(result.content).toHaveLength(1);
-    const parsedResult = JSON.parse(result.content[0].text as string);
-    expect(parsedResult.result.timezone).toBe("UTC");
+    expect(result.timezone).toBe("UTC");
   });
 
   it("should return error for unsupported timezone", async () => {
     await expect(
-      getCurrentTimeHandler({ timezone: "Invalid/Timezone" }, {} as any),
+      getCurrentTimeHandler({ timezone: "Invalid/Timezone" }),
     ).rejects.toThrow("Unsupported timezone: Invalid/Timezone");
   });
 
   it("should handle undefined timezone parameter", async () => {
-    const result = await getCurrentTimeHandler(
-      { timezone: undefined },
-      {} as any,
-    );
+    const result = await getCurrentTimeHandler({ timezone: undefined });
 
-    expect(result.content).toHaveLength(1);
-    const parsedResult = JSON.parse(result.content[0].text as string);
-    expect(parsedResult.result.timezone).toBe("UTC");
+    expect(result.timezone).toBe("UTC");
   });
 
   it("should return structured content", async () => {
-    const result = await getCurrentTimeHandler(
-      { timezone: "Asia/Tokyo" },
-      {} as any,
-    );
+    const result = await getCurrentTimeHandler({ timezone: "Asia/Tokyo" });
 
-    expect(result.structuredContent).toBeDefined();
-    if (result.structuredContent) {
-      expect((result.structuredContent.result as any).timezone).toBe(
-        "Asia/Tokyo",
-      );
-      expect((result.structuredContent.result as any).datetime).toBe(
-        "2024-07-27T11:00:00+09:00",
-      );
-    }
+    expect(result.timezone).toBe("Asia/Tokyo");
+    expect(result.datetime).toBe("2024-07-27T11:00:00+09:00");
   });
 
   it("should handle different timezones correctly", async () => {
@@ -100,10 +76,9 @@ describe("getCurrentTimeHandler", () => {
     };
     mockInstant.mockReturnValue(mockInstantValueUTC as any);
 
-    const result = await getCurrentTimeHandler({ timezone: "UTC" }, {} as any);
+    const result = await getCurrentTimeHandler({ timezone: "UTC" });
 
-    const parsedResult = JSON.parse(result.content[0].text as string);
-    expect(parsedResult.result.timezone).toBe("UTC");
-    expect(parsedResult.result.datetime).toBe("2024-07-27T02:00:00Z");
+    expect(result.timezone).toBe("UTC");
+    expect(result.datetime).toBe("2024-07-27T02:00:00Z");
   });
 });
