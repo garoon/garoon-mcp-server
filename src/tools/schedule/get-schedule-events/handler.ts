@@ -44,7 +44,7 @@ export const getScheduleEventsHandler = async (
   type ResponseType = z.infer<typeof outputSchema.result>;
   const result = await getRequest<ResponseType>(endpoint);
 
-  if (IS_PUBLIC_ONLY && result?.events) {
+  if (IS_PUBLIC_ONLY) {
     result.events = result.events.filter(
       (event) => event.visibilityType !== "PRIVATE",
     );

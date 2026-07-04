@@ -63,6 +63,17 @@ export function defineTool<
 
   const outputObjectSchema = z.object(outputSchema);
 
+  // The advertised output schema relaxes `result` to optional so that error
+  // responses (which carry only `error` with isError: true) conform to it.
+  // Strict MCP clients validate structuredContent against this schema on the
+  // client side without honoring isError, so a required `result` would reject
+  // every error response. The internal `outputObjectSchema` stays strict and is
+  // what actually validates success outputs, rejecting empty `{}`.
+  const advertisedOutputSchema = {
+    ...outputSchema,
+    result: outputSchema.result.optional(),
+  };
+
   const callback: ServerToolCallback = async (input, extra) => {
     try {
       const result = await definition.handler(
@@ -87,7 +98,13 @@ export function defineTool<
 
   return {
     name,
-    config: { title, description, inputSchema, outputSchema, annotations },
+    config: {
+      title,
+      description,
+      inputSchema,
+      outputSchema: advertisedOutputSchema,
+      annotations,
+    },
     callback,
   };
 }

@@ -81,7 +81,7 @@ describe("searchAvailableTimesHandler", () => {
       }),
     );
 
-    const output = result as any;
+    const output = result;
     expect(output.availableTimes).toHaveLength(2);
     expect(output.availableTimes[0]).toEqual({
       start: {
@@ -161,7 +161,7 @@ describe("searchAvailableTimesHandler", () => {
       }),
     );
 
-    const output = result as any;
+    const output = result;
     expect(output.availableTimes).toHaveLength(2);
   });
 
@@ -185,7 +185,7 @@ describe("searchAvailableTimesHandler", () => {
 
     const result = await searchAvailableTimesHandler(input);
 
-    const output = result as any;
+    const output = result;
     expect(output.availableTimes).toHaveLength(0);
   });
 
@@ -253,7 +253,7 @@ describe("searchAvailableTimesHandler", () => {
       }),
     );
 
-    const output = result as any;
+    const output = result;
     expect(output.availableTimes).toHaveLength(2);
 
     expect(output.availableTimes[0].facility).toEqual({
@@ -317,7 +317,7 @@ describe("searchAvailableTimesHandler", () => {
       }),
     );
 
-    const output = result as any;
+    const output = result;
     expect(output.availableTimes).toHaveLength(2);
 
     expect(output.availableTimes[0].facility).toBeUndefined();
@@ -362,7 +362,7 @@ describe("searchAvailableTimesHandler", () => {
       }),
     );
 
-    const output = result as any;
+    const output = result;
     expect(output.availableTimes).toHaveLength(1);
   });
 });

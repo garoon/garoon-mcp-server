@@ -188,7 +188,7 @@ describe("getFacilitiesHandler", () => {
 
     const result = await getFacilitiesHandler({ name: "Room" });
 
-    const output = result as any;
+    const output = result;
     expect(output.facilities).toHaveLength(2);
     expect(output.facilities[0].name).toBe("Conference Room 1");
     expect(output.facilities[1].name).toBe("Meeting Room 2");
@@ -217,7 +217,7 @@ describe("getFacilitiesHandler", () => {
 
     const result = await getFacilitiesHandler({ name: "Room" });
 
-    const output = result as any;
+    const output = result;
     expect(output.facilities).toHaveLength(2);
     expect(output.facilities[0].name).toBe("Room-101 & Room-102");
     expect(output.facilities[1].name).toBe("Training Room (Large)");
@@ -239,7 +239,7 @@ describe("getFacilitiesHandler", () => {
 
     const result = await getFacilitiesHandler({ name: "Conference Room" });
 
-    const output = result as any;
+    const output = result;
     expect(output.facilities[0].name).toBe("Conference Room 1");
     expect(output.facilities[0].notes).toBeUndefined();
   });
@@ -260,7 +260,7 @@ describe("getFacilitiesHandler", () => {
 
     const result = await getFacilitiesHandler({ name: "Conference Room" });
 
-    const output = result as any;
+    const output = result;
     expect(output.hasNext).toBe(true);
   });
 
