@@ -72,12 +72,13 @@ describe("search-available-times output schema", () => {
     expect(() => schema.parse(validOutput)).not.toThrow();
   });
 
-  it("should validate error output", () => {
-    const validOutput = {
-      error: "Some error message",
-    };
-
-    expect(() => schema.parse(validOutput)).not.toThrow();
+  it("should describe the error field but reject an error-only output", () => {
+    // Error outputs are emitted with isError: true, which the MCP SDK excludes
+    // from output-schema validation, so the public schema still requires result.
+    expect(outputSchema.error.parse("Some error message")).toBe(
+      "Some error message",
+    );
+    expect(() => schema.parse({ error: "Some error message" })).toThrow();
   });
 
   it("should reject invalid available times structure", () => {
@@ -120,10 +121,10 @@ describe("search-available-times output schema", () => {
     });
   });
 
-  it("should accept empty object (both result and error are optional)", () => {
+  it("should reject an empty object because result is required", () => {
     const emptyOutput = {};
 
-    expect(() => schema.parse(emptyOutput)).not.toThrow();
+    expect(() => schema.parse(emptyOutput)).toThrow();
   });
 
   it("should validate facility with all fields", () => {

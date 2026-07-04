@@ -136,10 +136,10 @@ describe("getOrganizationsHandler", () => {
 
     const result = await getOrganizationsHandler({ name: "Sales" });
 
-    expect((result as any).organizations).toHaveLength(2);
-    expect((result as any).organizations[0].name).toBe("Sales Department");
-    expect((result as any).organizations[1].name).toBe("Sales Support");
-    expect((result as any).hasNext).toBe(true);
+    expect(result.organizations).toHaveLength(2);
+    expect(result.organizations[0].name).toBe("Sales Department");
+    expect(result.organizations[1].name).toBe("Sales Support");
+    expect(result.hasNext).toBe(true);
   });
 
   it("should handle organizations with special characters in names", async () => {
@@ -163,8 +163,8 @@ describe("getOrganizationsHandler", () => {
 
     const result = await getOrganizationsHandler({ name: "R&D" });
 
-    expect((result as any).organizations).toHaveLength(2);
-    expect((result as any).organizations[0].name).toBe("R&D Department");
-    expect((result as any).organizations[1].name).toBe("IT/Security Team");
+    expect(result.organizations).toHaveLength(2);
+    expect(result.organizations[0].name).toBe("R&D Department");
+    expect(result.organizations[1].name).toBe("IT/Security Team");
   });
 });

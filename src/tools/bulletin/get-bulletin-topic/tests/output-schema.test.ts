@@ -63,11 +63,10 @@ describe("garoon-get-bulletin-topic outputSchema", () => {
     expect(() => schema.parse(validOutput)).not.toThrow();
   });
 
-  it("should validate error response", () => {
-    const errorOutput = {
-      error: "Topic not found",
-    };
-
-    expect(() => schema.parse(errorOutput)).not.toThrow();
+  it("should describe the error field but reject an error-only output", () => {
+    // Error outputs are emitted with isError: true, which the MCP SDK excludes
+    // from output-schema validation, so the public schema still requires result.
+    expect(outputSchema.error.parse("Topic not found")).toBe("Topic not found");
+    expect(() => schema.parse({ error: "Topic not found" })).toThrow();
   });
 });

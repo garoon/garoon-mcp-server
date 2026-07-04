@@ -311,18 +311,17 @@ describe("get-schedule-events output schema", () => {
     expect(() => schema.parse(validOutput)).not.toThrow();
   });
 
-  it("should validate error output", () => {
-    const validOutput = {
-      error: "User not found",
-    };
-
-    expect(() => schema.parse(validOutput)).not.toThrow();
+  it("should describe the error field but reject an error-only output", () => {
+    // Error outputs are emitted with isError: true, which the MCP SDK excludes
+    // from output-schema validation, so the public schema still requires result.
+    expect(outputSchema.error.parse("User not found")).toBe("User not found");
+    expect(() => schema.parse({ error: "User not found" })).toThrow();
   });
 
-  it("should accept empty object", () => {
+  it("should reject an empty object because result is required", () => {
     const emptyOutput = {};
 
-    expect(() => schema.parse(emptyOutput)).not.toThrow();
+    expect(() => schema.parse(emptyOutput)).toThrow();
   });
 
   it("should reject invalid event structure", () => {

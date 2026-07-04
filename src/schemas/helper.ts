@@ -7,11 +7,10 @@ export function createStructuredOutputSchema<OutputArgs extends z.ZodRawShape>(
   return {
     result: z
       .object(outputSchema)
-      .optional()
-      .describe("Result of the operation if successful"),
+      .describe("Result of the operation. Present on success"),
     error: z
       .string()
       .optional()
-      .describe("Error message if the operation failed"),
+      .describe("Error message. Error responses carry only this field"),
   };
 }

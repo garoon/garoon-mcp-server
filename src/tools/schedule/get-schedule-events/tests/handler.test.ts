@@ -154,7 +154,7 @@ describe("getScheduleEventsHandler", () => {
 
     const result = await getScheduleEventsHandler(input);
 
-    const output = result as any;
+    const output = result;
     expect(output.events).toHaveLength(0);
     expect(output.hasNext).toBe(false);
   });
@@ -203,7 +203,7 @@ describe("getScheduleEventsHandler", () => {
 
     const result = await getScheduleEventsHandler(input);
 
-    const output = result as any;
+    const output = result;
     expect(output.events).toHaveLength(2);
     expect(output.hasNext).toBe(true);
     expect(output.events[0].subject).toBe("Event 1");
@@ -275,7 +275,7 @@ describe("getScheduleEventsHandler", () => {
 
     const result = await getScheduleEventsHandler(input);
 
-    const output = result as any;
+    const output = result;
     expect(output.events.length).toBeGreaterThan(0);
   });
 
@@ -329,7 +329,7 @@ describe("getScheduleEventsHandler", () => {
       const callArgs = mockGetRequest.mock.calls[0][0];
       expect(callArgs).toContain("showPrivate=false");
 
-      const output = result as any;
+      const output = result;
       expect(output.events).toHaveLength(1);
       expect(output.events[0].subject).toBe("Public Event");
       expect(output.events[0].visibilityType).toBe("PUBLIC");
@@ -402,7 +402,7 @@ describe("getScheduleEventsHandler", () => {
 
       const result = await getScheduleEventsHandler(input);
 
-      const output = result as any;
+      const output = result;
 
       expect(output.events).toHaveLength(2);
       expect(output.events[0].subject).toBe("Public Event 1");

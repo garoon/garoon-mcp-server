@@ -9,8 +9,7 @@ export const getBulletinTopicHandler = async (
 ) => {
   const { topicId } = input;
 
-  type ResultType = NonNullable<z.infer<typeof outputSchema.result>>;
-  type ResponseType = ResultType["topic"];
+  type ResponseType = z.infer<typeof outputSchema.result>["topic"];
   const data = await getRequest<ResponseType>(
     `/api/v1/bulletin/topics/${encodeURIComponent(topicId)}`,
   );

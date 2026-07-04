@@ -153,7 +153,7 @@ describe("defineTool", () => {
   });
 
   it("should pass the parsed input and extra to the handler", async () => {
-    const handler = vi.fn().mockResolvedValue(undefined);
+    const handler = vi.fn().mockResolvedValue({});
 
     const tool = defineTool({
       name: "args-tool",
@@ -180,17 +180,30 @@ describe("defineTool", () => {
       description: "A tool for verifying config",
       inputSchema,
       outputSchema,
-      handler: async () => undefined,
+      handler: async () => ({}),
     });
 
     expect(tool.name).toBe("config-tool");
-    expect(tool.config).toEqual({
-      title: "Config Tool",
-      description: "A tool for verifying config",
-      inputSchema,
-      outputSchema,
-      annotations: undefined,
-    });
+    expect(tool.config.title).toBe("Config Tool");
+    expect(tool.config.description).toBe("A tool for verifying config");
+    expect(tool.config.inputSchema).toBe(inputSchema);
+    expect(tool.config.annotations).toBeUndefined();
     expect(typeof tool.callback).toBe("function");
+
+    // The advertised outputSchema relaxes result to optional while keeping error.
+    expect(tool.config.outputSchema.error).toBe(outputSchema.error);
+    expect(tool.config.outputSchema.result).not.toBe(outputSchema.result);
+    expect(z.object(tool.config.outputSchema).safeParse({}).success).toBe(true);
+    expect(z.object(outputSchema).safeParse({}).success).toBe(false);
+  });
+
+  it("should reject an empty object because result is required", () => {
+    const outputSchema = createStructuredOutputSchema({
+      value: z.string(),
+    });
+
+    const parsed = z.object(outputSchema).safeParse({});
+
+    expect(parsed.success).toBe(false);
   });
 });

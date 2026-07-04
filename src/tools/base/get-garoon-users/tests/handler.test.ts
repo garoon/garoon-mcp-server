@@ -113,9 +113,9 @@ describe("getGaroonUsersHandler", () => {
 
     const result = await getGaroonUsersHandler({ name: "John" });
 
-    expect((result as any).users).toHaveLength(2);
-    expect((result as any).users[0].name).toBe("John Doe");
-    expect((result as any).users[1].name).toBe("Jane Smith");
+    expect(result.users).toHaveLength(2);
+    expect(result.users[0].name).toBe("John Doe");
+    expect(result.users[1].name).toBe("Jane Smith");
   });
 
   it("should handle users with special characters in names", async () => {
@@ -139,9 +139,9 @@ describe("getGaroonUsersHandler", () => {
 
     const result = await getGaroonUsersHandler({ name: "José" });
 
-    expect((result as any).users).toHaveLength(2);
-    expect((result as any).users[0].name).toBe("José María");
-    expect((result as any).users[1].name).toBe("李小明");
+    expect(result.users).toHaveLength(2);
+    expect(result.users[0].name).toBe("José María");
+    expect(result.users[1].name).toBe("李小明");
   });
 
   it("should handle limit parameter", async () => {
@@ -164,7 +164,7 @@ describe("getGaroonUsersHandler", () => {
       "/api/v1/base/users?name=John&limit=1",
     );
 
-    expect((result as any).hasNext).toBe(true);
+    expect(result.hasNext).toBe(true);
   });
 
   it("should handle offset parameter", async () => {
@@ -187,7 +187,7 @@ describe("getGaroonUsersHandler", () => {
       "/api/v1/base/users?name=Jane&offset=10",
     );
 
-    expect((result as any).users[0].name).toBe("Jane Smith");
+    expect(result.users[0].name).toBe("Jane Smith");
   });
 
   it("should handle both limit and offset parameters", async () => {
@@ -214,8 +214,8 @@ describe("getGaroonUsersHandler", () => {
       "/api/v1/base/users?name=Bob&limit=5&offset=20",
     );
 
-    expect((result as any).users[0].name).toBe("Bob Wilson");
-    expect((result as any).hasNext).toBe(true);
+    expect(result.users[0].name).toBe("Bob Wilson");
+    expect(result.hasNext).toBe(true);
   });
 
   it("should handle pagination without name", async () => {
@@ -243,8 +243,8 @@ describe("getGaroonUsersHandler", () => {
       "/api/v1/base/users?limit=2&offset=0",
     );
 
-    expect((result as any).users).toHaveLength(2);
-    expect((result as any).hasNext).toBe(true);
+    expect(result.users).toHaveLength(2);
+    expect(result.hasNext).toBe(true);
   });
 
   it("should handle when offset equals 0", async () => {
@@ -265,7 +265,7 @@ describe("getGaroonUsersHandler", () => {
 
     expect(mockGetRequest).toHaveBeenCalledWith("/api/v1/base/users?offset=0");
 
-    expect((result as any).users[0].name).toBe("Zero Offset User");
+    expect(result.users[0].name).toBe("Zero Offset User");
   });
 
   it("should use name from input when provided (searchName = name)", async () => {
@@ -290,7 +290,7 @@ describe("getGaroonUsersHandler", () => {
       "/api/v1/base/users?name=input.user",
     );
 
-    expect((result as any).users[0].name).toBe("Input User");
+    expect(result.users[0].name).toBe("Input User");
   });
 
   it("should fallback to GAROON_USERNAME when name not provided (searchName = process.env.GAROON_USERNAME)", async () => {
@@ -315,6 +315,6 @@ describe("getGaroonUsersHandler", () => {
       "/api/v1/base/users?name=env.fallback.user",
     );
 
-    expect((result as any).users[0].name).toBe("Environment Fallback User");
+    expect(result.users[0].name).toBe("Environment Fallback User");
   });
 });
