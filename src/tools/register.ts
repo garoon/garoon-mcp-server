@@ -63,12 +63,17 @@ export function defineTool<
 
   const outputObjectSchema = z.object(outputSchema);
 
-  // The advertised output schema relaxes `result` to optional so that error
-  // responses (which carry only `error` with isError: true) conform to it.
-  // Strict MCP clients validate structuredContent against this schema on the
-  // client side without honoring isError, so a required `result` would reject
-  // every error response. The internal `outputObjectSchema` stays strict and is
-  // what actually validates success outputs, rejecting empty `{}`.
+  // Two output schemas exist on purpose.
+  // An MCP server publishes each tool's output schema to clients through the
+  // tools/list response ("advertised" schema), and some clients validate every
+  // structuredContent they receive against it — even error responses, despite
+  // isError: true (confirmed in the official SDK client as of 1.29.0). Error
+  // responses carry only `error` and no `result`, so publishing a schema with
+  // a required `result` would make such clients reject every error response.
+  // The published copy below therefore marks `result` as optional, while the
+  // strict `outputObjectSchema` above validates success outputs before they
+  // leave the server, so an empty `{}` can never actually be emitted.
+  // See register.integration.test.ts, which pins this behavior.
   const advertisedOutputSchema = {
     ...outputSchema,
     result: outputSchema.result.optional(),
