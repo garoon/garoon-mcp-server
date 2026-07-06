@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { idSchema } from "../../../schemas/index.js";
+import { idSchema } from "../../../../schemas/index.js";
 
 export const categorySchema = () =>
   z.object({

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createStructuredOutputSchema } from "../../../../core/structured-output.js";
 import { hasNextSchema } from "../../../../schemas/index.js";
-import { categorySchema } from "../../schemas/index.js";
+import { categorySchema } from "./category.js";
 
 export const outputSchema = createStructuredOutputSchema({
   categories: z
