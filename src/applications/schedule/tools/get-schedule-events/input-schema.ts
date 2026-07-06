@@ -15,13 +15,13 @@ export const inputSchema = {
     .describe(
       "Type of target: 'user', 'organization', or 'facility' (default: 'user')",
     ),
-  rangeStart: z
-    .string()
+  rangeStart: z.iso
+    .datetime({ offset: true })
     .describe(
       "Start datetime of the search range in RFC 3339 format (e.g., 2024-01-01T00:00:00+09:00). Must be before rangeEnd",
     ),
-  rangeEnd: z
-    .string()
+  rangeEnd: z.iso
+    .datetime({ offset: true })
     .describe(
       "End datetime of the search range in RFC 3339 format (e.g., 2024-01-07T23:59:59+09:00). Must be after rangeStart",
     ),

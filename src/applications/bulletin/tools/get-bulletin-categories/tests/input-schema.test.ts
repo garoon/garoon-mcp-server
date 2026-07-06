@@ -27,4 +27,20 @@ describe("garoon-get-bulletin-categories inputSchema", () => {
       offset: 10,
     });
   });
+
+  it("should accept special and positive parentId values", () => {
+    const schema = z.object(inputSchema);
+    [1, -1, -2, 42].forEach((parentId) => {
+      expect(() => schema.parse({ parentId })).not.toThrow();
+    });
+  });
+
+  it("should reject fractional parentId", () => {
+    const schema = z.object(inputSchema);
+    const result = schema.safeParse({ parentId: 1.5 });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain("parentId");
+    }
+  });
 });

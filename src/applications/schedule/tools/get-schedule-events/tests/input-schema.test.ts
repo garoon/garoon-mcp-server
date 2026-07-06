@@ -166,6 +166,76 @@ describe("get-schedule-events input schema", () => {
     });
   });
 
+  it("should accept numeric-string target", () => {
+    const validInput = {
+      target: "12345",
+      rangeStart: "2024-07-27T02:00:00Z",
+      rangeEnd: "2024-07-27T11:00:00+09:00",
+    };
+
+    expect(() => schema.parse(validInput)).not.toThrow();
+  });
+
+  it("should reject non-numeric target", () => {
+    const invalidTargets = ["", "abc", "12a", "-1"];
+
+    invalidTargets.forEach((target) => {
+      const result = schema.safeParse({
+        target,
+        rangeStart: "2024-01-01T00:00:00+09:00",
+        rangeEnd: "2024-01-07T23:59:59+09:00",
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toContain("target");
+      }
+    });
+  });
+
+  it("should reject datetime without timezone", () => {
+    const invalidRangeStarts = [
+      "2024-07-27T11:00:00",
+      "2024-07-27",
+      "not-a-date",
+    ];
+
+    invalidRangeStarts.forEach((rangeStart) => {
+      const result = schema.safeParse({
+        target: "123",
+        rangeStart,
+        rangeEnd: "2024-01-07T23:59:59+09:00",
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toContain("rangeStart");
+      }
+    });
+  });
+
+  it("should reject out-of-range limit and offset", () => {
+    const limitResult = schema.safeParse({
+      target: "123",
+      rangeStart: "2024-01-01T00:00:00+09:00",
+      rangeEnd: "2024-01-07T23:59:59+09:00",
+      limit: 1001,
+    });
+    expect(limitResult.success).toBe(false);
+    if (!limitResult.success) {
+      expect(limitResult.error.issues[0].path).toContain("limit");
+    }
+
+    const offsetResult = schema.safeParse({
+      target: "123",
+      rangeStart: "2024-01-01T00:00:00+09:00",
+      rangeEnd: "2024-01-07T23:59:59+09:00",
+      offset: -1,
+    });
+    expect(offsetResult.success).toBe(false);
+    if (!offsetResult.success) {
+      expect(offsetResult.error.issues[0].path).toContain("offset");
+    }
+  });
+
   it("should accept optional parameters as undefined", () => {
     const validInputs = [
       {

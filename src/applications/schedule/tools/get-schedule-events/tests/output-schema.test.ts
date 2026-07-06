@@ -28,7 +28,7 @@ describe("get-schedule-events output schema", () => {
             },
             attendees: [
               {
-                id: "user1",
+                id: "101",
                 code: "user1_code",
                 name: "User One",
                 type: "USER",
@@ -36,7 +36,7 @@ describe("get-schedule-events output schema", () => {
             ],
             facilities: [
               {
-                id: "room1",
+                id: "201",
                 code: "room1_code",
                 name: "Conference Room 1",
               },
@@ -44,7 +44,7 @@ describe("get-schedule-events output schema", () => {
             facilityUsingPurpose: "Meeting purpose",
             watchers: [
               {
-                id: "watcher1",
+                id: "301",
                 code: "watcher1_code",
                 name: "Watcher One",
                 type: "USER",

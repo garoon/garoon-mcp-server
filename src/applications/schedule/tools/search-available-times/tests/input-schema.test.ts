@@ -185,6 +185,50 @@ describe("search-available-times input schema", () => {
     expect(() => schema.parse(invalidInput)).toThrow();
   });
 
+  it("should accept timeInterval boundary values", () => {
+    [1, 1439].forEach((timeInterval) => {
+      const input = {
+        timeRanges: [
+          {
+            start: "2024-07-27T09:00:00+09:00",
+            end: "2024-07-27T18:00:00+09:00",
+          },
+        ],
+        timeInterval,
+      };
+      expect(() => schema.parse(input)).not.toThrow();
+    });
+  });
+
+  it("should reject out-of-range timeInterval values", () => {
+    [0, 1440].forEach((timeInterval) => {
+      const result = schema.safeParse({
+        timeRanges: [
+          {
+            start: "2024-07-27T09:00:00+09:00",
+            end: "2024-07-27T18:00:00+09:00",
+          },
+        ],
+        timeInterval,
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toContain("timeInterval");
+      }
+    });
+  });
+
+  it("should reject timeRange datetime without timezone", () => {
+    const result = schema.safeParse({
+      timeRanges: [{ start: "2024-07-27T09:00:00", end: "2024-07-27" }],
+      timeInterval: 30,
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain("timeRanges");
+    }
+  });
+
   it("should reject invalid facilitySearchCondition", () => {
     const invalidInput = {
       timeRanges: [

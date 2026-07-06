@@ -102,6 +102,22 @@ describe("get-organizations input schema", () => {
     });
   });
 
+  it("should reject out-of-range limit values", () => {
+    const invalidInputs = [
+      { name: "Test", limit: 0 },
+      { name: "Test", limit: 1001 },
+      { name: "Test", limit: 1.5 },
+    ];
+
+    invalidInputs.forEach((input) => {
+      const result = schema.safeParse(input);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toContain("limit");
+      }
+    });
+  });
+
   it("should reject invalid offset values", () => {
     const invalidInputs = [
       { name: "Test", offset: "10" },
@@ -111,6 +127,21 @@ describe("get-organizations input schema", () => {
 
     invalidInputs.forEach((input) => {
       expect(() => schema.parse(input)).toThrow();
+    });
+  });
+
+  it("should reject out-of-range offset values", () => {
+    const invalidInputs = [
+      { name: "Test", offset: -1 },
+      { name: "Test", offset: 0.5 },
+    ];
+
+    invalidInputs.forEach((input) => {
+      const result = schema.safeParse(input);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toContain("offset");
+      }
     });
   });
 
