@@ -49,7 +49,7 @@
     "fix:prettier": "pnpm lint:prettier --write",
     "license:analyze": "license-manager analyze -c license-manager.config.cjs",
     "license:extract": "license-manager extract -c license-manager.config.cjs",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit -p tsconfig.test.json"
   },
   "dependencies": {
     "@js-temporal/polyfill": "^0.5.1",
