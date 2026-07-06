@@ -5,6 +5,7 @@ import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { z } from "zod";
 import { defineTool, registerTools } from "./register.js";
 import { createStructuredOutputSchema } from "../schemas/helper.js";
+import { HttpErrorResponse } from "../client.js";
 
 async function connectClient(server: McpServer) {
   const [clientTransport, serverTransport] =
@@ -38,6 +39,16 @@ function buildServer() {
       outputSchema: createStructuredOutputSchema({ value: z.string() }),
       handler: () => ({ value: "hello" }),
     }),
+    defineTool({
+      name: "http-failing-tool",
+      title: "HTTP Failing Tool",
+      description: "A tool whose handler throws an HttpErrorResponse",
+      inputSchema: {},
+      outputSchema: createStructuredOutputSchema({ value: z.string() }),
+      handler: () => {
+        throw new HttpErrorResponse(404, "Not Found");
+      },
+    }),
   ]);
   return server;
 }
@@ -56,6 +67,23 @@ describe("defineTool over a live MCP SDK transport", () => {
 
     expect(result.isError).toBe(true);
     expect(result.structuredContent).toEqual({ error: "boom" });
+  });
+
+  it("includes status and responseText for an HTTP error without tripping the client validator", async () => {
+    const client = await connectClient(buildServer());
+    await client.listTools();
+
+    const result = await client.callTool({
+      name: "http-failing-tool",
+      arguments: {},
+    });
+
+    expect(result.isError).toBe(true);
+    expect(result.structuredContent).toEqual({
+      error: "HTTP Error 404",
+      status: 404,
+      responseText: "Not Found",
+    });
   });
 
   it("returns a success response with a structured result", async () => {
