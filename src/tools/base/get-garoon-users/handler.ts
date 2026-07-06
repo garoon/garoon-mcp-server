@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { getRequest } from "../../../client.js";
+import { getConfig } from "../../../config.js";
 import type { InferToolInput } from "../../register.js";
 import { inputSchema } from "./input-schema.js";
 import { outputSchema } from "./output-schema.js";
@@ -11,7 +12,7 @@ export const getGaroonUsersHandler = async (
 
   const queryParams = new URLSearchParams();
 
-  const searchName = name || process.env.GAROON_USERNAME;
+  const searchName = name || getConfig().username;
   if (searchName) {
     queryParams.append("name", searchName);
   }

@@ -1,32 +1,32 @@
 import { VERSION, EXECUTION_TYPE } from "./build-constants.js";
-
-const rawUrl = process.env.GAROON_BASE_URL || "";
-const GAROON_BASE_URL = rawUrl && /^https?:\/\//i.test(rawUrl) ? rawUrl : "";
-
-const API_CREDENTIAL = Buffer.from(
-  `${process.env.GAROON_USERNAME}:${process.env.GAROON_PASSWORD}`,
-).toString("base64");
+import { getConfig, type Config } from "./config.js";
 
 const USER_AGENT = `garoon-mcp-server/${VERSION} (${EXECUTION_TYPE})`;
 
-// Base headers for Garoon API
-const BASE_HEADERS: {
+type RequestHeaders = {
   "X-Cybozu-Authorization": string;
   "User-Agent": string;
   Authorization?: string;
-} = {
-  "X-Cybozu-Authorization": API_CREDENTIAL,
-  "User-Agent": USER_AGENT,
 };
 
-// Basic Authentication for Garoon if credentials are provided
-const GAROON_BASIC_AUTH_USERNAME = process.env.GAROON_BASIC_AUTH_USERNAME || "";
-const GAROON_BASIC_AUTH_PASSWORD = process.env.GAROON_BASIC_AUTH_PASSWORD || "";
-if (GAROON_BASIC_AUTH_USERNAME && GAROON_BASIC_AUTH_PASSWORD) {
-  const BASIC_AUTH_CREDENTIAL = Buffer.from(
-    `${GAROON_BASIC_AUTH_USERNAME}:${GAROON_BASIC_AUTH_PASSWORD}`,
+function buildHeaders(config: Config): RequestHeaders {
+  const apiCredential = Buffer.from(
+    `${config.username}:${config.password}`,
   ).toString("base64");
-  BASE_HEADERS.Authorization = `Basic ${BASIC_AUTH_CREDENTIAL}`;
+
+  const headers: RequestHeaders = {
+    "X-Cybozu-Authorization": apiCredential,
+    "User-Agent": USER_AGENT,
+  };
+
+  if (config.basicAuth) {
+    const basicAuthCredential = Buffer.from(
+      `${config.basicAuth.username}:${config.basicAuth.password}`,
+    ).toString("base64");
+    headers.Authorization = `Basic ${basicAuthCredential}`;
+  }
+
+  return headers;
 }
 
 export class HttpErrorResponse extends Error {
@@ -43,11 +43,12 @@ export async function postRequest<T>(
   endpoint: string,
   body: string,
 ): Promise<T> {
-  const requestUrl = `${GAROON_BASE_URL}${endpoint}`;
+  const config = getConfig();
+  const requestUrl = `${config.baseUrl}${endpoint}`;
   const response = await fetch(requestUrl, {
     method: "POST",
     headers: {
-      ...BASE_HEADERS,
+      ...buildHeaders(config),
       "Content-Type": "application/json",
     },
     body,
@@ -60,11 +61,12 @@ export async function postRequest<T>(
 }
 
 export async function getRequest<T>(endpoint: string): Promise<T> {
-  const requestUrl = `${GAROON_BASE_URL}${endpoint}`;
+  const config = getConfig();
+  const requestUrl = `${config.baseUrl}${endpoint}`;
   const response = await fetch(requestUrl, {
     method: "GET",
     headers: {
-      ...BASE_HEADERS,
+      ...buildHeaders(config),
     },
   });
   if (response.ok) {
