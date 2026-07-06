@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { getGaroonUsersHandler } from "../handler.js";
 import * as client from "../../../../client.js";
+import { setConfig, type Config } from "../../../../config.js";
 
 vi.mock("../../../../client.js", async () => {
   const actual = await vi.importActual("../../../../client.js");
@@ -10,11 +11,19 @@ vi.mock("../../../../client.js", async () => {
   };
 });
 
+const baseConfig: Config = {
+  baseUrl: "https://example.cybozu.com",
+  username: "config.user",
+  password: "secret",
+  publicOnly: false,
+};
+
 describe("getGaroonUsersHandler", () => {
   const mockGetRequest = vi.mocked(client.getRequest);
 
   beforeEach(() => {
     vi.clearAllMocks();
+    setConfig({ ...baseConfig });
   });
 
   afterEach(() => {
@@ -219,6 +228,8 @@ describe("getGaroonUsersHandler", () => {
   });
 
   it("should handle pagination without name", async () => {
+    setConfig({ ...baseConfig, username: "" });
+
     const mockApiResponse = {
       users: [
         {
@@ -248,6 +259,8 @@ describe("getGaroonUsersHandler", () => {
   });
 
   it("should handle when offset equals 0", async () => {
+    setConfig({ ...baseConfig, username: "" });
+
     const mockApiResponse = {
       users: [
         {
@@ -269,7 +282,7 @@ describe("getGaroonUsersHandler", () => {
   });
 
   it("should use name from input when provided (searchName = name)", async () => {
-    process.env.GAROON_USERNAME = "envuser";
+    setConfig({ ...baseConfig, username: "configuser" });
 
     const mockApiResponse = {
       users: [
@@ -293,8 +306,8 @@ describe("getGaroonUsersHandler", () => {
     expect(result.users[0].name).toBe("Input User");
   });
 
-  it("should fallback to GAROON_USERNAME when name not provided (searchName = process.env.GAROON_USERNAME)", async () => {
-    process.env.GAROON_USERNAME = "env.fallback.user";
+  it("should fallback to config username when name not provided (searchName = getConfig().username)", async () => {
+    setConfig({ ...baseConfig, username: "env.fallback.user" });
 
     const mockApiResponse = {
       users: [
