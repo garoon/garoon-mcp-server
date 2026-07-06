@@ -4,6 +4,7 @@ import { limitSchema, offsetSchema } from "../../../../schemas/index.js";
 export const inputSchema = {
   parentId: z
     .number()
+    .int()
     .optional()
     .describe(
       "Parent category ID. Special values: 1=root (default), -1=pending approval, -2=drafts",

@@ -41,8 +41,8 @@ export const isAllDaySchema = () =>
 export const startDateTimeSchema = () =>
   z
     .object({
-      dateTime: z
-        .string()
+      dateTime: z.iso
+        .datetime({ offset: true })
         .describe(
           "Start datetime in RFC 3339 format (e.g., 2024-07-27T11:00:00+09:00)",
         ),
@@ -57,8 +57,8 @@ export const startDateTimeSchema = () =>
 export const endDateTimeSchema = () =>
   z
     .object({
-      dateTime: z
-        .string()
+      dateTime: z.iso
+        .datetime({ offset: true })
         .describe(
           "End datetime in RFC 3339 format (e.g., 2024-07-27T11:00:00+09:00)",
         ),

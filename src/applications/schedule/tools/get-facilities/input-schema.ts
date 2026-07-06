@@ -3,8 +3,10 @@ import { z } from "zod";
 
 export const inputSchema = {
   name: z.string().describe("Name of the facilities to search for"),
-  limit: limitSchema().describe("Maximum number of facilities to return"),
+  limit: limitSchema().describe(
+    "Maximum number of facilities to return (1-1000, default: 100)",
+  ),
   offset: offsetSchema().describe(
-    "Number of facilities to skip from the beginning",
+    "Number of facilities to skip from the beginning (default: 0)",
   ),
 };

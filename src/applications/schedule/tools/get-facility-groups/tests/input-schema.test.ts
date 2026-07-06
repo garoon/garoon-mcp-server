@@ -15,4 +15,20 @@ describe("garoon-get-facility-groups inputSchema", () => {
       offset: 10,
     });
   });
+
+  it("should reject out-of-range limit and offset", () => {
+    const schema = z.object(inputSchema);
+
+    const limitResult = schema.safeParse({ limit: 1001 });
+    expect(limitResult.success).toBe(false);
+    if (!limitResult.success) {
+      expect(limitResult.error.issues[0].path).toContain("limit");
+    }
+
+    const offsetResult = schema.safeParse({ offset: -1 });
+    expect(offsetResult.success).toBe(false);
+    if (!offsetResult.success) {
+      expect(offsetResult.error.issues[0].path).toContain("offset");
+    }
+  });
 });

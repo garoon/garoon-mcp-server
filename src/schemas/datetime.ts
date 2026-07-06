@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export const dateTimeSchema = () =>
   z.object({
-    dateTime: z
-      .string()
+    dateTime: z.iso
+      .datetime({ offset: true })
       .describe(
         "Datetime in RFC 3339 format (e.g., 2024-07-27T11:00:00+09:00)",
       ),
@@ -13,13 +13,13 @@ export const dateTimeSchema = () =>
 export const timeRangeSchema = () =>
   z
     .object({
-      start: z
-        .string()
+      start: z.iso
+        .datetime({ offset: true })
         .describe(
           "Start datetime in RFC 3339 format (e.g., 2024-07-27T09:00:00+09:00)",
         ),
-      end: z
-        .string()
+      end: z.iso
+        .datetime({ offset: true })
         .describe(
           "End datetime in RFC 3339 format (e.g., 2024-07-27T18:00:00+09:00)",
         ),
@@ -31,6 +31,9 @@ export const timeRangeSchema = () =>
 export const timeIntervalSchema = () =>
   z
     .number()
+    .int()
+    .min(1)
+    .max(1439)
     .describe(
       "Time interval in minutes (e.g., 30 for 30-minutes slot, min 1, max 1439 minutes = 23h59m)",
     );

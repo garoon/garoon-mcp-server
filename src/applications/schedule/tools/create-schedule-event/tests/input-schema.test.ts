@@ -185,4 +185,41 @@ describe("create-schedule-event input schema", () => {
 
     expect(() => schema.parse(invalidInput)).toThrow();
   });
+
+  it("should accept start.dateTime with UTC offset", () => {
+    const validInput = {
+      start: { dateTime: "2024-07-27T02:00:00Z", timeZone: "Asia/Tokyo" },
+    };
+
+    expect(() => schema.parse(validInput)).not.toThrow();
+  });
+
+  it("should reject start.dateTime without timezone", () => {
+    const invalidDateTimes = [
+      "2024-07-27T11:00:00",
+      "2024-07-27",
+      "not-a-date",
+    ];
+
+    invalidDateTimes.forEach((dateTime) => {
+      const result = schema.safeParse({
+        start: { dateTime, timeZone: "Asia/Tokyo" },
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toContain("start");
+      }
+    });
+  });
+
+  it("should reject non-numeric attendee id", () => {
+    const result = schema.safeParse({
+      start: { dateTime: "2024-07-27T11:00:00+09:00", timeZone: "Asia/Tokyo" },
+      attendees: [{ type: "USER", id: "abc" }],
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain("attendees");
+    }
+  });
 });

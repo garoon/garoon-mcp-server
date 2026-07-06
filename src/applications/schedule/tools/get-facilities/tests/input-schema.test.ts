@@ -118,41 +118,44 @@ describe("get-facilities input schema", () => {
     });
   });
 
-  it("should accept negative limit values", () => {
-    const validInput = {
-      name: "Room",
-      limit: -1,
-    };
-
-    expect(() => schema.parse(validInput)).not.toThrow();
+  it("should accept limit boundary values", () => {
+    expect(() => schema.parse({ name: "Room", limit: 1 })).not.toThrow();
+    expect(() => schema.parse({ name: "Room", limit: 1000 })).not.toThrow();
   });
 
-  it("should accept negative offset values", () => {
-    const validInput = {
-      name: "Room",
-      offset: -5,
-    };
+  it("should reject out-of-range limit values", () => {
+    const invalidInputs = [
+      { name: "Room", limit: 0 },
+      { name: "Room", limit: -1 },
+      { name: "Room", limit: 1001 },
+      { name: "Room", limit: 1.5 },
+    ];
 
-    expect(() => schema.parse(validInput)).not.toThrow();
+    invalidInputs.forEach((input) => {
+      const result = schema.safeParse(input);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toContain("limit");
+      }
+    });
   });
 
-  it("should accept zero values for limit and offset", () => {
-    const validInput = {
-      name: "Room",
-      limit: 0,
-      offset: 0,
-    };
-
-    expect(() => schema.parse(validInput)).not.toThrow();
+  it("should accept offset boundary value", () => {
+    expect(() => schema.parse({ name: "Room", offset: 0 })).not.toThrow();
   });
 
-  it("should accept large numeric values", () => {
-    const validInput = {
-      name: "Room",
-      limit: 999999,
-      offset: 999999,
-    };
+  it("should reject out-of-range offset values", () => {
+    const invalidInputs = [
+      { name: "Room", offset: -1 },
+      { name: "Room", offset: 0.5 },
+    ];
 
-    expect(() => schema.parse(validInput)).not.toThrow();
+    invalidInputs.forEach((input) => {
+      const result = schema.safeParse(input);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toContain("offset");
+      }
+    });
   });
 });

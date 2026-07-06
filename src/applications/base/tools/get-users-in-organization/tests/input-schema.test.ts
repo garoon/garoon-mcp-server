@@ -21,6 +21,18 @@ describe("get-users-in-organization input schema", () => {
 
       expect(() => schema.parse(invalidInput)).toThrow();
     });
+
+    it("should reject non-numeric organizationId", () => {
+      const invalidIds = ["", "abc", "12a", "-1"];
+
+      invalidIds.forEach((organizationId) => {
+        const result = schema.safeParse({ organizationId });
+        expect(result.success).toBe(false);
+        if (!result.success) {
+          expect(result.error.issues[0].path).toContain("organizationId");
+        }
+      });
+    });
   });
 
   describe("limit param", () => {
@@ -43,6 +55,21 @@ describe("get-users-in-organization input schema", () => {
 
       expect(() => schema.parse(invalidInput)).toThrow();
     });
+
+    it("should reject out-of-range limit values", () => {
+      const invalidInputs = [
+        { organizationId: "123", limit: 0 },
+        { organizationId: "123", limit: 1001 },
+      ];
+
+      invalidInputs.forEach((input) => {
+        const result = schema.safeParse(input);
+        expect(result.success).toBe(false);
+        if (!result.success) {
+          expect(result.error.issues[0].path).toContain("limit");
+        }
+      });
+    });
   });
 
   describe("offset param", () => {
@@ -64,6 +91,14 @@ describe("get-users-in-organization input schema", () => {
       };
 
       expect(() => schema.parse(invalidInput)).toThrow();
+    });
+
+    it("should reject negative offset value", () => {
+      const result = schema.safeParse({ organizationId: "123", offset: -1 });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toContain("offset");
+      }
     });
   });
 
