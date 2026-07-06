@@ -1,0 +1,13 @@
+import { defineTool } from "../../../../core/register.js";
+import { inputSchema } from "./input-schema.js";
+import { outputSchema } from "./output-schema.js";
+import { getScheduleEventsHandler } from "./handler.js";
+
+export const getScheduleEvents = defineTool({
+  name: "garoon-get-schedule-events",
+  title: "Get Schedule Events",
+  description: "Search for schedule events in a specified period in Garoon",
+  inputSchema,
+  outputSchema,
+  handler: getScheduleEventsHandler,
+});

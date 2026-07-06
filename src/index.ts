@@ -3,8 +3,10 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { Agent, EnvHttpProxyAgent, setGlobalDispatcher } from "undici";
 import { readFileSync } from "fs";
-import { registerTools } from "./tools/register.js";
-import { tools } from "./tools/index.js";
+import { registerTools } from "./core/register.js";
+import { scheduleTools } from "./applications/schedule/index.js";
+import { baseTools } from "./applications/base/index.js";
+import { bulletinTools } from "./applications/bulletin/index.js";
 import { VERSION } from "./build-constants.js";
 import { loadConfig, setConfig, type Config } from "./config.js";
 
@@ -49,7 +51,7 @@ const server = new McpServer({
   version: VERSION,
 });
 
-registerTools(server, tools);
+registerTools(server, [...scheduleTools, ...baseTools, ...bulletinTools]);
 
 const transport = new StdioServerTransport();
 await server.connect(transport);
