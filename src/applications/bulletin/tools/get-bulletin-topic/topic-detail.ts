@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { idSchema, userSchema } from "../../../schemas/index.js";
+import { idSchema, userSchema } from "../../../../schemas/index.js";
 import { attachmentSchema } from "./attachment.js";
 
 export const topicDetailSchema = () =>

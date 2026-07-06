@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Garoon MCP (Model Context Protocol) server that provides tools, resources, and prompts for interacting with the Garoon API. Garoon is a groupware application by Cybozu used for scheduling, collaboration, and organizational management.
+This is a Garoon MCP (Model Context Protocol) server that provides tools for interacting with the Garoon API. Garoon is a groupware application by Cybozu used for scheduling, collaboration, and organizational management.
 Garoon bundles various applications like the following.
 
 - Scheduler(スケジュール)
@@ -85,25 +85,40 @@ docker run --rm -i \
 
 ## Architecture
 
-### MCP Server Structure
+### Directory Layout
 
-The server follows the MCP (Model Context Protocol) pattern with three main components:
+The source tree is organized by Garoon application, mirroring the Garoon REST API namespaces:
 
-1. **Tools** (`src/tools/`): Active operations that perform actions
-   - Each tool is registered via `registerTools()` with input/output schemas
+```
+src/
+  index.ts                 # composition only
+  config.ts / client.ts / constants.ts
+  core/                    # protocol-level infrastructure: register.ts (defineTool/registerTools), error-handler.ts, structured-output.ts
+  schemas/                 # cross-application Garoon vocabulary (id, user, organization, datetime, pagination)
+  applications/<app>/      # one directory per Garoon application (schedule, bulletin, base), matching Garoon REST API namespaces
+    index.ts               # aggregated tool exports
+    schemas/               # schemas shared by two or more tools within the application
+    tools/<tool>/          # index.ts, handler.ts, input-schema.ts, output-schema.ts, tests/
+```
 
-2. **Resources** (`src/resources/`): Read-only data providers
-   - Registered via `registerResources()`
+Each tool is defined with `defineTool` and registered via `registerTools()` with input/output schemas.
 
-3. **Prompts** (`src/prompts/`): Pre-configured prompt templates
-   - Registered via `registerPrompts()`
+### Schema Placement Rules
+
+Apply these rules to decide where any schema belongs:
+
+1. A new schema starts inside its tool directory.
+2. Promote a schema to `src/applications/<app>/schemas/` when a second tool in the same application needs it, and to `src/schemas/` when a second application needs it.
+3. Response/input variant pairs of one concept (e.g. `attendeeSchema` / `attendeeInputSchema`) live together in the location of the more widely shared variant, even if the other variant has a single consumer.
+4. Do not demote a schema when its consumption drops back to one tool.
+5. Cross-application imports go through `src/schemas/` only; applications must not import from each other.
 
 ### Key Files
 
 - `src/index.ts`: Entry point that initializes the MCP server and registers all components
 - `src/client.ts`: HTTP client for Garoon API communication with authentication
-- `src/*/register.ts`: MCP feature-registration system with error handling wrapper
-- `src/schemas/`: Zod schemas for data validation (schedule events, users)
+- `src/core/register.ts`: Tool-registration system (`defineTool`/`registerTools`) with error handling wrapper
+- `src/schemas/`: Zod schemas for cross-application Garoon vocabulary (id, user, organization, datetime, pagination)
 
 ### Authentication
 
