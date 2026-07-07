@@ -3,9 +3,9 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { z } from "zod";
-import { defineTool, registerTools } from "./register.js";
-import { createStructuredOutputSchema } from "./structured-output.js";
-import { HttpErrorResponse } from "../client.js";
+import { defineTool, registerTools } from "../register.js";
+import { createStructuredOutputSchema } from "../structured-output.js";
+import { HttpErrorResponse } from "../../client.js";
 
 async function connectClient(server: McpServer) {
   const [clientTransport, serverTransport] =

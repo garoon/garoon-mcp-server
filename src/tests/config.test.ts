@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { loadConfig } from "./config.js";
+import { loadConfig } from "../config.js";
 
 const baseEnv = {
   GAROON_BASE_URL: "https://example.cybozu.com",
