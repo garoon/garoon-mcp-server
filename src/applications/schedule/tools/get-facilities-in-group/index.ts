@@ -10,5 +10,6 @@ export const getFacilitiesInGroupTool = defineTool({
     "Get facilities that belong to a specific facility group with optional limit and offset parameters.",
   inputSchema,
   outputSchema,
+  annotations: { readOnlyHint: true, openWorldHint: false },
   handler: getFacilitiesInGroupHandler,
 });

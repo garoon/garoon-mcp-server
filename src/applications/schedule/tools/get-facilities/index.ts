@@ -10,5 +10,6 @@ export const getFacilitiesTool = defineTool({
     "Get facilities data from Garoon by searching facility names with optional limit and offset parameters.",
   inputSchema,
   outputSchema,
+  annotations: { readOnlyHint: true, openWorldHint: false },
   handler: getFacilitiesHandler,
 });

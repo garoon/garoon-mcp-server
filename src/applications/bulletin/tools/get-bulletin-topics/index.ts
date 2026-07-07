@@ -10,5 +10,6 @@ export const getBulletinTopicsTool = defineTool({
     "Get bulletin board topics in a specific category from Garoon. Returns topic summaries with subject, updater, and update time.",
   inputSchema,
   outputSchema,
+  annotations: { readOnlyHint: true, openWorldHint: false },
   handler: getBulletinTopicsHandler,
 });

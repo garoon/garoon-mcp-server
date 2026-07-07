@@ -10,5 +10,6 @@ export const getGaroonUsersTool = defineTool({
     "Get user data (name, ID, code) from Garoon by searching name/code. IMPORTANT: Omit name parameter for self-referential queries ('me', 'my', 'I', 'myself', 私, 僕, 自分) to return current user info. Supports pagination.",
   inputSchema,
   outputSchema,
+  annotations: { readOnlyHint: true, openWorldHint: false },
   handler: getGaroonUsersHandler,
 });

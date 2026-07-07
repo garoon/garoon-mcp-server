@@ -10,5 +10,6 @@ export const getBulletinTopicTool = defineTool({
     "Get full details of a specific bulletin board topic from Garoon, including body content, attachments, public period, and metadata.",
   inputSchema,
   outputSchema,
+  annotations: { readOnlyHint: true, openWorldHint: false },
   handler: getBulletinTopicHandler,
 });

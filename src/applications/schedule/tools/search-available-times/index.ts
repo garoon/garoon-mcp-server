@@ -10,5 +10,6 @@ export const searchAvailableTimes = defineTool({
     "Search for available time slots for specified attendee or facility within given time ranges in Garoon",
   inputSchema,
   outputSchema,
+  annotations: { readOnlyHint: true, openWorldHint: false },
   handler: searchAvailableTimesHandler,
 });

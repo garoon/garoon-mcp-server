@@ -10,5 +10,6 @@ export const getUserInOrganizationTool = defineTool({
     "Get users from a specific organization with support for pagination parameters (limit, offset) in Garoon.",
   inputSchema,
   outputSchema,
+  annotations: { readOnlyHint: true, openWorldHint: false },
   handler: getUsersInOrganizationHandler,
 });

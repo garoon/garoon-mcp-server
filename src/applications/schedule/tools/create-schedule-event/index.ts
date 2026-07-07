@@ -9,5 +9,11 @@ export const createScheduleEvent = defineTool({
   description: "Create a new schedule event in Garoon",
   inputSchema,
   outputSchema,
+  annotations: {
+    readOnlyHint: false,
+    destructiveHint: false,
+    idempotentHint: false,
+    openWorldHint: false,
+  },
   handler: createScheduleEventHandler,
 });

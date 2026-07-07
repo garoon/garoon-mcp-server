@@ -10,5 +10,6 @@ export const getOrganizationsTool = defineTool({
     "Get Garoon organization's name, ID, and code data by searching for organization names - supports pagination with optional limit and offset parameters.",
   inputSchema,
   outputSchema,
+  annotations: { readOnlyHint: true, openWorldHint: false },
   handler: getOrganizationsHandler,
 });
