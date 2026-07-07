@@ -96,6 +96,21 @@ src/
 
 Each tool is defined with `defineTool` and registered via `registerTools()` with input/output schemas.
 
+### Import Aliases (Subpath Imports)
+
+Imports that reach outside their own tool directory use Node subpath imports (the `imports` field in `package.json`) instead of relative paths:
+
+- `#applications/*.js` — code under `src/applications/` (e.g. an application's shared schemas)
+- `#core/*.js` — protocol-level infrastructure under `src/core/`
+- `#schemas/*.js` — cross-application vocabulary under `src/schemas/`
+- `#client.js` — the Garoon HTTP client
+- `#config.js` — configuration loading
+- `#constants.js` — shared constants
+
+Rule of thumb: relative specifiers are limited to the same directory (`./`) and to files within the same tool directory; everything else uses an alias. A relative path therefore means "code that shares this directory's fate"; a `#`-prefixed specifier means anything reached across directories. This rule applies to code under `src/applications/`; infrastructure under `src/core/` and files at the src root keep their shallow relative imports.
+
+`#applications/*.js` must not be used to reach another application: cross-application imports still go through `src/schemas/` only.
+
 ### Key Files
 
 - `src/index.ts`: Entry point that initializes the MCP server and registers all components

@@ -1,4 +1,4 @@
-import { limitSchema, offsetSchema } from "../../../../schemas/index.js";
+import { limitSchema, offsetSchema } from "#schemas/index.js";
 import { z } from "zod";
 
 export const inputSchema = {

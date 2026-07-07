@@ -1,4 +1,4 @@
-import { limitSchema, offsetSchema } from "../../../../schemas/index.js";
+import { limitSchema, offsetSchema } from "#schemas/index.js";
 
 export const inputSchema = {
   limit: limitSchema().describe(

@@ -3,11 +3,8 @@ import {
   facilitySearchConditionSchema,
   attendeeInputSchema,
   facilityInputSchema,
-} from "../../schemas/index.js";
-import {
-  timeIntervalSchema,
-  timeRangeSchema,
-} from "../../../../schemas/index.js";
+} from "#applications/schedule/schemas/index.js";
+import { timeIntervalSchema, timeRangeSchema } from "#schemas/index.js";
 
 export const inputSchema = {
   timeRanges: z

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { hasNextSchema, idSchema } from "../../../../schemas/index.js";
+import { hasNextSchema, idSchema } from "#schemas/index.js";
 import {
   attendeeSchema,
   eventTypeResponseSchema,
@@ -14,8 +14,8 @@ import {
   watcherSchema,
   isStartOnlySchema,
   isAllDaySchema,
-} from "../../schemas/index.js";
-import { createStructuredOutputSchema } from "../../../../core/structured-output.js";
+} from "#applications/schedule/schemas/index.js";
+import { createStructuredOutputSchema } from "#core/structured-output.js";
 
 const eventObjectSchema = z.object({
   id: idSchema().describe("Unique identifier for the schedule event"),

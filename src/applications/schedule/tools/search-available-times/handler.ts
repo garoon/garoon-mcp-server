@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { postRequest } from "../../../../client.js";
-import type { InferToolInput } from "../../../../core/register.js";
+import { postRequest } from "#client.js";
+import type { InferToolInput } from "#core/register.js";
 import { inputSchema } from "./input-schema.js";
 import { outputSchema } from "./output-schema.js";
 

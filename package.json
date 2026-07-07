@@ -21,6 +21,38 @@
     "url": "https://cybozu.co.jp"
   },
   "type": "module",
+  "imports": {
+    "#applications/*.js": {
+      "types": "./src/applications/*.ts",
+      "development": "./src/applications/*.ts",
+      "default": "./dist/applications/*.js"
+    },
+    "#core/*.js": {
+      "types": "./src/core/*.ts",
+      "development": "./src/core/*.ts",
+      "default": "./dist/core/*.js"
+    },
+    "#schemas/*.js": {
+      "types": "./src/schemas/*.ts",
+      "development": "./src/schemas/*.ts",
+      "default": "./dist/schemas/*.js"
+    },
+    "#client.js": {
+      "types": "./src/client.ts",
+      "development": "./src/client.ts",
+      "default": "./dist/client.js"
+    },
+    "#config.js": {
+      "types": "./src/config.ts",
+      "development": "./src/config.ts",
+      "default": "./dist/config.js"
+    },
+    "#constants.js": {
+      "types": "./src/constants.ts",
+      "development": "./src/constants.ts",
+      "default": "./dist/constants.js"
+    }
+  },
   "main": "dist/index.js",
   "bin": {
     "garoon-mcp-server": "dist/index.js"

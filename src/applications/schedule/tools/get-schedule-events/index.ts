@@ -1,4 +1,4 @@
-import { defineTool } from "../../../../core/register.js";
+import { defineTool } from "#core/register.js";
 import { inputSchema } from "./input-schema.js";
 import { outputSchema } from "./output-schema.js";
 import { getScheduleEventsHandler } from "./handler.js";
