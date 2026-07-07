@@ -3,8 +3,8 @@ import { z } from "zod";
 import {
   createErrorOutput,
   MAX_RESPONSE_TEXT_LENGTH,
-} from "./error-handler.js";
-import { HttpErrorResponse } from "../client.js";
+} from "../error-handler.js";
+import { HttpErrorResponse } from "../../client.js";
 
 describe("createErrorOutput", () => {
   it("includes status and responseText for an HttpErrorResponse", () => {

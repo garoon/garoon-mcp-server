@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { getRequest, postRequest, HttpErrorResponse } from "./client.js";
-import { setConfig, type Config } from "./config.js";
-import { VERSION, EXECUTION_TYPE } from "./build-constants.js";
+import { getRequest, postRequest, HttpErrorResponse } from "../client.js";
+import { setConfig, type Config } from "../config.js";
+import { VERSION, EXECUTION_TYPE } from "../build-constants.js";
 
 const baseConfig: Config = {
   baseUrl: "https://garoon.example.com/g",

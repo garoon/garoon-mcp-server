@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { z } from "zod";
-import { defineTool } from "./register.js";
-import { createStructuredOutputSchema } from "./structured-output.js";
+import { defineTool } from "../register.js";
+import { createStructuredOutputSchema } from "../structured-output.js";
 
 const mockExtra = {} as never;
 const emptyOutputSchema = createStructuredOutputSchema({});

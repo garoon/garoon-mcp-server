@@ -141,6 +141,7 @@ The server uses Basic Authentication with the Garoon API:
 - Uses Vitest as the test runner
 - Mock pattern: API client functions are mocked using `vi.mock()`
 - Test structure: Each tool/resource has a corresponding `.test.ts` file
+- Test placement: every test file lives in a `tests/` directory adjacent to the code under test (e.g. `src/tests/`, `src/core/tests/`, `src/applications/<app>/tools/<tool>/tests/`)
 - Tests validate: tool configuration, schemas, and callback behavior
 
 ## Reference site
