@@ -10,5 +10,6 @@ export const getBulletinCategoriesTool = defineTool({
     "Get bulletin board categories from Garoon. Use parentId to browse sub-categories. Special values: 1=root (default), -1=pending approval, -2=drafts.",
   inputSchema,
   outputSchema,
+  annotations: { readOnlyHint: true, openWorldHint: false },
   handler: getBulletinCategoriesHandler,
 });

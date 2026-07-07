@@ -9,5 +9,6 @@ export const getScheduleEvents = defineTool({
   description: "Search for schedule events in a specified period in Garoon",
   inputSchema,
   outputSchema,
+  annotations: { readOnlyHint: true, openWorldHint: false },
   handler: getScheduleEventsHandler,
 });

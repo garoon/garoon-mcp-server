@@ -103,6 +103,15 @@ src/
 
 Each tool is defined with `defineTool` and registered via `registerTools()` with input/output schemas.
 
+### Tool Annotations
+
+Every tool must declare `annotations`. Follow these rules for new tools:
+
+- `openWorldHint: false` on all tools (the target is a closed Garoon environment, not the open web).
+- Read-only tools (those that do not change Garoon state, including search APIs that use POST): `readOnlyHint: true`. Omit `destructiveHint`/`idempotentHint`, which are only meaningful when `readOnlyHint` is `false`.
+- Writing tools: `readOnlyHint: false` plus `destructiveHint` and `idempotentHint` reflecting the actual behavior (e.g. creating an event is non-destructive but non-idempotent).
+- Do not repeat `title` inside `annotations`; it is set at the top level of `defineTool`.
+
 ### Import Aliases (Subpath Imports)
 
 Imports that reach outside their own tool directory use Node subpath imports (the `imports` field in `package.json`) instead of relative paths:

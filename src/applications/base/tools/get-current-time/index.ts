@@ -9,5 +9,6 @@ export const getCurrentTimeTool = defineTool({
   description: "Get the current datetime in RFC 3339 format in Garoon.",
   inputSchema,
   outputSchema,
+  annotations: { readOnlyHint: true, openWorldHint: false },
   handler: getCurrentTimeHandler,
 });

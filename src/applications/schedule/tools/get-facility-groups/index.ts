@@ -10,5 +10,6 @@ export const getFacilityGroupsTool = defineTool({
     "Get facility groups data from Garoon with optional limit and offset parameters.",
   inputSchema,
   outputSchema,
+  annotations: { readOnlyHint: true, openWorldHint: false },
   handler: getFacilityGroupsHandler,
 });
