@@ -7,4 +7,5 @@ if ! [ -x node_modules/.bin/mcp-inspector ]; then
   exit 1
 fi
 
-pnpm exec mcp-inspector tsx src/index.ts
+# Resolve `#` subpath imports to src (not dist) so the inspector runs against the current sources.
+NODE_OPTIONS="--conditions=development" pnpm exec mcp-inspector tsx src/index.ts

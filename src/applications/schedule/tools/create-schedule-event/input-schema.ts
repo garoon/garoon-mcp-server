@@ -12,8 +12,8 @@ import {
   isAllDaySchema,
   attendeeInputSchema,
   watcherInputSchema,
-} from "../../schemas/index.js";
-import { facilityInputSchema } from "../../schemas/facility.js";
+} from "#applications/schedule/schemas/index.js";
+import { facilityInputSchema } from "#applications/schedule/schemas/facility.js";
 
 export const inputSchema = {
   subject: subjectSchema().default("New Schedule"),

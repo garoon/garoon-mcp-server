@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { limitSchema, offsetSchema } from "../../../../schemas/index.js";
+import { limitSchema, offsetSchema } from "#schemas/index.js";
 
 export const inputSchema = {
   parentId: z

@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { getScheduleEventsHandler } from "../handler.js";
-import * as client from "../../../../../client.js";
-import { setConfig, type Config } from "../../../../../config.js";
+import * as client from "#client.js";
+import { setConfig, type Config } from "#config.js";
 
-vi.mock("../../../../../client.js", async () => {
-  const actual = await vi.importActual("../../../../../client.js");
+vi.mock("#client.js", async () => {
+  const actual = await vi.importActual("#client.js");
   return {
     ...actual,
     getRequest: vi.fn(),

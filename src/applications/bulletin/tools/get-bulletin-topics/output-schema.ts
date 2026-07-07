@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { createStructuredOutputSchema } from "../../../../core/structured-output.js";
-import { hasNextSchema } from "../../../../schemas/index.js";
+import { createStructuredOutputSchema } from "#core/structured-output.js";
+import { hasNextSchema } from "#schemas/index.js";
 import { topicSummarySchema } from "./topic-summary.js";
 
 export const outputSchema = createStructuredOutputSchema({

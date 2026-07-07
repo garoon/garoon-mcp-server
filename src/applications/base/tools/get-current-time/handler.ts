@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { GAROON_SUPPORTED_TIMEZONES } from "../../../../constants.js";
-import type { InferToolInput } from "../../../../core/register.js";
+import { GAROON_SUPPORTED_TIMEZONES } from "#constants.js";
+import type { InferToolInput } from "#core/register.js";
 import { inputSchema } from "./input-schema.js";
 
 export const getCurrentTimeHandler = async (

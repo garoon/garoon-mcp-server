@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { limitSchema, offsetSchema } from "../../../../schemas/pagination.js";
+import { limitSchema, offsetSchema } from "#schemas/pagination.js";
 
 export const inputSchema = {
   name: z

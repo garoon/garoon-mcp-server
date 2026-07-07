@@ -1,9 +1,5 @@
 import { z } from "zod";
-import {
-  idSchema,
-  limitSchema,
-  offsetSchema,
-} from "../../../../schemas/index.js";
+import { idSchema, limitSchema, offsetSchema } from "#schemas/index.js";
 
 export const inputSchema = {
   target: idSchema().describe(

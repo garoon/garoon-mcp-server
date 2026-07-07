@@ -3,8 +3,8 @@ import {
   facilitySchema,
   startDateTimeSchema,
   endDateTimeSchema,
-} from "../../schemas/index.js";
-import { createStructuredOutputSchema } from "../../../../core/structured-output.js";
+} from "#applications/schedule/schemas/index.js";
+import { createStructuredOutputSchema } from "#core/structured-output.js";
 
 export const outputSchema = createStructuredOutputSchema({
   availableTimes: z
