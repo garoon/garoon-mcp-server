@@ -27,23 +27,17 @@ describe("garoon-get-schedule-event-comments inputSchema", () => {
     invalidIds.forEach((eventId) => {
       const result = schema.safeParse({ eventId });
       expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toContain("eventId");
-      }
+      expect(result.error?.issues[0].path).toContain("eventId");
     });
   });
 
   it("should reject out-of-range limit and offset", () => {
     const limitResult = schema.safeParse({ eventId: "2", limit: 1001 });
     expect(limitResult.success).toBe(false);
-    if (!limitResult.success) {
-      expect(limitResult.error.issues[0].path).toContain("limit");
-    }
+    expect(limitResult.error?.issues[0].path).toContain("limit");
 
     const offsetResult = schema.safeParse({ eventId: "2", offset: -1 });
     expect(offsetResult.success).toBe(false);
-    if (!offsetResult.success) {
-      expect(offsetResult.error.issues[0].path).toContain("offset");
-    }
+    expect(offsetResult.error?.issues[0].path).toContain("offset");
   });
 });
