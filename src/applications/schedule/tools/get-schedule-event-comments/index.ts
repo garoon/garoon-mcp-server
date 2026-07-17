@@ -7,7 +7,7 @@ export const getScheduleEventComments = defineTool({
   name: "garoon-get-schedule-event-comments",
   title: "Get Schedule Event Comments",
   description:
-    "Get the list of comments on a schedule event in Garoon, including each comment's author, creation datetime, body, and mentions, with optional limit and offset parameters.",
+    "Get the list of comments on a Garoon schedule event, including each comment's author, creation datetime, body, and mentions. Supports optional limit and offset parameters for pagination.",
   inputSchema,
   outputSchema,
   annotations: { readOnlyHint: true, openWorldHint: false },
