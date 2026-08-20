@@ -8,6 +8,7 @@ import type {
 } from "@modelcontextprotocol/sdk/types.js";
 import { z, type ZodRawShape } from "zod";
 import { createErrorOutput } from "./error-handler.js";
+import { registerToolListHandler } from "./tool-list.js";
 
 type HandlerExtra = RequestHandlerExtra<ServerRequest, ServerNotification>;
 
@@ -121,4 +122,6 @@ export function registerTools(
   tools.forEach((tool) => {
     server.registerTool(tool.name, tool.config, tool.callback);
   });
+
+  registerToolListHandler(server, tools);
 }
