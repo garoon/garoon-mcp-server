@@ -45,16 +45,14 @@ export function registerToolListHandler(
   // That is enough for a single registration of a fixed tool set, which is all
   // src/index.ts does.
   server.server.setRequestHandler(ListToolsRequestSchema, () => ({
-    tools: tools.map(
-      ({ name, config }): Tool => ({
-        name,
-        title: config.title,
-        description: config.description,
-        annotations: config.annotations,
-        execution: EXECUTION,
-        inputSchema: toAdvertisedSchema(config.inputSchema, "input"),
-        outputSchema: toAdvertisedSchema(config.outputSchema, "output"),
-      }),
-    ),
+    tools: tools.map(({ name, config }): Tool => ({
+      name,
+      title: config.title,
+      description: config.description,
+      annotations: config.annotations,
+      execution: EXECUTION,
+      inputSchema: toAdvertisedSchema(config.inputSchema, "input"),
+      outputSchema: toAdvertisedSchema(config.outputSchema, "output"),
+    })),
   }));
 }
