@@ -141,6 +141,7 @@ Apply these rules to decide where any schema belongs:
 
 - `src/index.ts`: Entry point that initializes the MCP server and registers all components
 - `src/client.ts`: HTTP client for Garoon API communication with authentication
+- `src/config.ts`: Loading and validation of every environment variable, exposed as a single configuration object
 - `src/core/register.ts`: Tool-registration system (`defineTool`/`registerTools`) with error handling wrapper
 - `src/schemas/`: Zod schemas for cross-application Garoon vocabulary (id, user, organization, datetime, pagination)
 

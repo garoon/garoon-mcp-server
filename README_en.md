@@ -16,7 +16,7 @@ Official local MCP server for Garoon.
 
 ### MCPB (formerly DXT)
 
-As of October 2025, MCPB is an installation method supported only by [Claude for desktop](https://claude.ai/download).\
+MCPB is an installation method supported only by [Claude for desktop](https://claude.ai/download).\
 You can install it simply by opening the `.mcpb` file with Claude.
 
 1. Open the [Releases page](https://github.com/garoon/garoon-mcp-server/releases).
@@ -365,18 +365,21 @@ Try using an absolute path or the `npx` command instead.
 
 ## Tool List
 
-| Tool Name                  | Description                                                                                                    |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| Create Schedule Event      | Creates a schedule event.                                                                                      |
-| Get Schedule Events        | Retrieves schedule events for specified users, organizations, or facilities.                                   |
-| Search Available Times     | Searches for available time slots based on specified conditions such as users and time ranges.                 |
-| Get Facilities             | Searches for facility IDs by facility name.                                                                    |
-| Garoon Get Facility Groups | Retrieves a list of facility groups.                                                                           |
-| Get Facilities In Group    | Retrieves facilities that belong to a specific facility group.                                                 |
-| Get Current Datetime       | Gets the current date and time.                                                                                |
-| Get Garoon Users           | Searches for user IDs, display names, and login names by name.<br>Also supports prompts like "me" or "myself". |
-| Get Organizations          | Searches for organization IDs by organization name.                                                            |
-| Get Users In Organization  | Gets users belonging to the specified organization ID.                                                         |
+| Tool Name                        | Description                                                                                                    |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Create Schedule Event            | Creates a schedule event.                                                                                      |
+| Get Schedule Events              | Retrieves schedule events for specified users, organizations, or facilities.                                   |
+| Search Available Times           | Searches for available time slots based on specified conditions such as users and time ranges.                 |
+| Get Facilities                   | Searches for facility IDs by facility name.                                                                    |
+| Garoon Get Facility Groups       | Retrieves a list of facility groups.                                                                           |
+| Get Facilities In Group          | Retrieves facilities that belong to a specific facility group.                                                 |
+| Get Current Datetime             | Gets the current date and time.                                                                                |
+| Get Garoon Users                 | Searches for user IDs, display names, and login names by name.<br>Also supports prompts like "me" or "myself". |
+| Get Organizations                | Searches for organization IDs by organization name.                                                            |
+| Get Users In Organization        | Gets users belonging to the specified organization ID.                                                         |
+| Garoon Get Bulletin Categories   | Retrieves a list of bulletin board categories.                                                                 |
+| Garoon Get Bulletin Topics       | Retrieves a list of topics in the specified category.                                                          |
+| Garoon Get Bulletin Topic Detail | Retrieves the details of the specified topic, including its body, attachments, and public period.              |
 
 **Notes:**
 

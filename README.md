@@ -16,7 +16,7 @@ Garoonの公式ローカルMCPサーバーです。
 
 ### MCPB (旧称: DXT)
 
-MCPBは、2025年10月時点では、[Claude for desktop](https://claude.ai/download)のみがサポートしているインストール方式です。\
+MCPBは、[Claude for desktop](https://claude.ai/download)のみがサポートしているインストール方式です。\
 `.mcpb`ファイルをClaudeで開くだけでインストールすることができます。
 
 1. [リリース一覧](https://github.com/garoon/garoon-mcp-server/releases)を開く。
@@ -365,18 +365,21 @@ npm install -g @garoon/mcp-server
 
 ## ツール一覧
 
-| ツール名                   | 説明                                                                                                   |
-| -------------------------- | ------------------------------------------------------------------------------------------------------ |
-| Create Schedule Event      | スケジュールを作成します。                                                                             |
-| Get Schedule Events        | ユーザー/組織/施設を指定し、対象の予定を取得します。                                                   |
-| Search Available Times     | ユーザーや時間範囲などの条件を指定して空き時間を検索します。                                           |
-| Get Facilities             | 施設名から施設IDを検索します。                                                                         |
-| Garoon Get Facility Groups | 施設グループの一覧を取得します。                                                                       |
-| Get Facilities In Group    | 指定した施設グループに所属する施設を取得します。                                                       |
-| Get Current Datetime       | 現在の日時を取得します。                                                                               |
-| Get Garoon Users           | 名前からユーザーID/表示名/ログイン名を検索します。<br>「私」「自分」等のプロンプトにも対応しています。 |
-| Get Organizations          | 組織名から組織IDを検索します。                                                                         |
-| Get Users In Organization  | 指定した組織IDに所属するユーザーを取得します。                                                         |
+| ツール名                         | 説明                                                                                                   |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Create Schedule Event            | スケジュールを作成します。                                                                             |
+| Get Schedule Events              | ユーザー/組織/施設を指定し、対象の予定を取得します。                                                   |
+| Search Available Times           | ユーザーや時間範囲などの条件を指定して空き時間を検索します。                                           |
+| Get Facilities                   | 施設名から施設IDを検索します。                                                                         |
+| Garoon Get Facility Groups       | 施設グループの一覧を取得します。                                                                       |
+| Get Facilities In Group          | 指定した施設グループに所属する施設を取得します。                                                       |
+| Get Current Datetime             | 現在の日時を取得します。                                                                               |
+| Get Garoon Users                 | 名前からユーザーID/表示名/ログイン名を検索します。<br>「私」「自分」等のプロンプトにも対応しています。 |
+| Get Organizations                | 組織名から組織IDを検索します。                                                                         |
+| Get Users In Organization        | 指定した組織IDに所属するユーザーを取得します。                                                         |
+| Garoon Get Bulletin Categories   | 掲示板のカテゴリー一覧を取得します。                                                                   |
+| Garoon Get Bulletin Topics       | 指定したカテゴリーに含まれる掲示の一覧を取得します。                                                   |
+| Garoon Get Bulletin Topic Detail | 指定した掲示の本文、添付ファイル、公開期間などの詳細を取得します。                                     |
 
 **注意事項:**
 
