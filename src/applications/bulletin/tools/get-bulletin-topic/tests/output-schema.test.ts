@@ -63,6 +63,21 @@ describe("garoon-get-bulletin-topic outputSchema", () => {
     expect(() => schema.parse(validOutput)).not.toThrow();
   });
 
+  it("should validate a draft topic belonging to the drafts special category", () => {
+    const validOutput = {
+      result: {
+        topic: {
+          ...minimalTopic,
+          isDraft: true,
+          isPublished: false,
+          category: { id: "-2", name: "Draft" },
+        },
+      },
+    };
+
+    expect(() => schema.parse(validOutput)).not.toThrow();
+  });
+
   it("should describe the error field but reject an error-only output", () => {
     // Error outputs are emitted with isError: true, which the MCP SDK excludes
     // from output-schema validation, so the public schema still requires result.

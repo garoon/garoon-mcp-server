@@ -40,6 +40,48 @@ describe("garoon-get-bulletin-categories outputSchema", () => {
     expect(() => schema.parse(validOutput)).not.toThrow();
   });
 
+  it("should validate special categories with negative ids", () => {
+    const validOutput = {
+      result: {
+        categories: [
+          {
+            id: "-1",
+            name: "Waiting to be published",
+            description: null,
+            hasSubCategories: false,
+          },
+          {
+            id: "-2",
+            name: "Draft",
+            description: null,
+            hasSubCategories: false,
+          },
+        ],
+        hasNext: false,
+      },
+    };
+
+    expect(() => schema.parse(validOutput)).not.toThrow();
+  });
+
+  it("should reject an unknown negative category id", () => {
+    const invalidOutput = {
+      result: {
+        categories: [
+          {
+            id: "-3",
+            name: "Unknown special category",
+            description: null,
+            hasSubCategories: false,
+          },
+        ],
+        hasNext: false,
+      },
+    };
+
+    expect(() => schema.parse(invalidOutput)).toThrow();
+  });
+
   it("should describe the error field but reject an error-only output", () => {
     // Error outputs are emitted with isError: true, which the MCP SDK excludes
     // from output-schema validation, so the public schema still requires result.
