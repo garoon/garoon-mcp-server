@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { categoryIdSchema } from "#applications/bulletin/schemas/index.js";
 import { idSchema, userSchema } from "#schemas/index.js";
 import { attachmentSchema } from "./attachment.js";
 
@@ -51,7 +52,7 @@ export const topicDetailSchema = () =>
     isExpired: z.boolean().describe("Whether the publication period has ended"),
     category: z
       .object({
-        id: idSchema().describe("Category identifier"),
+        id: categoryIdSchema(),
         name: z.string().describe("Category name"),
       })
       .describe("Category this topic belongs to"),

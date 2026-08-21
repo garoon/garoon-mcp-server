@@ -1,11 +1,9 @@
 import { z } from "zod";
-import { idSchema } from "#schemas/index.js";
+import { categoryIdSchema } from "#applications/bulletin/schemas/index.js";
 
 export const categorySchema = () =>
   z.object({
-    id: idSchema().describe(
-      "Category unique identifier as a numeric string (e.g., 12345)",
-    ),
+    id: categoryIdSchema(),
     name: z.string().describe("Category name"),
     description: z
       .string()
