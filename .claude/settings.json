@@ -2,7 +2,6 @@
   "permissions": {
     "allow": [
       "Read(./)",
-      "Write(./)",
       "Edit(./)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
@@ -26,7 +25,7 @@
       "Read(id_ed25519)",
       "Read(**/*token*)",
       "Read(**/*key*)",
-      "Write(**/secrets/**)",
+      "Edit(**/secrets/**)",
       "Bash(curl:*)",
       "Bash(wget:*)",
       "Bash(nc:*)",
