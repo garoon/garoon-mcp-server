@@ -5,12 +5,34 @@ WORKDIR /app
 
 RUN corepack enable
 
-RUN pnpm install --frozen-lockfile
+# Install through the Takumi Guard registry when CI passes the npm_auth secret.
+# The secret is deliberately optional: scripts/build-docker.sh builds locally
+# without one and must keep working. CI never takes that path -- its workflows
+# fail on an empty token before reaching the build. ~/.npmrc is written and
+# removed inside this single RUN so no credential lands in an image layer.
+RUN --mount=type=secret,id=npm_auth \
+    REGISTRY_HOST="npm.flatt.tech" && \
+    NPM_AUTH=$(cat /run/secrets/npm_auth 2>/dev/null || true) && \
+    if [ -n "$NPM_AUTH" ]; then \
+        echo "registry=https://${REGISTRY_HOST}/" > ~/.npmrc && \
+        echo "//${REGISTRY_HOST}/:_authToken=${NPM_AUTH}" >> ~/.npmrc; \
+    fi && \
+    pnpm install --frozen-lockfile && \
+    rm -f ~/.npmrc
+
 RUN BUILD_TYPE=docker pnpm run build
 # generate NOTICE file
 RUN pnpm run license:extract
 
-RUN pnpm install --prod
+RUN --mount=type=secret,id=npm_auth \
+    REGISTRY_HOST="npm.flatt.tech" && \
+    NPM_AUTH=$(cat /run/secrets/npm_auth 2>/dev/null || true) && \
+    if [ -n "$NPM_AUTH" ]; then \
+        echo "registry=https://${REGISTRY_HOST}/" > ~/.npmrc && \
+        echo "//${REGISTRY_HOST}/:_authToken=${NPM_AUTH}" >> ~/.npmrc; \
+    fi && \
+    pnpm install --prod && \
+    rm -f ~/.npmrc
 
 FROM gcr.io/distroless/nodejs22-debian12:nonroot@sha256:13593b7570658e8477de39e2f4a1dd25db2f836d68a0ba771251572d23bb4f8e
 LABEL org.opencontainers.image.source=https://github.com/garoon/garoon-mcp-server

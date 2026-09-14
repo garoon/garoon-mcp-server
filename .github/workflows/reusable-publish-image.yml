@@ -49,9 +49,28 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Takumi Guard
+        id: takumi-guard
+        uses: flatt-security/setup-takumi-guard-npm@9a5d797c2085b6326d3a2985c08e3a114b9b88c1 # v1.1.1
+        with:
+          bot-id: ${{ vars.TAKUMI_GUARD_BOT_ID }}
+          # The token is handed to Docker as a build secret, so nothing on the
+          # runner needs an .npmrc. This also makes auth failures exit non-zero.
+          set-registry: "false"
+
+      - name: Validate Takumi Guard token
+        env:
+          TAKUMI_GUARD_TOKEN: ${{ steps.takumi-guard.outputs.token }}
+        run: |
+          if [ -z "$TAKUMI_GUARD_TOKEN" ]; then
+            echo "::error::Takumi Guard authentication failed. TAKUMI_GUARD_TOKEN is empty."
+            exit 1
+          fi
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v3
@@ -72,5 +91,7 @@ jobs:
           platforms: "linux/amd64,linux/arm64"
           push: ${{ inputs.push }}
           tags: ${{ needs.create-tags.outputs.tags }}
+          secrets: |
+            npm_auth=${{ steps.takumi-guard.outputs.token }}
         env:
           DOCKER_BUILD_SUMMARY: false
