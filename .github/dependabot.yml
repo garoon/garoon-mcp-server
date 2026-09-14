@@ -70,3 +70,24 @@ updates:
     labels:
       - "dependencies"
       - "cicd"
+
+  # A "/" directory only covers .github/workflows -- actions pinned inside a
+  # composite action are invisible to Dependabot unless its directory is listed
+  # explicitly. Without this, the SHAs in setup-pnpm/action.yaml never get bumped.
+  - package-ecosystem: "github-actions"
+    directory: "/.github/actions/setup-pnpm"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "04:00"
+      timezone: "Asia/Tokyo"
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 5
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    labels:
+      - "dependencies"
+      - "cicd"
