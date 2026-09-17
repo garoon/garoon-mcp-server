@@ -124,21 +124,9 @@ jobs:
 
       - name: Setup Takumi Guard
         id: takumi-guard
-        uses: flatt-security/setup-takumi-guard-npm@9a5d797c2085b6326d3a2985c08e3a114b9b88c1 # v1.1.1
+        uses: ./.github/actions/takumi-guard-token
         with:
           bot-id: ${{ vars.TAKUMI_GUARD_BOT_ID }}
-          # The token is handed to Docker as a build secret, so nothing on the
-          # runner needs an .npmrc. This also makes auth failures exit non-zero.
-          set-registry: "false"
-
-      - name: Validate Takumi Guard token
-        env:
-          TAKUMI_GUARD_TOKEN: ${{ steps.takumi-guard.outputs.token }}
-        run: |
-          if [ -z "$TAKUMI_GUARD_TOKEN" ]; then
-            echo "::error::Takumi Guard authentication failed. TAKUMI_GUARD_TOKEN is empty."
-            exit 1
-          fi
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
