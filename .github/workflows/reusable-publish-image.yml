@@ -49,9 +49,16 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Takumi Guard
+        id: takumi-guard
+        uses: ./.github/actions/takumi-guard-token
+        with:
+          bot-id: ${{ vars.TAKUMI_GUARD_BOT_ID }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v3
@@ -72,5 +79,11 @@ jobs:
           platforms: "linux/amd64,linux/arm64"
           push: ${{ inputs.push }}
           tags: ${{ needs.create-tags.outputs.tags }}
+          secrets: |
+            npm_auth=${{ steps.takumi-guard.outputs.token }}
+          # Make the build fail if the secret above is ever dropped, instead of
+          # silently installing from the public registry.
+          build-args: |
+            REQUIRE_NPM_AUTH=true
         env:
           DOCKER_BUILD_SUMMARY: false
