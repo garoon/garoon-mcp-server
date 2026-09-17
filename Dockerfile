@@ -1,18 +1,23 @@
 FROM node:22@sha256:379c51ac7bbf9bffe16769cfda3eb027d59d9c66ac314383da3fcf71b46d026c AS build
 
+# CI sets this to true so a missing npm_auth secret fails the build instead of
+# silently installing from the public registry. scripts/build-docker.sh leaves
+# it false so local builds keep working without a secret.
+ARG REQUIRE_NPM_AUTH=false
+
 COPY . /app
 WORKDIR /app
 
 RUN corepack enable
 
-# Install through the Takumi Guard registry when CI passes the npm_auth secret.
-# The secret is deliberately optional: scripts/build-docker.sh builds locally
-# without one and must keep working. CI never takes that path -- its workflows
-# fail on an empty token before reaching the build. ~/.npmrc is written and
-# removed inside this single RUN so no credential lands in an image layer.
+# Install through the Takumi Guard registry. ~/.npmrc is written and removed
+# inside this single RUN so no credential lands in an image layer.
 RUN --mount=type=secret,id=npm_auth \
     REGISTRY_HOST="npm.flatt.tech" && \
     NPM_AUTH=$(cat /run/secrets/npm_auth 2>/dev/null || true) && \
+    if [ -z "$NPM_AUTH" ] && [ "$REQUIRE_NPM_AUTH" = "true" ]; then \
+        echo "npm_auth secret is required but missing" >&2 && exit 1; \
+    fi && \
     if [ -n "$NPM_AUTH" ]; then \
         echo "registry=https://${REGISTRY_HOST}/" > ~/.npmrc && \
         echo "//${REGISTRY_HOST}/:_authToken=${NPM_AUTH}" >> ~/.npmrc; \
@@ -27,6 +32,9 @@ RUN pnpm run license:extract
 RUN --mount=type=secret,id=npm_auth \
     REGISTRY_HOST="npm.flatt.tech" && \
     NPM_AUTH=$(cat /run/secrets/npm_auth 2>/dev/null || true) && \
+    if [ -z "$NPM_AUTH" ] && [ "$REQUIRE_NPM_AUTH" = "true" ]; then \
+        echo "npm_auth secret is required but missing" >&2 && exit 1; \
+    fi && \
     if [ -n "$NPM_AUTH" ]; then \
         echo "registry=https://${REGISTRY_HOST}/" > ~/.npmrc && \
         echo "//${REGISTRY_HOST}/:_authToken=${NPM_AUTH}" >> ~/.npmrc; \

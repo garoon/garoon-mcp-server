@@ -81,5 +81,9 @@ jobs:
           tags: ${{ needs.create-tags.outputs.tags }}
           secrets: |
             npm_auth=${{ steps.takumi-guard.outputs.token }}
+          # Make the build fail if the secret above is ever dropped, instead of
+          # silently installing from the public registry.
+          build-args: |
+            REQUIRE_NPM_AUTH=true
         env:
           DOCKER_BUILD_SUMMARY: false
