@@ -1,0 +1,42 @@
+name: takumi-guard-token
+description: Authenticate to the Takumi Guard npm registry and return a validated token
+# This action assumes the following things:
+# - granted `id-token: write` permission (required by Takumi Guard OIDC authentication)
+# Side effects:
+# - `set-registry: false` only stops the action from setting the registry. At v1.1.1 the
+#   action still appends `//npm.flatt.tech/:_authToken=` to the workspace `.npmrc` and
+#   exports `YARN_NPM_AUTH_TOKEN` into `$GITHUB_ENV`, so a live token sits in the checkout
+#   and in the job env for every later step. Nothing ships it because `.dockerignore` is an
+#   allow-list and `scripts/build-mcpb.sh` copies a fixed file list -- keep both that way.
+# - What `set-registry: false` does buy: the action exits non-zero on an OIDC or STS failure
+#   instead of exiting 0 into anonymous mode.
+# An empty `bot-id` still exits 0 in anonymous mode, so the token is validated below.
+
+inputs:
+  bot-id:
+    description: "Takumi Guard bot ID"
+    required: true
+
+outputs:
+  token:
+    description: "Takumi Guard npm token, guaranteed non-empty"
+    value: ${{ steps.takumi-guard.outputs.token }}
+
+runs:
+  using: composite
+  steps:
+    - id: takumi-guard
+      uses: flatt-security/setup-takumi-guard-npm@9a5d797c2085b6326d3a2985c08e3a114b9b88c1 # v1.1.1
+      with:
+        bot-id: ${{ inputs.bot-id }}
+        set-registry: "false"
+
+    - name: Validate Takumi Guard token
+      shell: bash
+      env:
+        TAKUMI_GUARD_TOKEN: ${{ steps.takumi-guard.outputs.token }}
+      run: |
+        if [ -z "$TAKUMI_GUARD_TOKEN" ]; then
+          echo "::error::Takumi Guard authentication failed. TAKUMI_GUARD_TOKEN is empty."
+          exit 1
+        fi

@@ -1,0 +1,65 @@
+name: setup-pnpm
+description: Setup pnpm, Node.js, and Takumi Guard environment
+# This action assumes the following things:
+# - granted `id-token: write` permission (required by Takumi Guard OIDC authentication)
+# Side effects:
+# - ~/.npmrc will be modified: the default registry is pointed at the Takumi Guard
+#   registry (npm.flatt.tech) and its auth token is stored there. Only the `registry=`
+#   line and the Takumi Guard `_authToken` line are replaced; every other line is preserved.
+# - The workspace `.npmrc` and `$GITHUB_ENV` also end up holding a live token; see
+#   .github/actions/takumi-guard-token/action.yaml for why `set-registry: false` does
+#   not prevent that.
+
+inputs:
+  node-version-file:
+    description: "File containing the Node.js version"
+    default: ".node-version"
+  bot-id:
+    description: "Takumi Guard bot ID"
+    required: true
+  cache:
+    description: "Whether to cache the pnpm store (true/false)"
+    default: "false"
+  cache-dependency-path:
+    description: "Path to dependency file"
+
+runs:
+  using: composite
+  steps:
+    # Set up Node.js before pnpm so pnpm runs on the intended Node.js version.
+    # https://github.com/pnpm/action-setup/issues/251
+    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version-file: ${{ inputs.node-version-file }}
+
+    # Use action-setup's built-in cache instead of setup-node's `cache: pnpm`,
+    # which can't resolve the store path with Node set up first.
+    # No `version:` here on purpose — action-setup reads package.json's
+    # `packageManager`, and errors out if the two ever disagree.
+    - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+      with:
+        cache: ${{ inputs.cache }}
+        # Fall back to action-setup's default when unset.
+        cache_dependency_path: ${{ inputs.cache-dependency-path == '' && 'pnpm-lock.yaml' || inputs.cache-dependency-path }}
+
+    - id: takumi-guard
+      uses: ./.github/actions/takumi-guard-token
+      with:
+        bot-id: ${{ inputs.bot-id }}
+
+    - name: Sync Takumi Guard config to ~/.npmrc
+      shell: bash
+      env:
+        TAKUMI_GUARD_TOKEN: ${{ steps.takumi-guard.outputs.token }}
+      run: |
+        REGISTRY_HOST="npm.flatt.tech"
+
+        if [ -f ~/.npmrc ]; then
+          grep -v '^registry=' ~/.npmrc > ~/.npmrc.tmp || true
+          mv ~/.npmrc.tmp ~/.npmrc
+        fi
+        echo "registry=https://${REGISTRY_HOST}/" >> ~/.npmrc
+
+        grep -v "^//${REGISTRY_HOST}/:_authToken=" ~/.npmrc > ~/.npmrc.tmp || true
+        mv ~/.npmrc.tmp ~/.npmrc
+        echo "//${REGISTRY_HOST}/:_authToken=${TAKUMI_GUARD_TOKEN}" >> ~/.npmrc

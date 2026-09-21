@@ -32,3 +32,6 @@ coverage/
 NOTICE
 *.mcpb
 build/
+
+# Written by the Takumi Guard action during CI; never commit it.
+.npmrc

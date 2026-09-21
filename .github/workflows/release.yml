@@ -88,6 +88,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write
     uses: ./.github/workflows/reusable-publish-image.yml
     with:
       tags: "${{ needs.prepare-release.outputs.no_prefix_version }},latest"
