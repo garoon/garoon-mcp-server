@@ -36,7 +36,7 @@ runs:
     # which can't resolve the store path with Node set up first.
     # No `version:` here on purpose — action-setup reads package.json's
     # `packageManager`, and errors out if the two ever disagree.
-    - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+    - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
       with:
         cache: ${{ inputs.cache }}
         # Fall back to action-setup's default when unset.
