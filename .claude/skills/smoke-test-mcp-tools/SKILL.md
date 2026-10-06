@@ -28,6 +28,9 @@ static argument-validation check.
 3. `dist/` is up to date (`pnpm run build`).
 4. The `garoon` server from `.mcp.json` is connected in Claude Code
    (`claude mcp list` shows `garoon` as `✔ Connected`).
+5. The current user has an event in the search range with at least one comment,
+   preferably including a mention. Garoon provides no REST API for posting
+   comments, so write them manually in the Garoon UI beforehand.
 
 Changing `.mcp.json`, env vars, or the build usually requires reconnecting
 (restarting the Claude Code session). If no `mcp__garoon__*` tools are visible,
@@ -74,6 +77,11 @@ optional input, or just a search term, and collect IDs for later phases.
 - `garoon-get-facilities-in-group`: `facilityGroupId` ← collected facility group ID.
 - `garoon-get-schedule-events`: `target` ← current user ID; `rangeStart` / `rangeEnd`
   ← derived from the current time.
+- `garoon-get-schedule-event-comments`: `eventId` ← from the `get-schedule-events`
+  result. Try the events in order and use the first one that has comments, because
+  an empty list does not validate the schema of each comment. If no event has
+  comments, the result is still PASS, but note in the report that the comment
+  item schema was not verified.
 - `garoon-search-available-times`: `timeRanges` ← derived from the current time;
   `attendees` ← current user ID.
 
