@@ -1,9 +1,11 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import { Ajv2020 } from "ajv/dist/2020.js";
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
-import type { Tool } from "@modelcontextprotocol/sdk/types.js";
+import { McpServer } from "@modelcontextprotocol/server";
+import {
+  Client,
+  InMemoryTransport,
+  type Tool,
+} from "@modelcontextprotocol/client";
 import { registerTools } from "#core/register.js";
 import { scheduleTools } from "#applications/schedule/index.js";
 import { baseTools } from "#applications/base/index.js";
@@ -37,6 +39,20 @@ describe("advertised schemas of every registered tool", () => {
     expect(advertisedTools.map((tool) => tool.name).sort()).toEqual(
       registeredTools.map((tool) => tool.name).sort(),
     );
+  });
+
+  it("advertises the title and annotations of every registered tool", () => {
+    registeredTools.forEach((registered) => {
+      const advertised = advertisedTools.find(
+        (tool) => tool.name === registered.name,
+      );
+      expect(advertised?.title, `${registered.name} title`).toBe(
+        registered.config.title,
+      );
+      expect(advertised?.annotations, `${registered.name} annotations`).toEqual(
+        registered.config.annotations,
+      );
+    });
   });
 
   it("declares JSON Schema 2020-12", () => {

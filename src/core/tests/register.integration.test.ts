@@ -1,7 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
+import { McpServer } from "@modelcontextprotocol/server";
+import { Client, InMemoryTransport } from "@modelcontextprotocol/client";
 import { z } from "zod";
 import { defineTool, registerTools } from "../register.js";
 import { createStructuredOutputSchema } from "../structured-output.js";
@@ -54,10 +53,12 @@ function buildServer() {
 }
 
 describe("defineTool over a live MCP SDK transport", () => {
-  it("returns an error response without tripping the client output validator", async () => {
+  it("returns an error response over the transport", async () => {
     const client = await connectClient(buildServer());
-    // listTools() compiles the client-side output validators, exercising the
-    // strict-client path where a required `result` would reject error responses.
+    // listTools() caches the advertised schemas the client compiles its output
+    // validator from. The 2.x client skips that validator for error responses,
+    // so the advertised-schema test below is what guards clients that still
+    // validate them.
     await client.listTools();
 
     const result = await client.callTool({

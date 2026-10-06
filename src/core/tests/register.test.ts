@@ -171,7 +171,7 @@ describe("defineTool", () => {
   });
 
   it("should build config from the definition fields", () => {
-    const inputSchema = {};
+    const inputSchema = { id: z.string() };
     const outputSchema = emptyOutputSchema;
 
     const tool = defineTool({
@@ -186,14 +186,15 @@ describe("defineTool", () => {
     expect(tool.name).toBe("config-tool");
     expect(tool.config.title).toBe("Config Tool");
     expect(tool.config.description).toBe("A tool for verifying config");
-    expect(tool.config.inputSchema).toBe(inputSchema);
+    expect(tool.config.inputSchema.shape).toStrictEqual(inputSchema);
+    expect(tool.config.inputSchema.shape.id).toBe(inputSchema.id);
     expect(tool.config.annotations).toBeUndefined();
     expect(typeof tool.callback).toBe("function");
 
     // The advertised outputSchema relaxes result to optional while keeping error.
-    expect(tool.config.outputSchema.error).toBe(outputSchema.error);
-    expect(tool.config.outputSchema.result).not.toBe(outputSchema.result);
-    expect(z.object(tool.config.outputSchema).safeParse({}).success).toBe(true);
+    expect(tool.config.outputSchema.shape.error).toBe(outputSchema.error);
+    expect(tool.config.outputSchema.shape.result).not.toBe(outputSchema.result);
+    expect(tool.config.outputSchema.safeParse({}).success).toBe(true);
     expect(z.object(outputSchema).safeParse({}).success).toBe(false);
   });
 
