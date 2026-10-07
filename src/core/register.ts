@@ -1,16 +1,13 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { RequestHandlerExtra } from "@modelcontextprotocol/sdk/shared/protocol.js";
 import type {
-  ToolAnnotations,
   CallToolResult,
-  ServerNotification,
-  ServerRequest,
-} from "@modelcontextprotocol/sdk/types.js";
+  McpServer,
+  ServerContext,
+  ToolAnnotations,
+} from "@modelcontextprotocol/server";
 import { z, type ZodRawShape } from "zod";
 import { createErrorOutput } from "./error-handler.js";
-import { registerToolListHandler } from "./tool-list.js";
 
-type HandlerExtra = RequestHandlerExtra<ServerRequest, ServerNotification>;
+type HandlerExtra = ServerContext;
 
 export type InferToolInput<InputArgs extends ZodRawShape> = z.output<
   z.ZodObject<InputArgs>
@@ -48,8 +45,8 @@ export type ToolDefinition = {
   config: {
     title?: string;
     description?: string;
-    inputSchema: ZodRawShape;
-    outputSchema: ZodRawShape;
+    inputSchema: z.ZodObject<ZodRawShape>;
+    outputSchema: z.ZodObject<ZodRawShape>;
     annotations?: ToolAnnotations;
   };
   callback: ServerToolCallback;
@@ -68,17 +65,19 @@ export function defineTool<
   // An MCP server publishes each tool's output schema to clients through the
   // tools/list response ("advertised" schema), and some clients validate every
   // structuredContent they receive against it — even error responses, despite
-  // isError: true (confirmed in the official SDK client as of 1.29.0). Error
-  // responses carry only `error` and no `result`, so publishing a schema with
-  // a required `result` would make such clients reject every error response.
+  // isError: true. The official SDK client did so up to 1.x; as of
+  // @modelcontextprotocol/client 2.0.0 it skips error responses, but other
+  // clients may still validate them. Error responses carry only `error` and no
+  // `result`, so publishing a schema with a required `result` would make such
+  // clients reject every error response.
   // The published copy below therefore marks `result` as optional, while the
   // strict `outputObjectSchema` above validates success outputs before they
   // leave the server, so an empty `{}` can never actually be emitted.
   // See register.integration.test.ts, which pins this behavior.
-  const advertisedOutputSchema = {
+  const advertisedOutputSchema = z.object({
     ...outputSchema,
     result: outputSchema.result.optional(),
-  };
+  });
 
   const callback: ServerToolCallback = async (input, extra) => {
     try {
@@ -107,7 +106,7 @@ export function defineTool<
     config: {
       title,
       description,
-      inputSchema,
+      inputSchema: z.object(inputSchema),
       outputSchema: advertisedOutputSchema,
       annotations,
     },
@@ -122,6 +121,4 @@ export function registerTools(
   tools.forEach((tool) => {
     server.registerTool(tool.name, tool.config, tool.callback);
   });
-
-  registerToolListHandler(server, tools);
 }
