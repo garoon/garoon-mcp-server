@@ -85,7 +85,7 @@
   },
   "dependencies": {
     "@js-temporal/polyfill": "^0.5.1",
-    "@modelcontextprotocol/server": "^2.0.0",
+    "@modelcontextprotocol/server": "^2.2.0",
     "undici": "^8.5.0",
     "zod": "^4.4.3"
   },
@@ -93,11 +93,11 @@
     "@anthropic-ai/mcpb": "^2.1.2",
     "@cybozu/eslint-config": "^25.0.0",
     "@cybozu/license-manager": "^1.4.0",
-    "@modelcontextprotocol/client": "^2.0.0",
+    "@modelcontextprotocol/client": "^2.2.0",
     "@modelcontextprotocol/inspector": "^2.7.0",
     "@types/node": "^26.2.0",
-    "ajv": "^8.20.0",
     "@vitest/coverage-v8": "^4.1.9",
+    "ajv": "^8.20.0",
     "eslint": "^9.37.0",
     "prettier": "^3.6.2",
     "tsx": "^4.20.6",

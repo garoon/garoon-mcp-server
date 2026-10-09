@@ -1,14 +1,9 @@
 #!/usr/bin/env node
-import { McpServer } from "@modelcontextprotocol/server";
-import { StdioServerTransport } from "@modelcontextprotocol/server/stdio";
+import { serveStdio } from "@modelcontextprotocol/server/stdio";
 import { Agent, EnvHttpProxyAgent, setGlobalDispatcher } from "undici";
 import { readFileSync } from "fs";
-import { registerTools } from "./core/register.js";
-import { scheduleTools } from "./applications/schedule/index.js";
-import { baseTools } from "./applications/base/index.js";
-import { bulletinTools } from "./applications/bulletin/index.js";
-import { VERSION } from "./build-constants.js";
 import { loadConfig, setConfig, type Config } from "./config.js";
+import { createServer } from "./server.js";
 
 let config: Config;
 try {
@@ -46,12 +41,9 @@ if (config.proxyUrl) {
   );
 }
 
-const server = new McpServer({
-  name: "Garoon MCP Server",
-  version: VERSION,
+serveStdio(createServer, {
+  // stderr for the same reason as the configuration error above.
+  onerror: (error) => {
+    process.stderr.write(`${error.message}\n`);
+  },
 });
-
-registerTools(server, [...scheduleTools, ...baseTools, ...bulletinTools]);
-
-const transport = new StdioServerTransport();
-await server.connect(transport);
