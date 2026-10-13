@@ -369,6 +369,7 @@ Try using an absolute path or the `npx` command instead.
 | -------------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | Create Schedule Event            | Creates a schedule event.                                                                                      |
 | Get Schedule Events              | Retrieves schedule events for specified users, organizations, or facilities.                                   |
+| Get Schedule Event Comments      | Retrieves the list of comments on the specified schedule event.                                                |
 | Search Available Times           | Searches for available time slots based on specified conditions such as users and time ranges.                 |
 | Get Facilities                   | Searches for facility IDs by facility name.                                                                    |
 | Garoon Get Facility Groups       | Retrieves a list of facility groups.                                                                           |

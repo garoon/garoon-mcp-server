@@ -369,6 +369,7 @@ npm install -g @garoon/mcp-server
 | -------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | Create Schedule Event            | スケジュールを作成します。                                                                             |
 | Get Schedule Events              | ユーザー/組織/施設を指定し、対象の予定を取得します。                                                   |
+| Get Schedule Event Comments      | 指定した予定のコメント一覧を取得します。                                                               |
 | Search Available Times           | ユーザーや時間範囲などの条件を指定して空き時間を検索します。                                           |
 | Get Facilities                   | 施設名から施設IDを検索します。                                                                         |
 | Garoon Get Facility Groups       | 施設グループの一覧を取得します。                                                                       |
