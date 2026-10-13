@@ -100,12 +100,12 @@
       "default": ""
     },
     "garoon_public_only": {
-      "type": "string",
+      "type": "boolean",
       "title": "Public Only Mode",
-      "description": "Filter out highly confidential information when set to 'true' (default: 'false')",
+      "description": "Exclude private schedule events from responses",
       "required": false,
       "sensitive": false,
-      "default": "false"
+      "default": false
     }
   },
   "keywords": ["Garoon"],
