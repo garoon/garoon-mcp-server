@@ -33,5 +33,5 @@ NOTICE
 *.mcpb
 build/
 
-# Written by the Takumi Guard action during CI; never commit it.
+# May hold registry credentials; never commit it.
 .npmrc
