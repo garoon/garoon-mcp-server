@@ -102,7 +102,7 @@
     "garoon_public_only": {
       "type": "boolean",
       "title": "Public Only Mode",
-      "description": "Exclude private schedule events from responses",
+      "description": "Exclude private schedule events and their comments from responses",
       "required": false,
       "sensitive": false,
       "default": false

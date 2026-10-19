@@ -419,5 +419,39 @@ describe("getScheduleEventsHandler", () => {
         output.events.every((event: any) => event.visibilityType === "PUBLIC"),
       ).toBe(true);
     });
+
+    it("should exclude events without a recognised visibility type when publicOnly is true", async () => {
+      const mockApiResponse = {
+        events: [
+          {
+            id: "1",
+            subject: "Public Event",
+            visibilityType: "PUBLIC",
+          },
+          {
+            id: "2",
+            subject: "Event Without Visibility Type",
+          },
+          {
+            id: "3",
+            subject: "Event With Watchers",
+            visibilityType: "SET_PRIVATE_WATCHERS",
+          },
+        ],
+        hasNext: false,
+      };
+
+      mockGetRequest.mockResolvedValue(mockApiResponse);
+
+      const result = await getScheduleEventsHandler({
+        target: "123",
+        targetType: "user" as const,
+        rangeStart: "2024-01-01T00:00:00+09:00",
+        rangeEnd: "2024-01-07T23:59:59+09:00",
+      });
+
+      expect(result.events).toHaveLength(1);
+      expect(result.events[0].subject).toBe("Public Event");
+    });
   });
 });
