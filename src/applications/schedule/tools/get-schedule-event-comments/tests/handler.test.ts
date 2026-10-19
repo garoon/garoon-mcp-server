@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { getScheduleEventCommentsHandler } from "../handler.js";
 import * as client from "#client.js";
+import { setConfig, type Config } from "#config.js";
 
 vi.mock("#client.js", async () => {
   const actual = await vi.importActual("#client.js");
@@ -10,11 +11,19 @@ vi.mock("#client.js", async () => {
   };
 });
 
+const baseConfig: Config = {
+  baseUrl: "https://example.cybozu.com",
+  username: "user",
+  password: "secret",
+  publicOnly: false,
+};
+
 describe("getScheduleEventCommentsHandler", () => {
   const mockGetRequest = vi.mocked(client.getRequest);
 
   beforeEach(() => {
     vi.clearAllMocks();
+    setConfig({ ...baseConfig });
   });
 
   afterEach(() => {
@@ -41,6 +50,7 @@ describe("getScheduleEventCommentsHandler", () => {
 
     const result = await getScheduleEventCommentsHandler({ eventId: "2" });
 
+    expect(mockGetRequest).toHaveBeenCalledTimes(1);
     expect(mockGetRequest).toHaveBeenCalledWith(
       "/api/v1/schedule/events/2/comments?",
     );
@@ -80,5 +90,76 @@ describe("getScheduleEventCommentsHandler", () => {
     await expect(
       getScheduleEventCommentsHandler({ eventId: "999999" }),
     ).rejects.toBe(httpError);
+  });
+
+  describe("public-only mode", () => {
+    const privateEventError =
+      "Comments of a private event cannot be retrieved because Public Only Mode (GAROON_PUBLIC_ONLY) is enabled";
+
+    beforeEach(() => {
+      setConfig({ ...baseConfig, publicOnly: true });
+    });
+
+    it("should look up the event before fetching comments of a public event", async () => {
+      const mockApiResponse = { comments: [], hasNext: false };
+      mockGetRequest
+        .mockResolvedValueOnce({ id: "2", visibilityType: "PUBLIC" })
+        .mockResolvedValueOnce(mockApiResponse);
+
+      const result = await getScheduleEventCommentsHandler({ eventId: "2" });
+
+      expect(mockGetRequest).toHaveBeenCalledTimes(2);
+      expect(mockGetRequest).toHaveBeenNthCalledWith(
+        1,
+        "/api/v1/schedule/events/2",
+      );
+      expect(mockGetRequest).toHaveBeenNthCalledWith(
+        2,
+        "/api/v1/schedule/events/2/comments?",
+      );
+      expect(result).toEqual(mockApiResponse);
+    });
+
+    it("should reject comments of a private event without fetching them", async () => {
+      mockGetRequest.mockResolvedValueOnce({
+        id: "2",
+        visibilityType: "PRIVATE",
+      });
+
+      await expect(
+        getScheduleEventCommentsHandler({ eventId: "2" }),
+      ).rejects.toThrow(privateEventError);
+
+      expect(mockGetRequest).toHaveBeenCalledTimes(1);
+      expect(mockGetRequest).toHaveBeenCalledWith("/api/v1/schedule/events/2");
+    });
+
+    it("should reject comments of an event without a visibility type without fetching them", async () => {
+      mockGetRequest.mockResolvedValueOnce({ id: "2" });
+
+      await expect(
+        getScheduleEventCommentsHandler({ eventId: "2" }),
+      ).rejects.toThrow(privateEventError);
+
+      expect(mockGetRequest).toHaveBeenCalledTimes(1);
+      expect(mockGetRequest).toHaveBeenCalledWith("/api/v1/schedule/events/2");
+    });
+
+    it("should propagate errors from the event lookup without fetching comments", async () => {
+      const httpError = new client.HttpErrorResponse(
+        404,
+        "GRN_SCHD_13001: Cannot perform actions on this appointment.",
+      );
+      mockGetRequest.mockRejectedValueOnce(httpError);
+
+      await expect(
+        getScheduleEventCommentsHandler({ eventId: "999999" }),
+      ).rejects.toBe(httpError);
+
+      expect(mockGetRequest).toHaveBeenCalledTimes(1);
+      expect(mockGetRequest).toHaveBeenCalledWith(
+        "/api/v1/schedule/events/999999",
+      );
+    });
   });
 });

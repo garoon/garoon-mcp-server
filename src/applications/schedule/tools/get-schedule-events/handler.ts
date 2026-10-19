@@ -48,7 +48,7 @@ export const getScheduleEventsHandler = async (
 
   if (publicOnly) {
     result.events = result.events.filter(
-      (event) => event.visibilityType !== "PRIVATE",
+      (event) => event.visibilityType === "PUBLIC",
     );
   }
 
