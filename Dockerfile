@@ -1,4 +1,4 @@
-FROM node:22@sha256:379c51ac7bbf9bffe16769cfda3eb027d59d9c66ac314383da3fcf71b46d026c AS build
+FROM node:22@sha256:82693da96a4e38b8c0e2bf0c5df58fcb86d2d25e5a235c07748f09bfa38567c2 AS build
 
 # CI sets this to true so a missing npm_auth secret fails the build instead of
 # silently installing from the public registry. scripts/build-docker.sh leaves
@@ -42,7 +42,7 @@ RUN --mount=type=secret,id=npm_auth \
     pnpm install --prod && \
     rm -f ~/.npmrc
 
-FROM gcr.io/distroless/nodejs22-debian12:nonroot@sha256:13593b7570658e8477de39e2f4a1dd25db2f836d68a0ba771251572d23bb4f8e
+FROM gcr.io/distroless/nodejs22-debian13:nonroot@sha256:b0b1352373f14fe86376d423e6d283ea6b85b912ff55ca89bed8d2fe11c257b8
 LABEL org.opencontainers.image.source=https://github.com/garoon/garoon-mcp-server
 
 WORKDIR /app
