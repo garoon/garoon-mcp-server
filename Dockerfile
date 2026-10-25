@@ -42,7 +42,7 @@ RUN --mount=type=secret,id=npm_auth \
     pnpm install --prod && \
     rm -f ~/.npmrc
 
-FROM gcr.io/distroless/nodejs22-debian13:nonroot@sha256:b0b1352373f14fe86376d423e6d283ea6b85b912ff55ca89bed8d2fe11c257b8
+FROM gcr.io/distroless/nodejs22-debian13:nonroot@sha256:10747a1323be68f206aed893599d43e6697ad67257e7c42703553f99fbce3d33
 LABEL org.opencontainers.image.source=https://github.com/garoon/garoon-mcp-server
 
 WORKDIR /app
