@@ -61,7 +61,7 @@ jobs:
           bot-id: ${{ vars.TAKUMI_GUARD_BOT_ID }}
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v3
+        uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
