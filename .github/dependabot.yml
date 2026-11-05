@@ -12,25 +12,12 @@ updates:
     open-pull-requests-limit: 10
     groups:
       dev-dependencies:
-        patterns:
-          - "@anthropic-ai/*"
-          - "@cybozu/*"
-          - "@types/*"
-          - "@vitest/*"
-          - "eslint*"
-          - "prettier"
-          - "tsx"
-          - "typescript"
-          - "vitest"
+        dependency-type: "development"
         update-types:
           - "minor"
           - "patch"
       production-dependencies:
-        patterns:
-          - "@js-temporal/*"
-          - "@modelcontextprotocol/*"
-          - "undici"
-          - "zod"
+        dependency-type: "production"
         update-types:
           - "minor"
           - "patch"
